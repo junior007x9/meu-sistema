@@ -15,7 +15,7 @@ export default async function ComprasPage() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Compras Online</h1>
           <p className="text-slate-500 mt-1">Gestão de encomendas e rastreio.</p>
         </div>
-        <Link href="/compras/nova" className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all hover:-translate-y-0.5 w-full sm:w-auto justify-center">
+        <Link href="/compras/nova" className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all hover:-translate-y-0.5 w-full sm:w-auto justify-center">
           <Plus className="h-5 w-5" />
           Registrar Compra
         </Link>

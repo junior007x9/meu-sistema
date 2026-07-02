@@ -30,7 +30,7 @@ export default function Sidebar() {
     <>
       {/* Botão de Menu para Celular */}
       <div className="bg-slate-900 text-white p-4 flex items-center justify-between md:hidden z-50 relative shadow-md">
-        <h1 className="font-bold text-lg tracking-wider text-blue-400">STYLLO ÓTICA</h1>
+        <h1 className="font-bold text-lg tracking-wider text-yellow-500">STYLLO ÓTICA</h1>
         <button onClick={() => setIsOpen(!isOpen)} className="p-1 focus:outline-none hover:bg-slate-800 rounded-md transition-colors">
           <Menu className="h-6 w-6" />
         </button>
@@ -44,13 +44,12 @@ export default function Sidebar() {
       `}>
         <div>
           <div className="mb-8 px-2 hidden md:block mt-2">
-            <h1 className="text-xl font-black tracking-wider text-blue-400">STYLLO ÓTICA</h1>
+            <h1 className="text-xl font-black tracking-wider text-yellow-500">STYLLO ÓTICA</h1>
             <p className="text-xs text-slate-400 font-medium mt-1">Gestão & UTI dos Óculos</p>
           </div>
 
           <nav className="space-y-1.5">
             {menuItems.map((item) => {
-              // Lógica para manter o menu ativo mesmo em sub-páginas (ex: /clientes/novo)
               const isActive = (pathname === '/' && item.href === '/') || 
                                (item.href !== '/' && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -63,11 +62,11 @@ export default function Sidebar() {
                   className={`
                     flex items-center gap-3 px-4 py-3.5 rounded-lg text-sm font-bold transition-all
                     ${isActive 
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-900/50' 
+                      ? 'bg-yellow-500 text-slate-900 shadow-md shadow-yellow-900/20' 
                       : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'}
                   `}
                 >
-                  <Icon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                  <Icon className={`h-5 w-5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`} />
                   {item.name}
                 </Link>
               );

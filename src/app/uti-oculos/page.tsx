@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { ordensServico, clientes } from '@/db/schema';
 import { desc, eq } from 'drizzle-orm';
-import { Plus, Search, Wrench, Wallet, QrCode, CreditCard, Banknotes } from 'lucide-react';
+import { Plus, Search, Wrench, Wallet, QrCode, CreditCard } from 'lucide-react';
 
 export default async function UTIPage() {
   const listaOS = await db

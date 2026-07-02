@@ -11,6 +11,7 @@ import {
   Wrench, 
   UserCog,
   Calculator,
+  ListChecks,
   Wallet, 
   ShoppingCart,
   Menu 
@@ -27,6 +28,7 @@ export default function Sidebar() {
     { name: 'Estoque & Produtos', icon: Glasses, href: '/produtos' },
     { name: 'UTI dos Óculos (OS)', icon: Wrench, href: '/uti-oculos' },
     { name: 'Produção Técnicos', icon: UserCog, href: '/uti-oculos/tecnicos' },
+    { name: 'Tabela de Preços', icon: ListChecks, href: '/tabela-precos' },
     { name: 'Simulador de Lentes', icon: Calculator, href: '/simulacoes' },
     { name: 'Compras Online', icon: ShoppingCart, href: '/compras' },
     { name: 'Financeiro', icon: Wallet, href: '/financeiro' },
@@ -78,7 +80,7 @@ export default function Sidebar() {
           {/* Navegação completa */}
           <nav className="space-y-1.5">
             {menuItems.map((item) => {
-              // Mantém o botão aceso mesmo se estiver dentro de uma sub-página (ex: /simulacoes/nova)
+              // Mantém o botão aceso mesmo se estiver dentro de uma sub-página
               const isActive = (pathname === '/' && item.href === '/') || 
                                (item.href !== '/' && pathname.startsWith(item.href));
               const Icon = item.icon;

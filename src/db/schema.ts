@@ -188,3 +188,25 @@ export const simulacoesLentes = sqliteTable('simulacoes_lentes', {
   ganho: real('ganho').default(0).notNull(), // Lucro (Líquido - Custo)
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 5. MÓDULO: TABELA DE PREÇOS DE SERVIÇOS
+// ==========================================
+
+export const tabelaPrecos = sqliteTable('tabela_precos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  tipoConserto: text('tipo_conserto').notNull(),
+  
+  // Preços na Loja
+  lojaPix: real('loja_pix').default(0).notNull(),
+  lojaCartao: real('loja_cartao').default(0).notNull(),
+  
+  // Preços no Delivery
+  deliveryPix: real('delivery_pix').default(0).notNull(),
+  deliveryCartao: real('delivery_cartao').default(0).notNull(),
+  
+  // Preços para Óticas Parceiras (Atacado/B2B)
+  oticasPix: real('oticas_pix').default(0).notNull(),
+  oticasCartao: real('oticas_cartao').default(0).notNull(),
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

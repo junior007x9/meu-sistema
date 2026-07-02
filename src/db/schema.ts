@@ -94,14 +94,12 @@ export const ordensServico = sqliteTable('ordens_servico', {
   modeloArmacao: text('modelo_armacao'),
   descricaoDefeito: text('descricao_defeito').notNull(),
   servicoRealizado: text('servico_realizado'),
+  tecnico: text('tecnico'), // <-- NOVA COLUNA ADICIONADA AQUI!
   status: text('status').default('RECEBIDO').notNull(), 
   valorTotal: real('valor_total').default(0).notNull(),
-  
-  // Novas colunas para espelhar a sua planilha de fechamento
   valorPix: real('valor_pix').default(0).notNull(),
   valorEspecie: real('valor_especie').default(0).notNull(),
   valorCartao: real('valor_cartao').default(0).notNull(),
-  
   dataEntrada: integer('data_entrada', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   dataEntregaPrevista: integer('data_entrega_prevista', { mode: 'timestamp' }),
 });

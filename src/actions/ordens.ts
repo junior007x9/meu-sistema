@@ -11,13 +11,13 @@ export async function criarOrdemServico(formData: FormData) {
   
   const modeloArmacao = formData.get('modeloArmacao') as string;
   const descricaoDefeito = formData.get('descricaoDefeito') as string;
-  const servicoRealizado = formData.get('servicoRealizado') as string; // O que foi feito
+  const servicoRealizado = formData.get('servicoRealizado') as string;
+  const tecnico = formData.get('tecnico') as string; // Captura o Técnico
   
   const valorPix = parseFloat(formData.get('valorPix') as string) || 0;
   const valorEspecie = parseFloat(formData.get('valorEspecie') as string) || 0;
   const valorCartao = parseFloat(formData.get('valorCartao') as string) || 0;
   
-  // O sistema calcula o valor total automaticamente
   const valorTotal = valorPix + valorEspecie + valorCartao;
 
   if (!clienteId || !descricaoDefeito) {
@@ -29,6 +29,7 @@ export async function criarOrdemServico(formData: FormData) {
     modeloArmacao: modeloArmacao || null,
     descricaoDefeito,
     servicoRealizado: servicoRealizado || null,
+    tecnico: tecnico || null, // Salva no banco
     valorTotal,
     valorPix,
     valorEspecie,
@@ -37,6 +38,6 @@ export async function criarOrdemServico(formData: FormData) {
   });
 
   revalidatePath('/uti-oculos');
-  // Redireciona de volta para o relatório principal da UTI
+  revalidatePath('/uti-oculos/tecnicos');
   redirect('/uti-oculos');
 }

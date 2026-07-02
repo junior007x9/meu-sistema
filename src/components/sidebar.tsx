@@ -9,6 +9,7 @@ import {
   Users, 
   Glasses, 
   Wrench, 
+  UserCog,
   Wallet, 
   ShoppingCart,
   Menu 
@@ -18,11 +19,13 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
 
+  // Lista com ABSOLUTAMENTE TODOS os botões e módulos do sistema
   const menuItems = [
     { name: 'Painel Geral', icon: LayoutDashboard, href: '/' },
     { name: 'Fichas de Clientes', icon: Users, href: '/clientes' },
     { name: 'Estoque & Produtos', icon: Glasses, href: '/produtos' },
     { name: 'UTI dos Óculos (OS)', icon: Wrench, href: '/uti-oculos' },
+    { name: 'Produção Técnicos', icon: UserCog, href: '/uti-oculos/tecnicos' },
     { name: 'Compras Online', icon: ShoppingCart, href: '/compras' },
     { name: 'Financeiro', icon: Wallet, href: '/financeiro' },
   ];
@@ -55,7 +58,7 @@ export default function Sidebar() {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div>
-          {/* Nova área da Logomarca (Versão Desktop) */}
+          {/* Área da Logomarca Oficial (Versão Desktop) */}
           <div className="mb-8 px-2 hidden md:flex flex-col items-center text-center mt-4">
             <div className="bg-white p-2 rounded-full shadow-lg shadow-black/20 mb-4 border-2 border-yellow-500">
               <Image 
@@ -67,11 +70,13 @@ export default function Sidebar() {
                 priority
               />
             </div>
-            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Sistema de Gestão</p>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sistema de Gestão</p>
           </div>
 
+          {/* Navegação com todos os botões ativos */}
           <nav className="space-y-1.5">
             {menuItems.map((item) => {
+              // Mantém o botão aceso mesmo se estiver dentro de uma sub-página (ex: /clientes/novo)
               const isActive = (pathname === '/' && item.href === '/') || 
                                (item.href !== '/' && pathname.startsWith(item.href));
               const Icon = item.icon;

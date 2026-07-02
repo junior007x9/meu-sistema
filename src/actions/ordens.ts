@@ -11,9 +11,14 @@ export async function criarOrdemServico(formData: FormData) {
   
   const modeloArmacao = formData.get('modeloArmacao') as string;
   const descricaoDefeito = formData.get('descricaoDefeito') as string;
+  const servicoRealizado = formData.get('servicoRealizado') as string; // O que foi feito
   
-  const valorTotalStr = formData.get('valorTotal') as string;
-  const valorTotal = valorTotalStr ? parseFloat(valorTotalStr) : 0;
+  const valorPix = parseFloat(formData.get('valorPix') as string) || 0;
+  const valorEspecie = parseFloat(formData.get('valorEspecie') as string) || 0;
+  const valorCartao = parseFloat(formData.get('valorCartao') as string) || 0;
+  
+  // O sistema calcula o valor total automaticamente
+  const valorTotal = valorPix + valorEspecie + valorCartao;
 
   if (!clienteId || !descricaoDefeito) {
     throw new Error('Cliente e defeito são obrigatórios.');
@@ -23,10 +28,15 @@ export async function criarOrdemServico(formData: FormData) {
     clienteId,
     modeloArmacao: modeloArmacao || null,
     descricaoDefeito,
+    servicoRealizado: servicoRealizado || null,
     valorTotal,
-    status: 'RECEBIDO', // Toda OS nova entra como RECEBIDO
+    valorPix,
+    valorEspecie,
+    valorCartao,
+    status: 'RECEBIDO', 
   });
 
   revalidatePath('/uti-oculos');
+  // Redireciona de volta para o relatório principal da UTI
   redirect('/uti-oculos');
 }

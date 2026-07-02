@@ -115,4 +115,3 @@ export default function Sidebar() {
       )}
     </>
   );
-}

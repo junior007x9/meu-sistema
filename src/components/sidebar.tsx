@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -30,7 +31,18 @@ export default function Sidebar() {
     <>
       {/* Botão de Menu para Celular */}
       <div className="bg-slate-900 text-white p-4 flex items-center justify-between md:hidden z-50 relative shadow-md">
-        <h1 className="font-bold text-lg tracking-wider text-yellow-500">STYLLO ÓTICA</h1>
+        <div className="flex items-center gap-3">
+          <div className="bg-white p-1 rounded-full shadow-sm">
+            <Image 
+              src="/logo.png" 
+              alt="Logo Styllo Ótica" 
+              width={36} 
+              height={36} 
+              className="rounded-full"
+            />
+          </div>
+          <h1 className="font-bold text-lg tracking-wider text-yellow-500">STYLLO ÓTICA</h1>
+        </div>
         <button onClick={() => setIsOpen(!isOpen)} className="p-1 focus:outline-none hover:bg-slate-800 rounded-md transition-colors">
           <Menu className="h-6 w-6" />
         </button>
@@ -43,9 +55,19 @@ export default function Sidebar() {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div>
-          <div className="mb-8 px-2 hidden md:block mt-2">
-            <h1 className="text-xl font-black tracking-wider text-yellow-500">STYLLO ÓTICA</h1>
-            <p className="text-xs text-slate-400 font-medium mt-1">Gestão & UTI dos Óculos</p>
+          {/* Nova área da Logomarca (Versão Desktop) */}
+          <div className="mb-8 px-2 hidden md:flex flex-col items-center text-center mt-4">
+            <div className="bg-white p-2 rounded-full shadow-lg shadow-black/20 mb-4 border-2 border-yellow-500">
+              <Image 
+                src="/logo.png" 
+                alt="Logo Styllo Ótica" 
+                width={110} 
+                height={110} 
+                className="rounded-full"
+                priority
+              />
+            </div>
+            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Sistema de Gestão</p>
           </div>
 
           <nav className="space-y-1.5">
@@ -74,7 +96,7 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        <div className="border-t border-slate-800 pt-5 px-2 text-xs text-slate-500 text-center font-medium uppercase tracking-wider">
+        <div className="border-t border-slate-800 pt-5 px-2 text-[10px] text-slate-500 text-center font-bold uppercase tracking-wider">
           Sistema Digital v1.0
         </div>
       </aside>

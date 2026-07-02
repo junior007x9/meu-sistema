@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Calculator, Save, Glasses, Percentage, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Calculator, Save, Glasses, Percent, TrendingUp } from 'lucide-react';
 import { salvarSimulacao } from '@/actions/simulacoes';
 
 export default function NovaSimulacaoPage() {
@@ -65,7 +65,7 @@ export default function NovaSimulacaoPage() {
               <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Taxa Cartão em 6x (%)</label>
               <div className="relative">
                 <input type="number" step="0.01" name="taxaCartao" value={taxa || ''} onChange={(e) => setTaxa(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-800 border border-slate-600 text-yellow-500 rounded-lg outline-none focus:border-yellow-500 font-black text-lg" />
-                <Percentage className="absolute right-4 top-3.5 h-5 w-5 text-yellow-600" />
+                <Percent className="absolute right-4 top-3.5 h-5 w-5 text-yellow-600" />
               </div>
             </div>
           </div>

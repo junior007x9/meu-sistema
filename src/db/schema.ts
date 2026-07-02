@@ -171,3 +171,20 @@ export const comprasOnline = sqliteTable('compras_online', {
   situacaoPagamento: text('situacao_pagamento'),
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 4. MÓDULO: SIMULADOR DE LENTES E MARGENS
+// ==========================================
+
+export const simulacoesLentes = sqliteTable('simulacoes_lentes', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  marcaLente: text('marca_lente').notNull(),
+  cliente: text('cliente'),
+  custoLente: real('custo_lente').default(0).notNull(),
+  valorTabela: real('valor_tabela').default(0).notNull(),
+  taxaCartao: real('taxa_cartao').default(0).notNull(), // Porcentagem que a maquininha cobra
+  valorParcela: real('valor_parcela').default(0).notNull(), // Parcela em 6x
+  descontoCartao: real('desconto_cartao').default(0).notNull(), // Valor perdido na taxa
+  diferenca: real('diferenca').default(0).notNull(), // Valor Líquido (Tabela - Taxa)
+  ganho: real('ganho').default(0).notNull(), // Lucro (Líquido - Custo)
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

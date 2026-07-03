@@ -9,9 +9,10 @@ import {
   tabelaPrecos, 
   contasMensais, 
   produtos, 
-  servicosJoaozinho, // <-- AQUI ESTÁ A IMPORTAÇÃO QUE FALTAVA
+  servicosJoaozinho,
   contaStyllo,
-  contaUti
+  contaUti,
+  controleCarne // <-- IMPORTAÇÃO CORRIGIDA AQUI
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -26,11 +27,10 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'preco') await db.delete(tabelaPrecos).where(eq(tabelaPrecos.id, id));
     if (tabela === 'conta') await db.delete(contasMensais).where(eq(contasMensais.id, id));
     if (tabela === 'joaozinho') await db.delete(servicosJoaozinho).where(eq(servicosJoaozinho.id, id));
-    // Adicione esta linha logo abaixo da exclusão do joaozinho:
     if (tabela === 'conta-styllo') await db.delete(contaStyllo).where(eq(contaStyllo.id, id));
-    // Adicione esta linha logo abaixo da exclusão da conta-styllo:
     if (tabela === 'conta-uti') await db.delete(contaUti).where(eq(contaUti.id, id));
-    if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id));
+    if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id)); // O comando agora vai funcionar
+
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

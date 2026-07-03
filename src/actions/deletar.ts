@@ -1,0 +1,22 @@
+"use server";
+
+import { db } from '@/db';
+import { comprasOnline, ordensServico, simulacoesLentes, tabelaPrecos, contasMensais } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+
+export async function deletarRegistro(id: number, tabela: string, caminho: string) {
+  try {
+    if (tabela === 'compras') await db.delete(comprasOnline).where(eq(comprasOnline.id, id));
+    if (tabela === 'os') await db.delete(ordensServico).where(eq(ordensServico.id, id));
+    if (tabela === 'simulacao') await db.delete(simulacoesLentes).where(eq(simulacoesLentes.id, id));
+    if (tabela === 'preco') await db.delete(tabelaPrecos).where(eq(tabelaPrecos.id, id));
+    if (tabela === 'conta') await db.delete(contasMensais).where(eq(contasMensais.id, id));
+
+    revalidatePath(caminho);
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao deletar:", error);
+    return { success: false, error: "Erro ao excluir o registro." };
+  }
+}

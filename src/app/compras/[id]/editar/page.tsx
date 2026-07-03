@@ -7,9 +7,12 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ArrowLeft, Save } from 'lucide-react';
 
-export default async function EditarCompraPage({ params }: { params: { id: string } }) {
-  const compraId = parseInt(params.id);
-  const compra = await db.select().from(comprasOnline).where(eq(comprasOnline.id, compraId)).get();
+export default async function EditarCompraPage({ params }: any) {
+  const resolvedParams = await params;
+  const compraId = parseInt(resolvedParams.id);
+  
+  const resultado = await db.select().from(comprasOnline).where(eq(comprasOnline.id, compraId));
+  const compra = resultado[0];
 
   if (!compra) redirect('/compras');
 
@@ -34,7 +37,7 @@ export default async function EditarCompraPage({ params }: { params: { id: strin
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-4 mb-8">
         <Link href="/compras" className="p-2 hover:bg-slate-200 rounded-full"><ArrowLeft className="h-6 w-6" /></Link>
-        <div><h1 className="text-3xl font-bold">Editar Compra</h1></div>
+        <div><h1 className="text-3xl font-bold text-slate-900">Editar Compra</h1></div>
       </div>
       <form action={atualizarCompra} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -51,14 +54,13 @@ export default async function EditarCompraPage({ params }: { params: { id: strin
           <div><label className="font-bold text-sm">Valor Total (R$)</label><input type="number" step="0.01" name="valorTotal" defaultValue={compra.valorTotal} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
           <div>
             <label className="font-bold text-sm">Situação</label>
-            {/* CORREÇÃO APLICADA AQUI NO defaultValue */}
             <select name="situacaoPagamento" defaultValue={compra.situacaoPagamento || 'A PAGAR'} className="w-full px-4 py-2 bg-slate-50 border rounded-lg font-bold">
               <option value="A PAGAR">A PAGAR</option>
               <option value="PAGO">PAGO</option>
             </select>
           </div>
         </div>
-        <div className="flex justify-end pt-4"><button type="submit" className="bg-yellow-500 hover:bg-yellow-600 px-8 py-3 rounded-xl font-bold shadow-md"><Save className="h-5 w-5 inline mr-2"/> Salvar</button></div>
+        <div className="flex justify-end pt-4"><button type="submit" className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-8 py-3 rounded-xl font-bold shadow-md"><Save className="h-5 w-5 inline mr-2"/> Salvar Alterações</button></div>
       </form>
     </div>
   );

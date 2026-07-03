@@ -7,9 +7,12 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ArrowLeft, Save } from 'lucide-react';
 
-export default async function EditarPrecoPage({ params }: { params: { id: string } }) {
-  const precoId = parseInt(params.id);
-  const preco = await db.select().from(tabelaPrecos).where(eq(tabelaPrecos.id, precoId)).get();
+export default async function EditarPrecoPage({ params }: any) {
+  const resolvedParams = await params;
+  const precoId = parseInt(resolvedParams.id);
+  
+  const resultado = await db.select().from(tabelaPrecos).where(eq(tabelaPrecos.id, precoId));
+  const preco = resultado[0];
 
   if (!preco) redirect('/tabela-precos');
 
@@ -33,7 +36,7 @@ export default async function EditarPrecoPage({ params }: { params: { id: string
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-4 mb-8">
         <Link href="/tabela-precos" className="p-2 hover:bg-slate-200 rounded-full"><ArrowLeft className="h-6 w-6" /></Link>
-        <div><h1 className="text-3xl font-bold">Editar Preço de Serviço</h1></div>
+        <div><h1 className="text-3xl font-bold text-slate-900">Editar Preço de Serviço</h1></div>
       </div>
       <form action={atualizarPreco} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">
         <div>
@@ -57,7 +60,7 @@ export default async function EditarPrecoPage({ params }: { params: { id: string
             <label className="text-xs font-bold">Cartão</label><input type="number" step="0.01" name="oticasCartao" defaultValue={preco.oticasCartao} className="w-full p-2 border border-blue-300 rounded" />
           </div>
         </div>
-        <div className="flex justify-end pt-4"><button type="submit" className="bg-yellow-500 hover:bg-yellow-600 px-8 py-3 rounded-xl font-bold shadow-md"><Save className="h-5 w-5 inline mr-2"/> Atualizar Tabela</button></div>
+        <div className="flex justify-end pt-4"><button type="submit" className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-8 py-3 rounded-xl font-bold shadow-md"><Save className="h-5 w-5 inline mr-2"/> Atualizar Valores</button></div>
       </form>
     </div>
   );

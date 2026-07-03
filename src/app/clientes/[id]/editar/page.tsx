@@ -7,16 +7,17 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ArrowLeft, Save, User } from 'lucide-react';
 
-export default async function EditarClientePage({ params }: { params: { id: string } }) {
-  const clienteId = parseInt(params.id);
+export default async function EditarClientePage({ params }: any) {
+  // Ajuste do Params Assíncrono
+  const resolvedParams = await params;
+  const clienteId = parseInt(resolvedParams.id);
   
-  // 1. Busca os dados atuais do cliente no banco
-  const clienteData = await db.select().from(clientes).where(eq(clientes.id, clienteId)).get();
+  // Ajuste do método de busca no banco
+  const resultado = await db.select().from(clientes).where(eq(clientes.id, clienteId));
+  const clienteData = resultado[0];
 
-  // Se não achar o cliente, volta pra lista
   if (!clienteData) redirect('/clientes');
 
-  // 2. Função que salva a alteração no banco
   async function atualizarCliente(formData: FormData) {
     "use server";
     const nome = formData.get('nome') as string;
@@ -48,23 +49,12 @@ export default async function EditarClientePage({ params }: { params: { id: stri
 
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-1">Nome Completo *</label>
-          <input 
-            type="text" 
-            name="nome" 
-            defaultValue={clienteData.nome} 
-            required 
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" 
-          />
+          <input type="text" name="nome" defaultValue={clienteData.nome} required className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" />
         </div>
 
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-1">Telefone (WhatsApp)</label>
-          <input 
-            type="text" 
-            name="telefone" 
-            defaultValue={clienteData.telefone || ''} 
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" 
-          />
+          <input type="text" name="telefone" defaultValue={clienteData.telefone || ''} className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" />
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t mt-6">

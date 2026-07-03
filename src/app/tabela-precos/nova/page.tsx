@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Save, Tool, Store, Bike, Building2 } from 'lucide-react';
+import { ArrowLeft, Save, Wrench, Store, Bike, Building2 } from 'lucide-react';
 import { salvarPrecoServico } from '@/actions/precos';
 
 export default function NovoPrecoPage() {
@@ -19,7 +19,7 @@ export default function NovoPrecoPage() {
         {/* NOME DO SERVIÇO */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <label className="block text-sm font-black text-slate-800 mb-2 uppercase tracking-widest flex items-center gap-2">
-            <Tool className="h-5 w-5 text-yellow-500" /> Tipo de Conserto *
+            <Wrench className="h-5 w-5 text-yellow-500" /> Tipo de Conserto *
           </label>
           <input type="text" name="tipoConserto" required className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold" placeholder="Ex: Solda Simples, Troca de Plaquetas..." />
         </div>

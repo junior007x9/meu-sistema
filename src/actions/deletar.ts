@@ -12,7 +12,7 @@ import {
   servicosJoaozinho,
   contaStyllo,
   contaUti,
-  controleCarne // <-- IMPORTAÇÃO CORRIGIDA AQUI
+  controleCarne, // <-- A VÍRGULA QUE FALTAVA ESTÁ AQUI
   clientesDevedoresUti
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -30,9 +30,9 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'joaozinho') await db.delete(servicosJoaozinho).where(eq(servicosJoaozinho.id, id));
     if (tabela === 'conta-styllo') await db.delete(contaStyllo).where(eq(contaStyllo.id, id));
     if (tabela === 'conta-uti') await db.delete(contaUti).where(eq(contaUti.id, id));
-    if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id)); // O comando agora vai funcionar
-    // Adicione esta linha logo abaixo da exclusão do carnê:
+    if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id));
     if (tabela === 'devedores-uti') await db.delete(clientesDevedoresUti).where(eq(clientesDevedoresUti.id, id));
+
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

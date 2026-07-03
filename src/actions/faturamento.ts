@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation';
 import { contaStyllo } from '@/db/schema';
 import { contaUti } from '@/db/schema';
 import { controleCarne } from '@/db/schema';
+import { clientesDevedoresUti} from '@/db/schema';
+
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -96,4 +98,19 @@ export async function salvarCarne(formData: FormData) {
 
   revalidatePath('/faturamento/carne');
   redirect('/faturamento/carne');
+}
+export async function salvarDevedorUti(formData: FormData) {
+  const cliente = formData.get('cliente') as string;
+  const contato = formData.get('contato') as string || '';
+  const servicos = formData.get('servicos') as string;
+  const valor = parseFloat(formData.get('valor') as string) || 0;
+  const data = formData.get('data') as string;
+  const pago = formData.get('pago') as string;
+
+  await db.insert(clientesDevedoresUti).values({
+    cliente, contato, servicos, valor, data, pago
+  });
+
+  revalidatePath('/faturamento/devedores-uti');
+  redirect('/faturamento/devedores-uti');
 }

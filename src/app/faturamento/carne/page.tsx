@@ -3,17 +3,15 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { controleCarne } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BookOpen, Wrench, Landmark, Activity } from 'lucide-react';
+import { Plus, BookOpen, Wrench, Landmark, Activity, UserMinus } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function CarnesPage() {
   const registros = await db.select().from(controleCarne).orderBy(desc(controleCarne.id));
 
-  // Somatórios do Rodapé
   const somaVendas = registros.reduce((acc, c) => acc + c.valorVenda, 0);
   const somaEntradas = registros.reduce((acc, c) => acc + c.valorEntrada, 0);
   
-  // Array para somar as colunas das 10 parcelas
   const somaParcelas = Array(10).fill(0);
   let totalGeralTodasParcelas = 0;
 
@@ -38,11 +36,12 @@ export default async function CarnesPage() {
       </div>
 
       {/* SISTEMA DE ABAS - CARNÊS ATIVO */}
-      <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
+      <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
          <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
          <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
          <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
          <Link href="/faturamento/carne" className="px-4 py-2 bg-white border-t-2 border-x-2 border-yellow-500 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><BookOpen className="h-4 w-4" /> Carnês</Link>
+         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -53,7 +52,6 @@ export default async function CarnesPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            {/* Tabela Extra Larga para caber tudo igual ao Excel */}
             <table className="w-full text-center border-collapse min-w-[2800px] border border-slate-400">
               <thead>
                 <tr>
@@ -69,8 +67,6 @@ export default async function CarnesPage() {
                   <th className="p-2 border border-slate-400">DATA DA COMPRA</th>
                   <th className="p-2 border border-slate-400">VALOR</th>
                   <th className="p-2 border border-slate-400">ENTRAD.</th>
-                  
-                  {/* Cabeçalho das 10 Parcelas */}
                   {[...Array(10)].map((_, i) => (
                     <React.Fragment key={i}>
                       <th className="p-2 border border-slate-400 bg-yellow-50 text-yellow-900">{i+1}ª (R$)</th>
@@ -90,8 +86,6 @@ export default async function CarnesPage() {
                     <td className="p-2 border border-slate-400">{item.dataCompra.split('-').reverse().join('/')}</td>
                     <td className="p-2 border border-slate-400 text-blue-700">R$ {item.valorVenda.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400 text-emerald-700">R$ {item.valorEntrada.toFixed(2)}</td>
-                    
-                    {/* Renderiza as 10 parcelas da linha */}
                     {[...Array(10)].map((_, i) => {
                       const v = Number((item as any)[`p${i+1}Valor`]);
                       const d = (item as any)[`p${i+1}Data`];
@@ -109,7 +103,6 @@ export default async function CarnesPage() {
                 ))}
               </tbody>
               <tfoot>
-                 {/* LINHA DE TOTAIS DAS COLUNAS (Amarela) */}
                  <tr className="bg-yellow-300 text-slate-900 font-black text-xs">
                     <td colSpan={5} className="p-3 border border-slate-400 text-right uppercase">TOTAL:</td>
                     <td className="p-3 border border-slate-400">{somaVendas.toFixed(2)}</td>
@@ -122,7 +115,6 @@ export default async function CarnesPage() {
                     ))}
                     <td className="p-3 border border-slate-400 bg-slate-200"></td>
                  </tr>
-                 {/* LINHA VERDE GIGANTE COM O TOTAL GERAL DAS PARCELAS */}
                  <tr className="bg-[#92d050] text-black font-black text-sm uppercase tracking-widest text-center">
                     <td colSpan={7} className="p-3 border border-slate-400 text-right">TOTAL GERAL DE PARCELAS:</td>
                     <td colSpan={19} className="p-3 border border-slate-400 text-left pl-8 text-lg">

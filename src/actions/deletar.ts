@@ -13,6 +13,7 @@ import {
   contaStyllo,
   contaUti,
   controleCarne // <-- IMPORTAÇÃO CORRIGIDA AQUI
+  clientesDevedoresUti
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -30,7 +31,8 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'conta-styllo') await db.delete(contaStyllo).where(eq(contaStyllo.id, id));
     if (tabela === 'conta-uti') await db.delete(contaUti).where(eq(contaUti.id, id));
     if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id)); // O comando agora vai funcionar
-
+    // Adicione esta linha logo abaixo da exclusão do carnê:
+    if (tabela === 'devedores-uti') await db.delete(clientesDevedoresUti).where(eq(clientesDevedoresUti.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

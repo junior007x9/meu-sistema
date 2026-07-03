@@ -315,3 +315,14 @@ export const controleCarne = sqliteTable('controle_carne', {
 
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+export const clientesDevedoresUti = sqliteTable('clientes_devedores_uti', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  cliente: text('cliente').notNull(),
+  contato: text('contato'),
+  servicos: text('servicos').notNull(),
+  valor: real('valor').default(0).notNull(),
+  data: text('data').notNull(),
+  pago: text('pago').default('NÃO').notNull(), // Status: 'SIM' ou 'NÃO'
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

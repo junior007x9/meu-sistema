@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { contaStyllo } from '@/db/schema';
 
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
@@ -31,4 +32,25 @@ export async function salvarServicoJoaozinho(formData: FormData) {
 
   revalidatePath('/faturamento/joaozinho');
   redirect('/faturamento/joaozinho');
+}
+export async function salvarContaStyllo(formData: FormData) {
+  const data = formData.get('data') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const anoBase = formData.get('anoBase') as string;
+  
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+
+  // A Matemática: Tudo que entra menos o que sai
+  const total = (pix + credito + debito) - saida;
+
+  await db.insert(contaStyllo).values({
+    data, mesReferencia, anoBase,
+    pix, credito, debito, saida, total
+  });
+
+  revalidatePath('/faturamento/conta-styllo');
+  redirect('/faturamento/conta-styllo');
 }

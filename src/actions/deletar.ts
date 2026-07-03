@@ -9,7 +9,8 @@ import {
   tabelaPrecos, 
   contasMensais, 
   produtos, 
-  servicosJoaozinho // <-- AQUI ESTÁ A IMPORTAÇÃO QUE FALTAVA
+  servicosJoaozinho, // <-- AQUI ESTÁ A IMPORTAÇÃO QUE FALTAVA
+  contaStyllo
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -24,6 +25,8 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'preco') await db.delete(tabelaPrecos).where(eq(tabelaPrecos.id, id));
     if (tabela === 'conta') await db.delete(contasMensais).where(eq(contasMensais.id, id));
     if (tabela === 'joaozinho') await db.delete(servicosJoaozinho).where(eq(servicosJoaozinho.id, id));
+    // Adicione esta linha logo abaixo da exclusão do joaozinho:
+    if (tabela === 'conta-styllo') await db.delete(contaStyllo).where(eq(contaStyllo.id, id));
 
     revalidatePath(caminho);
     return { success: true };

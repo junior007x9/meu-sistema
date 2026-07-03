@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BarChart3, Wrench } from 'lucide-react';
+import { Plus, BarChart3, Wrench, Landmark } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function JoaozinhoPage() {
@@ -22,12 +22,14 @@ export default async function JoaozinhoPage() {
         </Link>
       </div>
 
-      {/* Abas Superiores (Prontas para receber as próximas tabelas) */}
-      <div className="flex gap-2 border-b border-slate-200 pb-2">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2">
+      {/* SISTEMA DE ABAS (Navegação entre as planilhas) */}
+      <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap">
             <Wrench className="h-4 w-4" /> Serviços Joãozinho
          </Link>
-         {/* As próximas tabelas vão entrar aqui ao lado depois! */}
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap">
+            <Landmark className="h-4 w-4" /> Conta Styllo Ótica
+         </Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -75,7 +77,6 @@ export default async function JoaozinhoPage() {
                     <td className="p-3 border border-slate-400 text-purple-700">R$ {item.coloracaoValor.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-[#92d050]/20 text-green-800 font-black text-sm">R$ {item.total.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-white">
-                      {/* O link de edição deixaremos pronto para o futuro, hoje usamos só o excluir que já funciona */}
                       <BotoesAcao id={item.id} tabela="joaozinho" caminho="/faturamento/joaozinho" linkEditar={`/faturamento/joaozinho/${item.id}/editar`} />
                     </td>
                   </tr>

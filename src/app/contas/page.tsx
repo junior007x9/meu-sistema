@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { contasMensais } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 import { Plus, Receipt } from 'lucide-react';
+import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function ContasMensaisPage() {
   const listaContas = await db.select().from(contasMensais).orderBy(desc(contasMensais.criadoEm));
@@ -26,11 +27,10 @@ export default async function ContasMensaisPage() {
           <div className="p-12 flex flex-col items-center justify-center text-center">
             <Receipt className="h-16 w-16 text-slate-300 mb-4" />
             <h3 className="text-lg font-bold text-slate-900">Nenhum repasse registrado</h3>
-            <p className="text-slate-500 max-w-sm mt-1">Clique no botão acima para iniciar os cálculos do mês.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-center border-collapse min-w-[900px] border border-slate-400">
+            <table className="w-full text-center border-collapse min-w-[1000px] border border-slate-400">
               <thead>
                 <tr>
                   <th colSpan={8} className="bg-slate-900 text-white py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">
@@ -39,12 +39,13 @@ export default async function ContasMensaisPage() {
                 </tr>
                 <tr className="text-xs uppercase tracking-wider font-black text-black">
                   <th className="p-3 bg-slate-200 border border-slate-400">Mês Referência</th>
-                  <th className="p-3 bg-yellow-100 border border-slate-400">Total Fatura (R$)</th>
-                  <th className="p-3 bg-yellow-100 border border-slate-400">Equatorial Barbosa</th>
-                  <th className="p-3 bg-yellow-100 border border-slate-400">Equatorial Aline</th>
+                  <th className="p-3 bg-yellow-100 border border-slate-400">Total Fatura</th>
+                  <th className="p-3 bg-yellow-100 border border-slate-400">Eq. Barbosa</th>
+                  <th className="p-3 bg-yellow-100 border border-slate-400">Eq. Aline</th>
                   <th className="p-3 bg-blue-100 border border-slate-400">Água Barbosa</th>
                   <th className="p-3 bg-blue-100 border border-slate-400">Água Aline</th>
-                  <th className="p-3 bg-[#ff3300] text-white border border-slate-400">TOTAL ALINE (Repasse)</th>
+                  <th className="p-3 bg-[#ff3300] text-white border border-slate-400">TOTAL ALINE</th>
+                  <th className="p-3 bg-slate-200 border border-slate-400">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,6 +58,9 @@ export default async function ContasMensaisPage() {
                     <td className="p-3 border border-slate-400">R$ {conta.aguaBarbosa.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400">R$ {conta.aguaAline.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-red-50 text-red-700 font-black text-lg">R$ {conta.totalAlineGeral.toFixed(2)}</td>
+                    <td className="p-3 border border-slate-400 bg-white">
+                      <BotoesAcao id={conta.id} tabela="conta" caminho="/contas" linkEditar={`/contas/${conta.id}/editar`} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

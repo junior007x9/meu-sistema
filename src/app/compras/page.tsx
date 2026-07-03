@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { comprasOnline } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 import { Plus, Search, ShoppingBag, Truck, CheckCircle2, Clock } from 'lucide-react';
+import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function ComprasPage() {
   const listaCompras = await db.select().from(comprasOnline).orderBy(desc(comprasOnline.criadoEm));
@@ -21,11 +22,6 @@ export default async function ComprasPage() {
         </Link>
       </div>
 
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-        <Search className="h-5 w-5 text-slate-400" />
-        <input type="text" placeholder="Buscar por produto, loja ou rastreio..." className="bg-transparent border-none outline-none w-full text-slate-700 font-medium" />
-      </div>
-
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         {listaCompras.length === 0 ? (
           <div className="p-12 flex flex-col items-center justify-center text-center">
@@ -35,7 +31,7 @@ export default async function ComprasPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[1000px]">
+            <table className="w-full text-left border-collapse min-w-[1100px]">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500 font-black">
                   <th className="p-4">Data</th>
@@ -46,6 +42,7 @@ export default async function ComprasPage() {
                   <th className="p-4 text-center">Qtd.</th>
                   <th className="p-4 text-right">Valor Total</th>
                   <th className="p-4 text-center">Situação</th>
+                  <th className="p-4 text-center">Ações</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -77,6 +74,9 @@ export default async function ComprasPage() {
                           <Clock className="h-3 w-3" /> {compra.situacaoPagamento}
                         </span>
                       )}
+                    </td>
+                    <td className="p-4 bg-slate-50 border-l border-slate-100">
+                      <BotoesAcao id={compra.id} tabela="compras" caminho="/compras" linkEditar={`/compras/${compra.id}/editar`} />
                     </td>
                   </tr>
                 ))}

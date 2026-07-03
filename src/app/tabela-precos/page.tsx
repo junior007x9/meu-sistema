@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { tabelaPrecos } from '@/db/schema';
 import { asc } from 'drizzle-orm';
 import { Plus, ListChecks } from 'lucide-react';
+import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function TabelaPrecosPage() {
   const listaPrecos = await db.select().from(tabelaPrecos).orderBy(asc(tabelaPrecos.tipoConserto));
@@ -26,37 +27,29 @@ export default async function TabelaPrecosPage() {
           <div className="p-12 flex flex-col items-center justify-center text-center">
             <ListChecks className="h-16 w-16 text-slate-300 mb-4" />
             <h3 className="text-lg font-bold text-slate-900">Nenhum serviço cadastrado</h3>
-            <p className="text-slate-500 max-w-sm mt-1">Clique no botão acima para adicionar preços à sua tabela.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-center border-collapse min-w-[900px] border border-slate-400">
+            <table className="w-full text-center border-collapse min-w-[1000px] border border-slate-400">
               <thead>
-                {/* LINHA 1: TÍTULO GERAL (CIANO) */}
                 <tr>
-                  <th colSpan={7} className="bg-[#00bdf2] text-black py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">
+                  <th colSpan={8} className="bg-[#00bdf2] text-black py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">
                     TABELA DE PREÇOS DE SERVIÇOS - 2026
                   </th>
                 </tr>
-                
-                {/* LINHA 2: CANAIS DE VENDA */}
                 <tr className="text-xs uppercase tracking-wider font-black text-black">
                   <th className="p-3 bg-[#ffffcc] border border-slate-400">LOJA STYLLO ÓTICA</th>
                   <th colSpan={2} className="p-3 bg-[#ccffcc] border border-slate-400">NA LOJA</th>
                   <th colSpan={2} className="p-3 bg-[#fae3d2] border border-slate-400">DELIVERY</th>
                   <th colSpan={2} className="p-3 bg-[#dce8f5] border border-slate-400">ÓTICAS</th>
+                  <th rowSpan={2} className="p-3 bg-slate-200 border border-slate-400">AÇÕES</th>
                 </tr>
-                
-                {/* LINHA 3: MÉTODOS DE PAGAMENTO */}
                 <tr className="text-[10px] uppercase font-black text-black">
                   <th className="p-2 bg-[#ffffcc] border border-slate-400">TIPOS DE CONSERTOS</th>
-                  
                   <th className="p-2 bg-[#ccffcc] border border-slate-400">ESPÉCIE / PIX</th>
                   <th className="p-2 bg-[#ccffcc] border border-slate-400">CARTÃO</th>
-                  
                   <th className="p-2 bg-[#fae3d2] border border-slate-400">ESPÉCIE / PIX</th>
                   <th className="p-2 bg-[#fae3d2] border border-slate-400">CARTÃO</th>
-                  
                   <th className="p-2 bg-[#dce8f5] border border-slate-400">ESPÉCIE / PIX</th>
                   <th className="p-2 bg-[#dce8f5] border border-slate-400">CARTÃO</th>
                 </tr>
@@ -65,15 +58,15 @@ export default async function TabelaPrecosPage() {
                 {listaPrecos.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors font-bold text-xs text-slate-800">
                     <td className="p-3 border border-slate-400 bg-[#ffffcc]/50 text-left uppercase">{item.tipoConserto}</td>
-                    
                     <td className="p-3 border border-slate-400 bg-[#ccffcc]/30">R$ {item.lojaPix.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-[#ccffcc]/30">R$ {item.lojaCartao.toFixed(2)}</td>
-                    
                     <td className="p-3 border border-slate-400 bg-[#fae3d2]/30">R$ {item.deliveryPix.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-[#fae3d2]/30">R$ {item.deliveryCartao.toFixed(2)}</td>
-                    
                     <td className="p-3 border border-slate-400 bg-[#dce8f5]/30">R$ {item.oticasPix.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-[#dce8f5]/30">R$ {item.oticasCartao.toFixed(2)}</td>
+                    <td className="p-3 border border-slate-400 bg-white">
+                      <BotoesAcao id={item.id} tabela="preco" caminho="/tabela-precos" linkEditar={`/tabela-precos/${item.id}/editar`} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

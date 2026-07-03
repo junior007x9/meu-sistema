@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { simulacoesLentes } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, Calculator, FileText } from 'lucide-react';
+import { Plus, Calculator } from 'lucide-react';
+import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function SimulacoesPage() {
   const simulacoes = await db.select().from(simulacoesLentes).orderBy(desc(simulacoesLentes.criadoEm));
@@ -26,15 +27,13 @@ export default async function SimulacoesPage() {
           <div className="p-12 flex flex-col items-center justify-center text-center">
             <Calculator className="h-16 w-16 text-slate-300 mb-4" />
             <h3 className="text-lg font-bold text-slate-900">Nenhuma simulação salva</h3>
-            <p className="text-slate-500 max-w-sm mt-1">Clique no botão acima para abrir a calculadora inteligente.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[1100px]">
+            <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
-                {/* Título unificado idêntico ao Excel */}
                 <tr>
-                  <th colSpan={8} className="bg-slate-100 text-slate-800 text-center py-3 font-black tracking-widest uppercase border-b border-slate-300 text-sm">
+                  <th colSpan={9} className="bg-slate-100 text-slate-800 text-center py-3 font-black tracking-widest uppercase border-b border-slate-300 text-sm">
                     SIMULAÇÃO DE VALORES DE LENTES
                   </th>
                 </tr>
@@ -46,7 +45,8 @@ export default async function SimulacoesPage() {
                   <th className="p-3 border-r border-slate-200 text-center text-red-700">Desconto Cartão em 6 X</th>
                   <th className="p-3 border-r border-slate-200 text-center">Diferença</th>
                   <th className="p-3 border-r border-slate-200 text-center bg-green-50 text-green-700 font-black">Ganho</th>
-                  <th className="p-3 text-center">Cliente</th>
+                  <th className="p-3 border-r border-slate-200 text-center">Cliente</th>
+                  <th className="p-3 text-center">Ações</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -59,7 +59,10 @@ export default async function SimulacoesPage() {
                     <td className="p-3 border-r border-slate-200 text-sm font-bold text-red-600 text-center">R$ {sim.descontoCartao.toFixed(2)}</td>
                     <td className="p-3 border-r border-slate-200 text-sm font-medium text-slate-600 text-center">R$ {sim.diferenca.toFixed(2)}</td>
                     <td className="p-3 border-r border-slate-200 text-sm font-black text-green-600 text-center bg-green-50/50">R$ {sim.ganho.toFixed(2)}</td>
-                    <td className="p-3 text-xs font-bold text-slate-500 text-center uppercase">{sim.cliente || '-'}</td>
+                    <td className="p-3 border-r border-slate-200 text-xs font-bold text-slate-500 text-center uppercase">{sim.cliente || '-'}</td>
+                    <td className="p-3 bg-slate-50">
+                      <BotoesAcao id={sim.id} tabela="simulacao" caminho="/simulacoes" linkEditar={`/simulacoes/${sim.id}/editar`} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -5,22 +5,44 @@ import { produtos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { ArrowLeft, Save, Package } from 'lucide-react';
+import { ArrowLeft, Save, Package, Tag } from 'lucide-react';
 
 export default async function EditarProdutoPage({ params }: { params: { id: string } }) {
   const produtoId = parseInt(params.id);
   
+  // Busca o produto correspondente no banco
   const produtoData = await db.select().from(produtos).where(eq(produtos.id, produtoId)).get();
 
   if (!produtoData) redirect('/produtos');
 
+  // Função que executa a atualização mapeando o Schema correto
   async function atualizarProduto(formData: FormData) {
     "use server";
+    const codigo = formData.get('codigo') as string;
     const nome = formData.get('nome') as string;
+    const categoria = formData.get('categoria') as string;
+    const fornecedor = formData.get('fornecedor') as string;
+    
+    const precoCusto = parseFloat(formData.get('precoCusto') as string) || 0;
+    const estoque = parseInt(formData.get('estoque') as string, 10) || 0;
+    const precoVenda = parseFloat(formData.get('precoVenda') as string) || 0;
+    const porcentagemDesconto = parseFloat(formData.get('porcentagemDesconto') as string) || 0;
 
-    // Atualizando apenas o Nome por enquanto para não quebrar a Vercel
+    if (!nome || !categoria || precoVenda <= 0) {
+      throw new Error('Nome, categoria e preço de venda são obrigatórios.');
+    }
+
     await db.update(produtos)
-      .set({ nome })
+      .set({ 
+        codigo: codigo || null,
+        nome, 
+        categoria, 
+        fornecedor: fornecedor || null,
+        precoCusto, 
+        estoque, 
+        precoVenda, 
+        porcentagemDesconto 
+      })
       .where(eq(produtos.id, produtoId));
       
     revalidatePath('/produtos');
@@ -28,38 +50,86 @@ export default async function EditarProdutoPage({ params }: { params: { id: stri
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/produtos" className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/produtos" className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500">
+          <ArrowLeft className="h-6 w-6" />
+        </Link>
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Editar Produto</h1>
-          <p className="text-sm text-slate-500 font-medium">Atualize os dados básicos.</p>
+          <p className="text-sm text-slate-500 font-medium">Modifique as informações cadastrais e níveis de estoque.</p>
         </div>
       </div>
 
-      <form action={atualizarProduto} className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 mb-4 border-b pb-2">
-          <Package className="h-5 w-5 text-yellow-500" />
-          <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Dados do Produto</h2>
+      <form action={atualizarProduto} className="space-y-6">
+        
+        {/* BLOCO 1: IDENTIFICAÇÃO */}
+        <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div className="flex items-center gap-2 mb-2 border-b pb-3">
+            <Package className="h-5 w-5 text-yellow-500" />
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Identificação do Produto</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-1">
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Código de Barras / Ref.</label>
+              <input type="text" name="codigo" defaultValue={produtoData.codigo || ''} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-mono font-bold" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Nome / Descrição do Produto *</label>
+              <input type="text" name="nome" defaultValue={produtoData.nome} required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold text-slate-800" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Categoria *</label>
+              <input type="text" name="categoria" defaultValue={produtoData.categoria} required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" placeholder="Ex: Armações, Lentes, Acessórios" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Fornecedor / Representante</label>
+              <input type="text" name="fornecedor" defaultValue={produtoData.fornecedor || ''} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" />
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-bold text-slate-700 mb-1">Nome / Descrição *</label>
-          <input 
-            type="text" 
-            name="nome" 
-            defaultValue={produtoData.nome} 
-            required 
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" 
-          />
+        {/* BLOCO 2: VALORES E ESTOQUE */}
+        <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div className="flex items-center gap-2 mb-2 border-b pb-3">
+            <Tag className="h-5 w-5 text-yellow-500" />
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Preços e Níveis de Estoque</h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Preço de Custo (R$)</label>
+              <input type="number" step="0.01" name="precoCusto" defaultValue={produtoData.precoCusto || 0} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Qtd. em Estoque *</label>
+              <input type="number" name="estoque" defaultValue={produtoData.estoque} required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-black text-slate-800" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Preço de Venda (R$) *</label>
+              <input type="number" step="0.01" name="precoVenda" defaultValue={produtoData.precoVenda} required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-black text-emerald-600" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">% Máx Desconto</label>
+              <input type="number" step="0.01" name="porcentagemDesconto" defaultValue={produtoData.porcentagemDesconto || 0} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold text-amber-600" />
+            </div>
+          </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t mt-6">
-          <Link href="/produtos" className="px-6 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">Cancelar</Link>
-          <button type="submit" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold shadow-md transition-all">
+        {/* BOTÕES DE AÇÃO */}
+        <div className="flex justify-end gap-3 pb-10">
+          <Link href="/produtos" className="px-6 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">
+            Cancelar
+          </Link>
+          <button type="submit" className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-8 py-2.5 rounded-xl font-bold shadow-md transition-transform hover:scale-105">
             <Save className="h-5 w-5" /> Salvar Alterações
           </button>
         </div>
+
       </form>
     </div>
   );

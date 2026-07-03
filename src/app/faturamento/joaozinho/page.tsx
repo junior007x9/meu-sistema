@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BarChart3, Wrench, Landmark } from 'lucide-react';
+import { Plus, BarChart3, Wrench, Landmark, Activity } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function JoaozinhoPage() {
@@ -22,13 +22,16 @@ export default async function JoaozinhoPage() {
         </Link>
       </div>
 
-      {/* SISTEMA DE ABAS (Navegação entre as planilhas) */}
+      {/* SISTEMA DE ABAS - JOÃOZINHO ATIVO */}
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap">
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm">
             <Wrench className="h-4 w-4" /> Serviços Joãozinho
          </Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap">
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors">
             <Landmark className="h-4 w-4" /> Conta Styllo Ótica
+         </Link>
+         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors">
+            <Activity className="h-4 w-4" /> Conta UTI
          </Link>
       </div>
 

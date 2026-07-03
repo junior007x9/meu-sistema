@@ -5,6 +5,7 @@ import { servicosJoaozinho } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { contaStyllo } from '@/db/schema';
+import { contaUti } from '@/db/schema';
 
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
@@ -53,4 +54,24 @@ export async function salvarContaStyllo(formData: FormData) {
 
   revalidatePath('/faturamento/conta-styllo');
   redirect('/faturamento/conta-styllo');
+}
+export async function salvarContaUti(formData: FormData) {
+  const data = formData.get('data') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const anoBase = formData.get('anoBase') as string;
+  
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+
+  const total = (pix + credito + debito) - saida;
+
+  await db.insert(contaUti).values({
+    data, mesReferencia, anoBase,
+    pix, credito, debito, saida, total
+  });
+
+  revalidatePath('/faturamento/conta-uti');
+  redirect('/faturamento/conta-uti');
 }

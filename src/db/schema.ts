@@ -276,3 +276,18 @@ export const contaStyllo = sqliteTable('conta_styllo', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+export const contaUti = sqliteTable('conta_uti', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  data: text('data').notNull(),
+  mesReferencia: text('mes_referencia').notNull(),
+  anoBase: text('ano_base').default('2026').notNull(),
+  
+  pix: real('pix').default(0).notNull(),
+  credito: real('credito').default(0).notNull(),
+  debito: real('debito').default(0).notNull(),
+  saida: real('saida').default(0).notNull(),
+  
+  total: real('total').default(0).notNull(), // (PIX + Credito + Debito) - Saída
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

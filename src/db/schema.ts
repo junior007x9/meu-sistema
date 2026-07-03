@@ -338,3 +338,19 @@ export const servicosIndicados = sqliteTable('servicos_indicados', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+export const controleFuncionarios = sqliteTable('controle_funcionarios', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  nome: text('nome').notNull(),
+  mesReferencia: text('mes_referencia').notNull(),
+  dataInicio: text('data_inicio').notNull(),
+  diasJson: text('dias_json').notNull(), // Guarda todos os dias numa única coluna
+  
+  totalVt: real('total_vt').default(0).notNull(),
+  totalVa: real('total_va').default(0).notNull(),
+  totalSalario: real('total_salario').default(0).notNull(),
+  totalFerias: real('total_ferias').default(0).notNull(),
+  total13: real('total_13').default(0).notNull(),
+  totalGeral: real('total_geral').default(0).notNull(),
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

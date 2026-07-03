@@ -9,7 +9,7 @@ import { contaUti } from '@/db/schema';
 import { controleCarne } from '@/db/schema';
 import { clientesDevedoresUti} from '@/db/schema';
 import { servicosIndicados } from '@/db/schema';
-
+import { controleFuncionarios } from '@/db/schema';
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -130,4 +130,44 @@ export async function salvarServicoIndicado(formData: FormData) {
 
   revalidatePath('/faturamento/servicos-indicados');
   redirect('/faturamento/servicos-indicados');
+}
+export async function salvarFuncionario(formData: FormData) {
+  const nome = formData.get('nome') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const dataInicio = formData.get('dataInicio') as string;
+  
+  let totalVt = 0, totalVa = 0, totalSalario = 0, totalFerias = 0, total13 = 0;
+  const dias = [];
+
+  // O sistema varre as 25 linhas do formulário
+  for(let i = 0; i < 25; i++) {
+    const dia = formData.get(`dia_${i}`) as string;
+    if(!dia) continue; // Se o dia estiver vazio, ignora
+    
+    const status = formData.get(`status_${i}`) as string;
+    let vt = 0, va = 0, sal = 0, fer = 0, d13 = 0;
+    
+    // Se estiver presente (P), lê os valores da linha
+    if (status === 'P') {
+      vt = parseFloat(formData.get(`vt_${i}`) as string) || 0;
+      va = parseFloat(formData.get(`va_${i}`) as string) || 0;
+      sal = parseFloat(formData.get(`sal_${i}`) as string) || 0;
+      fer = parseFloat(formData.get(`fer_${i}`) as string) || 0;
+      d13 = parseFloat(formData.get(`d13_${i}`) as string) || 0;
+    }
+
+    totalVt += vt; totalVa += va; totalSalario += sal; totalFerias += fer; total13 += d13;
+    dias.push({ dia, status, vt, va, sal, fer, d13 });
+  }
+
+  const totalGeral = totalVt + totalVa + totalSalario + totalFerias + total13;
+
+  await db.insert(controleFuncionarios).values({
+    nome, mesReferencia, dataInicio,
+    diasJson: JSON.stringify(dias), // Salva a planilha inteira aqui
+    totalVt, totalVa, totalSalario, totalFerias, total13, totalGeral
+  });
+
+  revalidatePath('/faturamento/funcionarios');
+  redirect('/faturamento/funcionarios');
 }

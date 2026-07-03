@@ -10,20 +10,17 @@ import { ArrowLeft, Save, Package } from 'lucide-react';
 export default async function EditarProdutoPage({ params }: { params: { id: string } }) {
   const produtoId = parseInt(params.id);
   
-  // Busca os dados no banco
   const produtoData = await db.select().from(produtos).where(eq(produtos.id, produtoId)).get();
 
   if (!produtoData) redirect('/produtos');
 
-  // Função para salvar
   async function atualizarProduto(formData: FormData) {
     "use server";
     const nome = formData.get('nome') as string;
-    const quantidade = parseInt(formData.get('quantidade') as string) || 0;
-    const preco = parseFloat(formData.get('preco') as string) || 0;
 
+    // Atualizando apenas o Nome por enquanto para não quebrar a Vercel
     await db.update(produtos)
-      .set({ nome, quantidade, preco })
+      .set({ nome })
       .where(eq(produtos.id, produtoId));
       
     revalidatePath('/produtos');
@@ -36,7 +33,7 @@ export default async function EditarProdutoPage({ params }: { params: { id: stri
         <Link href="/produtos" className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Editar Produto</h1>
-          <p className="text-sm text-slate-500 font-medium">Atualize estoque e preço.</p>
+          <p className="text-sm text-slate-500 font-medium">Atualize os dados básicos.</p>
         </div>
       </div>
 
@@ -55,28 +52,6 @@ export default async function EditarProdutoPage({ params }: { params: { id: stri
             required 
             className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-medium" 
           />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-1">Quantidade em Estoque</label>
-            <input 
-              type="number" 
-              name="quantidade" 
-              defaultValue={produtoData.quantidade} 
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold" 
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-1">Preço de Venda (R$)</label>
-            <input 
-              type="number" 
-              step="0.01"
-              name="preco" 
-              defaultValue={produtoData.preco} 
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-yellow-500 font-bold" 
-            />
-          </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t mt-6">

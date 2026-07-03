@@ -354,3 +354,33 @@ export const controleFuncionarios = sqliteTable('controle_funcionarios', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 8. FATURAMENTO DIÁRIO
+// ==========================================
+export const faturamentoDiario = sqliteTable('faturamento_diario', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  mesReferencia: text('mes_referencia').notNull(), // Ex: ABRIL
+  anoBase: text('ano_base').default('2026').notNull(),
+  data: text('data').notNull(),
+  descricao: text('descricao').notNull(), // Vendas / Serviços
+  
+  compra: real('compra').default(0).notNull(), // R$ Compra
+  
+  // Entradas
+  especie: real('especie').default(0).notNull(),
+  credito: real('credito').default(0).notNull(),
+  debito: real('debito').default(0).notNull(),
+  pix: real('pix').default(0).notNull(),
+  
+  total: real('total').default(0).notNull(), // Soma das entradas
+  
+  // Saídas
+  saidaDinheiro: real('saida_dinheiro').default(0).notNull(),
+  saidaPix: real('saida_pix').default(0).notNull(),
+  
+  // Fechamento
+  dizimo: real('dizimo').default(0).notNull(),
+  fatEspecie: real('fat_especie').default(0).notNull(), // especie - saidaDinheiro
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

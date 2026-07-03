@@ -10,6 +10,7 @@ import { controleCarne } from '@/db/schema';
 import { clientesDevedoresUti} from '@/db/schema';
 import { servicosIndicados } from '@/db/schema';
 import { controleFuncionarios } from '@/db/schema';
+import { faturamentoDiario } from '@/db/schema';
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -170,4 +171,34 @@ export async function salvarFuncionario(formData: FormData) {
 
   revalidatePath('/faturamento/funcionarios');
   redirect('/faturamento/funcionarios');
+}
+export async function salvarFaturamentoDiario(formData: FormData) {
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const anoBase = formData.get('anoBase') as string;
+  const data = formData.get('data') as string;
+  const descricao = formData.get('descricao') as string;
+  
+  const compra = parseFloat(formData.get('compra') as string) || 0;
+  
+  const especie = parseFloat(formData.get('especie') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  
+  const saidaDinheiro = parseFloat(formData.get('saidaDinheiro') as string) || 0;
+  const saidaPix = parseFloat(formData.get('saidaPix') as string) || 0;
+  
+  // A Matemática Base
+  const total = especie + credito + debito + pix;
+  const dizimo = parseFloat(formData.get('dizimo') as string) || (total * 0.10); // Pega do form, ou calcula 10%
+  const fatEspecie = especie - saidaDinheiro;
+
+  await db.insert(faturamentoDiario).values({
+    mesReferencia, anoBase, data, descricao,
+    compra, especie, credito, debito, pix, total,
+    saidaDinheiro, saidaPix, dizimo, fatEspecie
+  });
+
+  revalidatePath('/faturamento/diario');
+  redirect('/faturamento/diario');
 }

@@ -16,6 +16,7 @@ import {
   clientesDevedoresUti,
   servicosIndicados,
   controleFuncionarios,
+  faturamentoDiario,
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -37,6 +38,7 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     // Adicione esta linha logo abaixo da exclusão dos devedores-uti:
     if (tabela === 'indicados') await db.delete(servicosIndicados).where(eq(servicosIndicados.id, id));
     if (tabela === 'funcionarios') await db.delete(controleFuncionarios).where(eq(controleFuncionarios.id, id));
+    if (tabela === 'diario') await db.delete(faturamentoDiario).where(eq(faturamentoDiario.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

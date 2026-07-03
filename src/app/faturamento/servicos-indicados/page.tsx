@@ -3,12 +3,11 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosIndicados } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, Handshake, Wrench, Landmark, Activity, BookOpen, UserMinus, Users } from 'lucide-react';
+import { Plus, Handshake, Wrench, Landmark, Activity, BookOpen, UserMinus, Users, CalendarDays } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function ServicosIndicadosPage() {
   const registros = await db.select().from(servicosIndicados).orderBy(desc(servicosIndicados.data));
-  
   const somaValor = registros.reduce((acc, curr) => acc + curr.valor, 0);
   const somaDevido = registros.reduce((acc, curr) => acc + curr.valorDevido, 0);
 
@@ -32,6 +31,7 @@ export default async function ServicosIndicadosPage() {
          <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
          <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-white border-t-2 border-x-2 border-indigo-600 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Handshake className="h-4 w-4 text-indigo-600" /> Serviços Indicados</Link>
          <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
+         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">

@@ -1,21 +1,30 @@
 "use server";
 
 import { db } from '@/db';
-// Adicionamos a tabela 'produtos' na importação
-import { clientes, comprasOnline, ordensServico, simulacoesLentes, tabelaPrecos, contasMensais, produtos } from '@/db/schema';
+import { 
+  clientes, 
+  comprasOnline, 
+  ordensServico, 
+  simulacoesLentes, 
+  tabelaPrecos, 
+  contasMensais, 
+  produtos, 
+  servicosJoaozinho // <-- AQUI ESTÁ A IMPORTAÇÃO QUE FALTAVA
+} from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function deletarRegistro(id: number, tabela: string, caminho: string) {
   try {
     if (tabela === 'cliente') await db.delete(clientes).where(eq(clientes.id, id));
-    if (tabela === 'produto') await db.delete(produtos).where(eq(produtos.id, id)); // <-- NOVA LINHA
+    if (tabela === 'produto') await db.delete(produtos).where(eq(produtos.id, id));
     if (tabela === 'compras') await db.delete(comprasOnline).where(eq(comprasOnline.id, id));
     if (tabela === 'os') await db.delete(ordensServico).where(eq(ordensServico.id, id));
     if (tabela === 'simulacao') await db.delete(simulacoesLentes).where(eq(simulacoesLentes.id, id));
     if (tabela === 'preco') await db.delete(tabelaPrecos).where(eq(tabelaPrecos.id, id));
     if (tabela === 'conta') await db.delete(contasMensais).where(eq(contasMensais.id, id));
     if (tabela === 'joaozinho') await db.delete(servicosJoaozinho).where(eq(servicosJoaozinho.id, id));
+
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

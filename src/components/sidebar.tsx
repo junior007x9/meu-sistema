@@ -6,15 +6,16 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
+  BarChart3,
   Users, 
   Glasses, 
   Wrench, 
   UserCog,
-  Calculator,
   ListChecks,
+  Calculator,
   Receipt,
-  Wallet, 
   ShoppingCart,
+  Wallet, 
   Menu 
 } from 'lucide-react';
 
@@ -25,6 +26,7 @@ export default function Sidebar() {
   // Lista definitiva com TODOS os botões e módulos do sistema
   const menuItems = [
     { name: 'Painel Geral', icon: LayoutDashboard, href: '/' },
+    { name: 'Faturamento Mensal', icon: BarChart3, href: '/faturamento/joaozinho' },
     { name: 'Fichas de Clientes', icon: Users, href: '/clientes' },
     { name: 'Estoque & Produtos', icon: Glasses, href: '/produtos' },
     { name: 'UTI dos Óculos (OS)', icon: Wrench, href: '/uti-oculos' },
@@ -38,7 +40,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Botão de Menu para Celular */}
+      {/* Botão de Menu para Telemóvel / Celular */}
       <div className="bg-slate-900 text-white p-4 flex items-center justify-between md:hidden z-50 relative shadow-md">
         <div className="flex items-center gap-3">
           <div className="bg-white p-1 rounded-full shadow-sm">
@@ -79,10 +81,10 @@ export default function Sidebar() {
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sistema de Gestão</p>
           </div>
 
-          {/* Navegação completa com rolagem suave se a tela for pequena */}
+          {/* Navegação completa com rolagem suave se o ecrã for pequeno */}
           <nav className="space-y-1.5 overflow-y-auto flex-1 pr-2 pb-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
             {menuItems.map((item) => {
-              // Mantém o botão aceso mesmo se estiver dentro de uma sub-página
+              // Mantém o botão ativo mesmo se estiver dentro de uma sub-página (ex: /faturamento/joaozinho/novo)
               const isActive = (pathname === '/' && item.href === '/') || 
                                (item.href !== '/' && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -112,7 +114,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Fundo escuro ao abrir o menu no celular */}
+      {/* Fundo escuro ao abrir o menu no telemóvel */}
       {isOpen && (
         <div 
           onClick={() => setIsOpen(false)} 

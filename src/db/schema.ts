@@ -238,3 +238,26 @@ export const contasMensais = sqliteTable('contas_mensais', {
 
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 7. MÓDULO: FATURAMENTO POR MÊS
+// ==========================================
+
+export const servicosJoaozinho = sqliteTable('servicos_joaozinho', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  data: text('data').notNull(), // Data exata do serviço (Ex: 2026-07-02)
+  mesReferencia: text('mes_referencia').notNull(), // Ex: "JULHO"
+  anoBase: text('ano_base').default('2026').notNull(), // Ex: "2026"
+  
+  montagem: text('montagem'),
+  montagemValor: real('montagem_valor').default(0).notNull(),
+  
+  transposicao: text('transposicao'),
+  transposicaoValor: real('transposicao_valor').default(0).notNull(),
+  
+  coloracao: text('coloracao'),
+  coloracaoValor: real('coloracao_valor').default(0).notNull(),
+  
+  total: real('total').default(0).notNull(), // Soma automática
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

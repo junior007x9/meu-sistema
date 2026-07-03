@@ -15,7 +15,7 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'simulacao') await db.delete(simulacoesLentes).where(eq(simulacoesLentes.id, id));
     if (tabela === 'preco') await db.delete(tabelaPrecos).where(eq(tabelaPrecos.id, id));
     if (tabela === 'conta') await db.delete(contasMensais).where(eq(contasMensais.id, id));
-
+    if (tabela === 'joaozinho') await db.delete(servicosJoaozinho).where(eq(servicosJoaozinho.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

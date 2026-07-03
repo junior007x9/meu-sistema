@@ -291,3 +291,27 @@ export const contaUti = sqliteTable('conta_uti', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+export const controleCarne = sqliteTable('controle_carne', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  anoBase: text('ano_base').default('2026').notNull(), // Ex: 2025, 2026
+  cliente: text('cliente').notNull(),
+  contato: text('contato'),
+  dataCompra: text('data_compra').notNull(),
+  
+  valorVenda: real('valor_venda').default(0).notNull(),
+  valorEntrada: real('valor_entrada').default(0).notNull(),
+
+  // As 10 Parcelas (Valor e Data de Pagamento)
+  p1Valor: real('p1_valor').default(0), p1Data: text('p1_data'),
+  p2Valor: real('p2_valor').default(0), p2Data: text('p2_data'),
+  p3Valor: real('p3_valor').default(0), p3Data: text('p3_data'),
+  p4Valor: real('p4_valor').default(0), p4Data: text('p4_data'),
+  p5Valor: real('p5_valor').default(0), p5Data: text('p5_data'),
+  p6Valor: real('p6_valor').default(0), p6Data: text('p6_data'),
+  p7Valor: real('p7_valor').default(0), p7Data: text('p7_data'),
+  p8Valor: real('p8_valor').default(0), p8Data: text('p8_data'),
+  p9Valor: real('p9_valor').default(0), p9Data: text('p9_data'),
+  p10Valor: real('p10_valor').default(0), p10Data: text('p10_data'),
+
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

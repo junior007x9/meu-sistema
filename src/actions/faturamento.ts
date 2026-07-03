@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { contaStyllo } from '@/db/schema';
 import { contaUti } from '@/db/schema';
-
+import { controleCarne } from '@/db/schema';
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -74,4 +74,26 @@ export async function salvarContaUti(formData: FormData) {
 
   revalidatePath('/faturamento/conta-uti');
   redirect('/faturamento/conta-uti');
+}
+export async function salvarCarne(formData: FormData) {
+  const parcelas: any = {};
+  
+  // Loop inteligente para capturar as 10 parcelas do formulário
+  for (let i = 1; i <= 10; i++) {
+    parcelas[`p${i}Valor`] = parseFloat(formData.get(`p${i}Valor`) as string) || 0;
+    parcelas[`p${i}Data`] = formData.get(`p${i}Data`) as string || null;
+  }
+
+  await db.insert(controleCarne).values({
+    anoBase: formData.get('anoBase') as string,
+    cliente: formData.get('cliente') as string,
+    contato: formData.get('contato') as string,
+    dataCompra: formData.get('dataCompra') as string,
+    valorVenda: parseFloat(formData.get('valorVenda') as string) || 0,
+    valorEntrada: parseFloat(formData.get('valorEntrada') as string) || 0,
+    ...parcelas // Injeta as 10 parcelas automaticamente
+  });
+
+  revalidatePath('/faturamento/carne');
+  redirect('/faturamento/carne');
 }

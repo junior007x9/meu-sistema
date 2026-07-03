@@ -30,6 +30,7 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'conta-styllo') await db.delete(contaStyllo).where(eq(contaStyllo.id, id));
     // Adicione esta linha logo abaixo da exclusão da conta-styllo:
     if (tabela === 'conta-uti') await db.delete(contaUti).where(eq(contaUti.id, id));
+    if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

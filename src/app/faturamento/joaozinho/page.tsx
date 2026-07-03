@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BarChart3, Wrench, Landmark, Activity } from 'lucide-react';
+import { Plus, BarChart3, Wrench, Landmark, Activity, BookOpen } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function JoaozinhoPage() {
@@ -32,6 +32,9 @@ export default async function JoaozinhoPage() {
          </Link>
          <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors">
             <Activity className="h-4 w-4" /> Conta UTI
+         </Link>
+         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors">
+            <BookOpen className="h-4 w-4" /> Carnês
          </Link>
       </div>
 

@@ -13,7 +13,8 @@ import {
   contaStyllo,
   contaUti,
   controleCarne, // <-- A VÍRGULA QUE FALTAVA ESTÁ AQUI
-  clientesDevedoresUti
+  clientesDevedoresUti,
+  servicosIndicados
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -32,7 +33,8 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'conta-uti') await db.delete(contaUti).where(eq(contaUti.id, id));
     if (tabela === 'carne') await db.delete(controleCarne).where(eq(controleCarne.id, id));
     if (tabela === 'devedores-uti') await db.delete(clientesDevedoresUti).where(eq(clientesDevedoresUti.id, id));
-
+    // Adicione esta linha logo abaixo da exclusão dos devedores-uti:
+    if (tabela === 'indicados') await db.delete(servicosIndicados).where(eq(servicosIndicados.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

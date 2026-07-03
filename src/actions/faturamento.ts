@@ -8,6 +8,7 @@ import { contaStyllo } from '@/db/schema';
 import { contaUti } from '@/db/schema';
 import { controleCarne } from '@/db/schema';
 import { clientesDevedoresUti} from '@/db/schema';
+import { servicosIndicados } from '@/db/schema';
 
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
@@ -113,4 +114,20 @@ export async function salvarDevedorUti(formData: FormData) {
 
   revalidatePath('/faturamento/devedores-uti');
   redirect('/faturamento/devedores-uti');
+}
+export async function salvarServicoIndicado(formData: FormData) {
+  const quemIndicou = formData.get('quemIndicou') as string;
+  const contatos = formData.get('contatos') as string || '';
+  const servicoPago = formData.get('servicoPago') as string;
+  const servico = formData.get('servico') as string;
+  const valor = parseFloat(formData.get('valor') as string) || 0;
+  const data = formData.get('data') as string;
+  const valorDevido = parseFloat(formData.get('valorDevido') as string) || 0;
+
+  await db.insert(servicosIndicados).values({
+    quemIndicou, contatos, servicoPago, servico, valor, data, valorDevido
+  });
+
+  revalidatePath('/faturamento/servicos-indicados');
+  redirect('/faturamento/servicos-indicados');
 }

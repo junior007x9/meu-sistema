@@ -326,3 +326,15 @@ export const clientesDevedoresUti = sqliteTable('clientes_devedores_uti', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+export const servicosIndicados = sqliteTable('servicos_indicados', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  quemIndicou: text('quem_indicou').notNull(),
+  contatos: text('contatos'),
+  servicoPago: text('servico_pago').default('NÃO').notNull(), // 'SIM' ou 'NÃO'
+  servico: text('servico').notNull(),
+  valor: real('valor').default(0).notNull(),
+  data: text('data').notNull(),
+  valorDevido: real('valor_devido').default(0).notNull(),
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

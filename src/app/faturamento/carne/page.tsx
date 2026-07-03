@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { controleCarne } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BookOpen, Wrench, Landmark, Activity, UserMinus } from 'lucide-react';
+import { Plus, BookOpen, Wrench, Landmark, Activity, UserMinus, Handshake } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function CarnesPage() {
@@ -42,6 +42,7 @@ export default async function CarnesPage() {
          <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
          <Link href="/faturamento/carne" className="px-4 py-2 bg-white border-t-2 border-x-2 border-yellow-500 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><BookOpen className="h-4 w-4" /> Carnês</Link>
          <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
+         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">

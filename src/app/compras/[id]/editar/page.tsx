@@ -38,8 +38,8 @@ export default async function EditarCompraPage({ params }: { params: { id: strin
       </div>
       <form action={atualizarCompra} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div><label className="font-bold text-sm">Produto</label><input type="text" name="produto" defaultValue={compra.produto} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
-          <div><label className="font-bold text-sm">Loja</label><input type="text" name="loja" defaultValue={compra.loja} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
+          <div><label className="font-bold text-sm">Produto</label><input type="text" name="produto" defaultValue={compra.produto || ''} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
+          <div><label className="font-bold text-sm">Loja</label><input type="text" name="loja" defaultValue={compra.loja || ''} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div><label className="font-bold text-sm">Quem Comprou</label><input type="text" name="quemComprou" defaultValue={compra.quemComprou || ''} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
@@ -51,7 +51,8 @@ export default async function EditarCompraPage({ params }: { params: { id: strin
           <div><label className="font-bold text-sm">Valor Total (R$)</label><input type="number" step="0.01" name="valorTotal" defaultValue={compra.valorTotal} className="w-full px-4 py-2 bg-slate-50 border rounded-lg" /></div>
           <div>
             <label className="font-bold text-sm">Situação</label>
-            <select name="situacaoPagamento" defaultValue={compra.situacaoPagamento} className="w-full px-4 py-2 bg-slate-50 border rounded-lg font-bold">
+            {/* CORREÇÃO APLICADA AQUI NO defaultValue */}
+            <select name="situacaoPagamento" defaultValue={compra.situacaoPagamento || 'A PAGAR'} className="w-full px-4 py-2 bg-slate-50 border rounded-lg font-bold">
               <option value="A PAGAR">A PAGAR</option>
               <option value="PAGO">PAGO</option>
             </select>

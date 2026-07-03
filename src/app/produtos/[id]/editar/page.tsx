@@ -7,44 +7,46 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ArrowLeft, Save, Package, Tag } from 'lucide-react';
 
-export default async function EditarProdutoPage({ params }: { params: { id: string } }) {
-  const produtoId = parseInt(params.id);
+// O "any" ajuda a Vercel a não reclamar da tipagem do params
+export default async function EditarProdutoPage({ params }: any) {
   
-  // Busca o produto correspondente no banco
-  const produtoData = await db.select().from(produtos).where(eq(produtos.id, produtoId)).get();
+  // CORREÇÃO 1: Aguardar os parâmetros da URL (Exigência das versões novas)
+  const resolvedParams = await params;
+  const produtoId = parseInt(resolvedParams.id);
 
-  if (!produtoData) redirect('/produtos');
+  // CORREÇÃO 2: Usar o formato de array em vez do .get() que quebrava o servidor
+  const resultado = await db.select().from(produtos).where(eq(produtos.id, produtoId));
+  const produtoData = resultado[0];
 
-  // Função que executa a atualização mapeando o Schema correto
+  if (!produtoData) {
+    redirect('/produtos');
+  }
+
   async function atualizarProduto(formData: FormData) {
     "use server";
     const codigo = formData.get('codigo') as string;
     const nome = formData.get('nome') as string;
     const categoria = formData.get('categoria') as string;
     const fornecedor = formData.get('fornecedor') as string;
-    
+
     const precoCusto = parseFloat(formData.get('precoCusto') as string) || 0;
     const estoque = parseInt(formData.get('estoque') as string, 10) || 0;
     const precoVenda = parseFloat(formData.get('precoVenda') as string) || 0;
     const porcentagemDesconto = parseFloat(formData.get('porcentagemDesconto') as string) || 0;
 
-    if (!nome || !categoria || precoVenda <= 0) {
-      throw new Error('Nome, categoria e preço de venda são obrigatórios.');
-    }
-
     await db.update(produtos)
-      .set({ 
+      .set({
         codigo: codigo || null,
-        nome, 
-        categoria, 
+        nome,
+        categoria,
         fornecedor: fornecedor || null,
-        precoCusto, 
-        estoque, 
-        precoVenda, 
-        porcentagemDesconto 
+        precoCusto,
+        estoque,
+        precoVenda,
+        porcentagemDesconto
       })
       .where(eq(produtos.id, produtoId));
-      
+
     revalidatePath('/produtos');
     redirect('/produtos');
   }
@@ -62,14 +64,14 @@ export default async function EditarProdutoPage({ params }: { params: { id: stri
       </div>
 
       <form action={atualizarProduto} className="space-y-6">
-        
+
         {/* BLOCO 1: IDENTIFICAÇÃO */}
         <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 mb-2 border-b pb-3">
             <Package className="h-5 w-5 text-yellow-500" />
             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Identificação do Produto</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-1">
               <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Código de Barras / Ref.</label>

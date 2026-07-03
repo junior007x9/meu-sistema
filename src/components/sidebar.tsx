@@ -12,6 +12,7 @@ import {
   UserCog,
   Calculator,
   ListChecks,
+  Receipt,
   Wallet, 
   ShoppingCart,
   Menu 
@@ -30,6 +31,7 @@ export default function Sidebar() {
     { name: 'Produção Técnicos', icon: UserCog, href: '/uti-oculos/tecnicos' },
     { name: 'Tabela de Preços', icon: ListChecks, href: '/tabela-precos' },
     { name: 'Simulador de Lentes', icon: Calculator, href: '/simulacoes' },
+    { name: 'Repasses Mensais', icon: Receipt, href: '/contas' },
     { name: 'Compras Online', icon: ShoppingCart, href: '/compras' },
     { name: 'Financeiro', icon: Wallet, href: '/financeiro' },
   ];
@@ -61,10 +63,10 @@ export default function Sidebar() {
         transition-transform duration-300 md:translate-x-0 md:static md:h-screen shadow-xl
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div>
+        <div className="flex flex-col h-full overflow-hidden">
           {/* Área da Logomarca Oficial (Versão Desktop) */}
-          <div className="mb-8 px-2 hidden md:flex flex-col items-center text-center mt-4">
-            <div className="bg-white p-2 rounded-full shadow-lg shadow-black/20 mb-4 border-2 border-yellow-500">
+          <div className="mb-6 px-2 hidden md:flex flex-col items-center text-center mt-4">
+            <div className="bg-white p-2 rounded-full shadow-lg shadow-black/20 mb-4 border-2 border-yellow-500 flex-shrink-0">
               <Image 
                 src="/logo.png" 
                 alt="Logo Styllo Ótica" 
@@ -77,8 +79,8 @@ export default function Sidebar() {
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sistema de Gestão</p>
           </div>
 
-          {/* Navegação completa */}
-          <nav className="space-y-1.5">
+          {/* Navegação completa com rolagem suave se a tela for pequena */}
+          <nav className="space-y-1.5 overflow-y-auto flex-1 pr-2 pb-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
             {menuItems.map((item) => {
               // Mantém o botão aceso mesmo se estiver dentro de uma sub-página
               const isActive = (pathname === '/' && item.href === '/') || 
@@ -97,7 +99,7 @@ export default function Sidebar() {
                       : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'}
                   `}
                 >
-                  <Icon className={`h-5 w-5 ${isActive ? 'text-slate-900' : 'text-slate-500'}`} />
+                  <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'text-slate-900' : 'text-slate-500'}`} />
                   {item.name}
                 </Link>
               );
@@ -105,7 +107,7 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        <div className="border-t border-slate-800 pt-5 px-2 text-[10px] text-slate-500 text-center font-bold uppercase tracking-wider">
+        <div className="border-t border-slate-800 pt-5 px-2 text-[10px] text-slate-500 text-center font-bold uppercase tracking-wider mt-2 flex-shrink-0">
           Sistema Digital v1.0
         </div>
       </aside>

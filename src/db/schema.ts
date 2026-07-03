@@ -210,3 +210,31 @@ export const tabelaPrecos = sqliteTable('tabela_precos', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 6. MÓDULO: CONTAS MENSAIS E REPASSES
+// ==========================================
+
+export const contasMensais = sqliteTable('contas_mensais', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  mesReferencia: text('mes_referencia').notNull(), // Ex: "MAIO 2026"
+  
+  // Equatorial
+  totalKwh: real('total_kwh').default(0).notNull(),
+  totalRs: real('total_rs').default(0).notNull(),
+  mediaBarbosaKwh: real('media_barbosa_kwh').default(0).notNull(),
+  icms: real('icms').default(0).notNull(),
+  pis: real('pis').default(0).notNull(),
+  cofins: real('cofins').default(0).notNull(),
+  descontoAlinePerc: real('desconto_aline_perc').default(20).notNull(), // O seu desconto de 20%
+  
+  // Águas de Teresina
+  aguaAline: real('agua_aline').default(0).notNull(),
+  aguaBarbosa: real('agua_barbosa').default(0).notNull(),
+  
+  // Totais Calculados (Salvos para o histórico)
+  equatorialBarbosa: real('equatorial_barbosa').default(0).notNull(),
+  equatorialAline: real('equatorial_aline').default(0).notNull(),
+  totalAlineGeral: real('total_aline_geral').default(0).notNull(), // Luz + Água
+
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

@@ -1,14 +1,15 @@
 "use server";
 
 import { db } from '@/db';
-// Adicionamos a tabela 'clientes' aqui na importação
-import { clientes, comprasOnline, ordensServico, simulacoesLentes, tabelaPrecos, contasMensais } from '@/db/schema';
+// Adicionamos a tabela 'produtos' na importação
+import { clientes, comprasOnline, ordensServico, simulacoesLentes, tabelaPrecos, contasMensais, produtos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export async function deletarRegistro(id: number, tabela: string, caminho: string) {
   try {
     if (tabela === 'cliente') await db.delete(clientes).where(eq(clientes.id, id));
+    if (tabela === 'produto') await db.delete(produtos).where(eq(produtos.id, id)); // <-- NOVA LINHA
     if (tabela === 'compras') await db.delete(comprasOnline).where(eq(comprasOnline.id, id));
     if (tabela === 'os') await db.delete(ordensServico).where(eq(ordensServico.id, id));
     if (tabela === 'simulacao') await db.delete(simulacoesLentes).where(eq(simulacoesLentes.id, id));

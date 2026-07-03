@@ -7,8 +7,8 @@ import { deletarRegistro } from '@/actions/deletar';
 
 interface BotoesAcaoProps {
   id: number;
-  // Adicionamos 'cliente' na lista abaixo:
-  tabela: 'cliente' | 'compras' | 'os' | 'simulacao' | 'preco' | 'conta';
+  // Adicionamos 'produto' aqui:
+  tabela: 'cliente' | 'produto' | 'compras' | 'os' | 'simulacao' | 'preco' | 'conta';
   caminho: string;
   linkEditar: string;
 }

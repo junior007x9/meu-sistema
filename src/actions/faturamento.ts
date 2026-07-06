@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from '@/db';
+import { faturamentoDiario } from '@/db/schema';
 import { servicosJoaozinho } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -273,4 +274,41 @@ export async function salvarBalancoUti(formData: FormData) {
 
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
+}
+export async function salvarDiario(formData: FormData) {
+  const data = formData.get('data') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const descricao = formData.get('descricao') as string;
+
+  const compra = parseFloat(formData.get('compra') as string) || 0;
+  const especie = parseFloat(formData.get('especie') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  
+  const saidaDinheiro = parseFloat(formData.get('saidaDinheiro') as string) || 0;
+  const saidaPix = parseFloat(formData.get('saidaPix') as string) || 0;
+  const dizimo = parseFloat(formData.get('dizimo') as string) || 0;
+  const fatEspecie = parseFloat(formData.get('fatEspecie') as string) || 0;
+
+  const total = especie + credito + debito + pix;
+
+  await db.insert(faturamentoDiario).values({
+    data,
+    mesReferencia,
+    descricao,
+    compra,
+    especie,
+    credito,
+    debito,
+    pix,
+    total,
+    saidaDinheiro,
+    saidaPix,
+    dizimo,
+    fatEspecie
+  });
+
+  revalidatePath('/faturamento/diario');
+  redirect('/faturamento/diario');
 }

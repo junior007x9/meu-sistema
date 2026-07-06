@@ -2,77 +2,73 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Save, Users, FileSpreadsheet } from 'lucide-react';
+import { ArrowLeft, Save, Users } from 'lucide-react';
 import { salvarFuncionario } from '@/actions/faturamento';
+import BotaoSubmit from '@/components/BotaoSubmit';
 
 export default function NovoFuncionarioPage() {
+  const DIAS = Array.from({ length: 31 }, (_, i) => i + 1);
+
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/faturamento/funcionarios" className="p-2 hover:bg-slate-200 rounded-full text-slate-500"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/faturamento/funcionarios" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 outline-none"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Planilha do Funcionário</h1>
-          <p className="text-sm text-slate-500 font-medium">Lançamento de despesas e vales do mês.</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Folha de Funcionário</h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">Registe os valores de estágio e vales do colaborador (Mês Inteiro).</p>
         </div>
       </div>
 
-      <form action={salvarFuncionario} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+      <form action={salvarFuncionario} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
         
-        {/* CABEÇALHO */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#c2d69b]/20 p-5 rounded-xl border border-[#c2d69b]">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Nome do Funcionário *</label>
-            <input type="text" name="nome" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg outline-none font-bold" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Nome do Funcionário *</label>
+             <input type="text" name="nome" required placeholder="Ex: Joana Albuquerque" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold uppercase text-slate-800" />
           </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Mês/Ano Referência *</label>
-            <input type="text" name="mesReferencia" placeholder="Ex: MARÇO 2025" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg outline-none font-bold" />
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Mês Base *</label>
+             <select name="mesReferencia" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-slate-800 appearance-none">
+               <option value="JANEIRO">JANEIRO</option><option value="FEVEREIRO">FEVEREIRO</option>
+               <option value="MARÇO">MARÇO</option><option value="ABRIL">ABRIL</option>
+               <option value="MAIO">MAIO</option><option value="JUNHO">JUNHO</option>
+             </select>
           </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Data Início Estágio *</label>
-            <input type="text" name="dataInicio" placeholder="Ex: 13/03/2025" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg outline-none font-bold" />
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Data Início do Período *</label>
+             <input type="date" name="dataInicio" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-slate-800" />
           </div>
         </div>
 
-        {/* PLANILHA DINÂMICA (Estilo Excel) */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <FileSpreadsheet className="h-5 w-5 text-emerald-600" />
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Lançamentos Diários</h2>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2"><Users className="h-4 w-4 text-emerald-600" /> Preenchimento Diário</h2>
+            <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full uppercase">Se usar a letra F o sistema anula o dia</span>
           </div>
-          <p className="text-xs text-slate-500 font-medium mb-4">
-            Preencha apenas as linhas dos dias trabalhados. Coloque o <strong>Dia (Ex: 13)</strong>. Se o funcionário faltou, mude o status para <strong>"F"</strong> e o sistema zera tudo automaticamente.
-          </p>
-
-          <div className="overflow-x-auto rounded-xl border border-slate-300">
-            <table className="w-full text-center text-sm border-collapse min-w-[700px]">
+          
+          <div className="overflow-x-auto scrollbar-thin border border-slate-200 rounded-2xl shadow-inner select-none bg-slate-50/30">
+            <table className="w-full text-center border-collapse min-w-[2000px]">
               <thead>
-                <tr className="bg-slate-100 font-bold text-slate-700 border-b border-slate-300">
-                  <th className="p-3 border-r">Dia do Mês</th>
-                  <th className="p-3 border-r">Situação</th>
-                  <th className="p-3 border-r">V. Transp.</th>
-                  <th className="p-3 border-r">V. Alim.</th>
-                  <th className="p-3 border-r">Salário</th>
-                  <th className="p-3 border-r">Férias</th>
-                  <th className="p-3">13º Sal.</th>
+                <tr className="bg-emerald-50 text-emerald-950 font-black text-[10px] uppercase tracking-wider">
+                  <th className="p-3 border-r border-slate-200 w-16">DIA</th>
+                  <th className="p-3 border-r border-slate-200 w-24">STATUS ( P / F )</th>
+                  <th className="p-3 border-r border-slate-200">VALE TRANS. (R$)</th>
+                  <th className="p-3 border-r border-slate-200">VALE ALIMEN. (R$)</th>
+                  <th className="p-3 border-r border-slate-200">SALÁRIO COMER. (R$)</th>
+                  <th className="p-3 border-r border-slate-200">FÉRIAS (R$)</th>
+                  <th className="p-3">13º SALÁRIO (R$)</th>
                 </tr>
               </thead>
-              <tbody>
-                {/* Gera 25 linhas em branco com os valores padrões para facilitar a vida! */}
-                {[...Array(25)].map((_, i) => (
-                  <tr key={i} className="hover:bg-slate-50 border-b border-slate-200">
-                    <td className="p-1 border-r bg-white"><input type="text" name={`dia_${i}`} placeholder="Ex: 13" className="w-full text-center outline-none bg-transparent font-black text-slate-800 py-2" /></td>
-                    <td className="p-1 border-r bg-white">
-                      <select name={`status_${i}`} className="w-full text-center outline-none bg-transparent font-black text-slate-700 py-2 cursor-pointer">
-                        <option value="P">P (Presente)</option>
-                        <option value="F">F (Falta)</option>
-                      </select>
-                    </td>
-                    <td className="p-1 border-r"><input type="number" step="0.01" name={`vt_${i}`} defaultValue="4.10" className="w-full text-center outline-none bg-transparent py-2 text-slate-600 font-medium" /></td>
-                    <td className="p-1 border-r"><input type="number" step="0.01" name={`va_${i}`} defaultValue="15.00" className="w-full text-center outline-none bg-transparent py-2 text-slate-600 font-medium" /></td>
-                    <td className="p-1 border-r"><input type="number" step="0.01" name={`sal_${i}`} defaultValue="50.60" className="w-full text-center outline-none bg-transparent py-2 text-slate-600 font-medium" /></td>
-                    <td className="p-1 border-r"><input type="number" step="0.01" name={`fer_${i}`} defaultValue="50.60" className="w-full text-center outline-none bg-transparent py-2 text-slate-600 font-medium" /></td>
-                    <td className="p-1"><input type="number" step="0.01" name={`d13_${i}`} defaultValue="50.60" className="w-full text-center outline-none bg-transparent py-2 text-slate-600 font-medium" /></td>
+              <tbody className="divide-y divide-slate-100 bg-white">
+                {DIAS.map((dia) => (
+                  <tr key={dia} className="hover:bg-slate-50 transition-colors">
+                    <td className="p-2 border-r border-slate-100 font-black text-slate-900 bg-slate-50">{dia}</td>
+                    <td className="p-2 border-r border-slate-100"><input type="text" name={`d${dia}_status`} defaultValue="P" className="w-full text-center outline-none bg-transparent font-black text-slate-800 uppercase focus:bg-emerald-50 focus:text-emerald-900 rounded py-1" maxLength={1} /></td>
+                    <td className="p-2 border-r border-slate-100"><input type="number" step="0.01" name={`d${dia}_vt`} className="w-full text-center outline-none bg-transparent font-medium text-slate-700 focus:bg-slate-100 rounded py-1" /></td>
+                    <td className="p-2 border-r border-slate-100"><input type="number" step="0.01" name={`d${dia}_va`} className="w-full text-center outline-none bg-transparent font-medium text-slate-700 focus:bg-slate-100 rounded py-1" /></td>
+                    <td className="p-2 border-r border-slate-100"><input type="number" step="0.01" name={`d${dia}_sal`} className="w-full text-center outline-none bg-transparent font-medium text-slate-700 focus:bg-slate-100 rounded py-1" /></td>
+                    <td className="p-2 border-r border-slate-100"><input type="number" step="0.01" name={`d${dia}_fer`} className="w-full text-center outline-none bg-transparent font-medium text-slate-700 focus:bg-slate-100 rounded py-1" /></td>
+                    <td className="p-2"><input type="number" step="0.01" name={`d${dia}_d13`} className="w-full text-center outline-none bg-transparent font-medium text-slate-700 focus:bg-slate-100 rounded py-1" /></td>
                   </tr>
                 ))}
               </tbody>
@@ -80,10 +76,8 @@ export default function NovoFuncionarioPage() {
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-slate-200 mt-6">
-          <button type="submit" className="bg-emerald-600 hover:bg-emerald-700 px-10 py-3.5 rounded-xl font-black text-white shadow-md transition-transform hover:-translate-y-0.5">
-            <Save className="h-5 w-5 inline mr-2"/> Gravar e Calcular Mês
-          </button>
+        <div className="flex justify-end pt-6 border-t border-slate-100">
+          <BotaoSubmit texto="Processar Folha do Mês" icone={<Save className="h-5 w-5" />} cor="emerald" />
         </div>
       </form>
     </div>

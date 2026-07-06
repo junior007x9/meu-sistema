@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Save, Wallet } from 'lucide-react';
 import { salvarBalancoDiario } from '@/actions/faturamento';
+import BotaoSubmit from '@/components/BotaoSubmit';
 
 export default function NovoBalancoDiarioPage() {
   const [compras, setCompras] = useState(0);
@@ -17,89 +18,75 @@ export default function NovoBalancoDiarioPage() {
   const totalLiquido = totalEntradas - compras - saidas;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/faturamento/balanco-diario" className="p-2 hover:bg-slate-200 rounded-full text-slate-500"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/faturamento/balanco-diario" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Novo Lançamento (Balanço)</h1>
-          <p className="text-sm text-slate-500 font-medium">Balanço financeiro diário da ótica.</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Novo Balanço Diário (Styllo)</h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">Balanço financeiro global de liquidez diária.</p>
         </div>
       </div>
 
-      <form action={salvarBalancoDiario} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+      <form action={salvarBalancoDiario} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
         
-        {/* DATA E COMPRAS */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-5 rounded-xl border border-slate-200">
-          <div>
-             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Data *</label>
-             <input type="date" name="data" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded outline-none font-bold text-slate-800" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Data *</label>
+             <input type="date" name="data" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-bold text-slate-800" />
           </div>
-          <div>
-             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Mês Base *</label>
-             <select name="mesReferencia" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded outline-none font-bold">
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Mês Base *</label>
+             <select name="mesReferencia" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-bold text-slate-800 appearance-none">
                <option value="JANEIRO">JANEIRO</option><option value="FEVEREIRO">FEVEREIRO</option>
                <option value="MARÇO">MARÇO</option><option value="ABRIL">ABRIL</option>
                <option value="MAIO">MAIO</option><option value="JUNHO">JUNHO</option>
              </select>
           </div>
-          <div>
-             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Ano Base *</label>
-             <input type="text" name="anoBase" defaultValue="2026" required className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded outline-none font-bold" />
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Ano Base *</label>
+             <input type="text" name="anoBase" defaultValue="2026" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-bold text-slate-800" />
           </div>
-          <div>
-             <label className="block text-xs font-bold text-orange-700 uppercase mb-1">Total Compras (R$)</label>
-             <input type="number" step="0.01" name="compras" value={compras || ''} onChange={e => setCompras(Number(e.target.value))} className="w-full px-4 py-2.5 bg-orange-50 border border-orange-300 rounded outline-none font-black text-orange-800" />
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-orange-700 uppercase ml-1">Total Compras (R$)</label>
+             <input type="number" step="0.01" name="compras" value={compras || ''} onChange={e => setCompras(Number(e.target.value))} className="w-full px-4 py-3 bg-orange-50/50 border border-orange-200 rounded-xl outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all font-black text-orange-800 placeholder-orange-300" placeholder="0.00" />
           </div>
         </div>
 
-        {/* ENTRADAS E SAÍDAS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          <div className="space-y-4">
-             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b pb-2">Entradas do Dia</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+          <div className="space-y-5">
+             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2"><Wallet className="h-4 w-4 text-indigo-600" /> Entradas do Dia</h2>
              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1">R$ Espécie</label>
-                  <input type="number" step="0.01" name="entradaDinheiro" value={dinheiro || ''} onChange={e => setDinheiro(Number(e.target.value))} className="w-full px-4 py-2 border rounded font-bold text-green-800" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Cartão Crédito</label>
-                  <input type="number" step="0.01" name="entradaCredito" value={credito || ''} onChange={e => setCredito(Number(e.target.value))} className="w-full px-4 py-2 border rounded font-bold text-green-800" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Cartão Débito</label>
-                  <input type="number" step="0.01" name="entradaDebito" value={debito || ''} onChange={e => setDebito(Number(e.target.value))} className="w-full px-4 py-2 border rounded font-bold text-green-800" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase mb-1">PIX</label>
-                  <input type="number" step="0.01" name="entradaPix" value={pix || ''} onChange={e => setPix(Number(e.target.value))} className="w-full px-4 py-2 border rounded font-bold text-green-800" />
-                </div>
+                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">R$ Espécie</label><input type="number" step="0.01" name="entradaDinheiro" value={dinheiro || ''} onChange={e => setDinheiro(Number(e.target.value))} className="w-full px-4 py-2.5 border border-slate-200 bg-slate-50 rounded-lg focus:bg-white outline-none focus:border-indigo-500 font-bold text-green-800 transition-colors" placeholder="0.00" /></div>
+                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Cartão Crédito</label><input type="number" step="0.01" name="entradaCredito" value={credito || ''} onChange={e => setCredito(Number(e.target.value))} className="w-full px-4 py-2.5 border border-slate-200 bg-slate-50 rounded-lg focus:bg-white outline-none focus:border-indigo-500 font-bold text-green-800 transition-colors" placeholder="0.00" /></div>
+                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Cartão Débito</label><input type="number" step="0.01" name="entradaDebito" value={debito || ''} onChange={e => setDebito(Number(e.target.value))} className="w-full px-4 py-2.5 border border-slate-200 bg-slate-50 rounded-lg focus:bg-white outline-none focus:border-indigo-500 font-bold text-green-800 transition-colors" placeholder="0.00" /></div>
+                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">PIX</label><input type="number" step="0.01" name="entradaPix" value={pix || ''} onChange={e => setPix(Number(e.target.value))} className="w-full px-4 py-2.5 border border-slate-200 bg-slate-50 rounded-lg focus:bg-white outline-none focus:border-indigo-500 font-bold text-green-800 transition-colors" placeholder="0.00" /></div>
              </div>
-             <div className="bg-green-50 border border-green-200 p-3 rounded-lg text-right">
-                <span className="font-black text-green-900 text-sm">Total Entradas: R$ {totalEntradas.toFixed(2)}</span>
+             <div className="bg-green-50 border border-green-200 p-4 rounded-xl flex justify-between items-center shadow-sm">
+                <span className="font-black text-green-900 text-[10px] uppercase tracking-widest">Total Entradas</span>
+                <span className="font-black text-green-700 text-lg">R$ {totalEntradas.toFixed(2)}</span>
              </div>
           </div>
 
-          <div className="space-y-4">
-             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b pb-2">Saídas de Caixa</h2>
-             <div>
-                <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Saída Pagamentos (Cartão/PIX)</label>
-                <input type="number" step="0.01" name="saidaPagamentos" value={saidas || ''} onChange={e => setSaidas(Number(e.target.value))} className="w-full px-4 py-3 border border-red-300 rounded-lg font-black text-red-800 bg-red-50" />
+          <div className="space-y-5 flex flex-col justify-between">
+             <div className="space-y-5">
+               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">Saídas de Caixa</h2>
+               <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-red-600 uppercase ml-1">Saída Pagamentos (Cartão/PIX)</label>
+                  <input type="number" step="0.01" name="saidaPagamentos" value={saidas || ''} onChange={e => setSaidas(Number(e.target.value))} className="w-full px-4 py-4 border border-red-200 bg-red-50/50 rounded-xl outline-none focus:bg-white focus:border-red-500 font-black text-red-800 text-lg transition-colors placeholder-red-300" placeholder="0.00" />
+               </div>
              </div>
              
-             <div className="bg-blue-50 border border-blue-300 p-4 rounded-xl text-center mt-6">
-                <p className="text-xs font-black uppercase text-blue-800 mb-1">PREVISÃO DO TOTAL LÍQUIDO</p>
-                <h3 className={`text-3xl font-black ${totalLiquido >= 0 ? 'text-blue-900' : 'text-red-600'}`}>
+             <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-2xl text-center shadow-sm">
+                <p className="text-[10px] font-black uppercase tracking-widest text-indigo-800 mb-2">PREVISÃO DO TOTAL LÍQUIDO</p>
+                <h3 className={`text-4xl font-black ${totalLiquido >= 0 ? 'text-indigo-950' : 'text-red-600'}`}>
                   R$ {totalLiquido.toFixed(2)}
                 </h3>
              </div>
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-slate-200 mt-6">
-          <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 px-10 py-3.5 rounded-xl font-black text-white shadow-md transition-transform hover:-translate-y-0.5 flex items-center gap-2">
-            <Save className="h-5 w-5"/> Gravar no Balanço Diário
-          </button>
+        <div className="flex justify-end pt-6 border-t border-slate-100 mt-6">
+          <BotaoSubmit texto="Gravar no Balanço" icone={<Save className="h-5 w-5" />} cor="indigo" />
         </div>
       </form>
     </div>

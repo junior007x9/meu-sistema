@@ -1,90 +1,92 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Save, BookOpen } from 'lucide-react';
+import { ArrowLeft, Save, BookOpen, Calendar } from 'lucide-react';
 import { salvarCarne } from '@/actions/faturamento';
+import BotaoSubmit from '@/components/BotaoSubmit';
 
 export default function NovoCarnePage() {
+  const [valorVenda, setValorVenda] = useState(0);
+  const [valorEntrada, setValorEntrada] = useState(0);
+  const totalParcelado = Math.max(0, valorVenda - valorEntrada);
+
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/faturamento/carne" className="p-2 hover:bg-slate-200 rounded-full text-slate-500"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/faturamento/carne" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Novo Carnê</h1>
-          <p className="text-sm text-slate-500 font-medium">Cadastre um novo plano de pagamento em carnê.</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Novo Carnê de Vendas</h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">Registe o parcelamento e controle as prestações do cliente.</p>
         </div>
       </div>
 
-      <form action={salvarCarne} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+      <form action={salvarCarne} className="bg-white p-5 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
         
-        {/* IDENTIFICAÇÃO DO CARNÊ */}
+        {/* INFORMAÇÕES DO CLIENTE */}
         <div className="space-y-4">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 border-b pb-2">
-            <BookOpen className="h-5 w-5 text-yellow-500" /> Dados do Cliente e da Venda
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-amber-500" /> Dados da Venda e do Cliente
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-1">
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Ano Base *</label>
-              <input type="text" name="anoBase" defaultValue="2026" required className="w-full px-4 py-2.5 bg-yellow-50 border border-yellow-300 rounded outline-none font-black text-yellow-900 text-center" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase ml-1">Nome do Cliente *</label>
+              <input type="text" name="cliente" required placeholder="Ex: Maria Silva Morais" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-semibold uppercase text-slate-800" />
             </div>
-            <div className="md:col-span-3">
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Nome do Cliente *</label>
-              <input type="text" name="cliente" required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded outline-none font-bold" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Contato / Telefone</label>
-              <input type="text" name="contato" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Data da Compra *</label>
-              <input type="date" name="dataCompra" required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded outline-none font-bold text-slate-600" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Valor Venda (R$) *</label>
-              <input type="number" step="0.01" name="valorVenda" required className="w-full px-4 py-2.5 border border-blue-300 bg-blue-50 rounded font-black text-blue-800 outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Entrada (R$)</label>
-              <input type="number" step="0.01" name="valorEntrada" className="w-full px-4 py-2.5 border border-green-300 bg-green-50 rounded font-black text-green-800 outline-none" />
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 uppercase ml-1">Contacto / WhatsApp</label>
+              <input type="text" name="contato" placeholder="Ex: (86) 99999-9999" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-medium text-slate-700" />
             </div>
           </div>
         </div>
 
-        {/* GRADE DE PARCELAS */}
-        <div className="space-y-4 pt-4">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2 border-b pb-2">
-            Plano de Parcelamento (Até 10x)
-          </h2>
-          <p className="text-xs text-slate-500 font-bold mb-4">Preencha apenas as parcelas que vão ser geradas para este carnê.</p>
+        {/* VALORES E CRONOGRAMA BASE */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50 p-5 sm:p-6 rounded-2xl border border-slate-100">
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Data da Compra *</label>
+             <input type="date" name="dataCompra" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-800" />
+          </div>
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Ano Base *</label>
+             <input type="text" name="anoBase" defaultValue="2026" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-800" />
+          </div>
+          <div className="space-y-1.5">
+             <label className="text-xs font-bold text-slate-500 uppercase ml-1">Valor Total da Venda (R$) *</label>
+             <input type="number" step="0.01" name="valorVenda" value={valorVenda || ''} onChange={e => setValorVenda(Number(e.target.value))} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-black text-slate-900 text-lg" placeholder="0.00" />
+          </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* ENTRADA E CRONOGRAMA DAS 10 PRESTAÇÕES */}
+        <div className="space-y-6">
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-slate-400" /> Entrada e Plano de Parcelamento (Até 10x)
+          </h2>
+          
+          <div className="max-w-xs space-y-1.5 mb-6">
+            <label className="text-xs font-bold text-emerald-600 uppercase ml-1">Valor da Entrada (R$)</label>
+            <input type="number" step="0.01" name="valorEntrada" value={valorEntrada || ''} onChange={e => setValorEntrada(Number(e.target.value))} className="w-full px-4 py-3 bg-emerald-50/30 border border-emerald-200 rounded-xl outline-none focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-700" placeholder="0.00" />
+          </div>
+
+          <p className="text-xs font-semibold text-slate-400 -mt-2">Preencha apenas a quantidade de parcelas acordada com o cliente:</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm hover:border-yellow-400 transition-colors">
-                <div className="text-[10px] font-black uppercase text-slate-400 mb-2 border-b border-slate-200 pb-1">Parcela {i + 1}</div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Valor (R$)</label>
-                    <input type="number" step="0.01" name={`p${i + 1}Valor`} className="w-full px-2 py-1.5 border border-slate-300 rounded font-bold text-sm text-slate-800" />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Data Pgto</label>
-                    <input type="date" name={`p${i + 1}Data`} className="w-full px-2 py-1.5 border border-slate-300 rounded font-medium text-xs text-slate-500" />
-                  </div>
-                </div>
+              <div key={i} className="bg-slate-50/50 p-3 rounded-xl border border-slate-200/60 space-y-2 transition-all hover:border-amber-200">
+                <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 block">{i+1}ª Prestação</span>
+                <input type="number" step="0.01" name={`p${i+1}Valor`} placeholder="Valor R$" className="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg outline-none focus:border-amber-500 font-bold text-slate-800" />
+                <input type="date" name={`p${i+1}Data`} className="w-full px-2 py-1 text-[11px] bg-white border border-slate-200 rounded-lg outline-none focus:border-amber-500 font-semibold text-slate-600" />
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex justify-end pt-6 border-t border-slate-200">
-          <button type="submit" className="bg-yellow-500 hover:bg-yellow-600 px-10 py-3.5 rounded-xl font-black text-slate-900 shadow-md transition-transform hover:-translate-y-0.5">
-            <Save className="h-5 w-5 inline mr-2"/> Gravar Carnê
-          </button>
+        {/* FECHAMENTO */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-slate-100">
+          <div className="bg-amber-50/60 border border-amber-200 px-6 py-3 rounded-2xl flex flex-col w-full sm:w-auto">
+             <span className="text-[10px] uppercase font-black tracking-widest text-amber-700">Saldo Restante no Carnê</span>
+             <span className="text-2xl font-black text-amber-950">R$ {totalParcelado.toFixed(2)}</span>
+          </div>
+          <BotaoSubmit texto="Gerar Carnê de Venda" icone={<Save className="h-5 w-5" />} cor="yellow" />
         </div>
       </form>
     </div>

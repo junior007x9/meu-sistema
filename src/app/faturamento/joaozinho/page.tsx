@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BarChart3, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays } from 'lucide-react';
+import { Plus, BarChart3, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays, Scale } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function JoaozinhoPage() {
@@ -23,15 +23,15 @@ export default async function JoaozinhoPage() {
       </div>
 
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
-         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Activity className="h-4 w-4" /> Conta UTI</Link>
-         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><BookOpen className="h-4 w-4" /> Carnês</Link>
-         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
-         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
-         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Funcionários</Link>
-         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
-         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
+         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
+         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><BookOpen className="h-4 w-4" /> Carnês</Link>
+         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
+         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
+         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
+         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
+         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -44,11 +44,7 @@ export default async function JoaozinhoPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse min-w-[900px] border border-slate-400">
               <thead>
-                <tr>
-                  <th colSpan={9} className="bg-slate-100 text-slate-800 py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">
-                    SERVIÇOS JOÃOZINHO
-                  </th>
-                </tr>
+                <tr><th colSpan={9} className="bg-slate-100 text-slate-800 py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">SERVIÇOS JOÃOZINHO</th></tr>
                 <tr className="text-xs uppercase tracking-wider font-black text-black">
                   <th className="p-3 bg-slate-50 border border-slate-400" rowSpan={2}>DATA</th>
                   <th className="p-2 bg-white border border-slate-400" colSpan={6}>SERVIÇOS / VALOR</th>
@@ -67,10 +63,7 @@ export default async function JoaozinhoPage() {
               <tbody>
                 {servicos.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors font-bold text-xs text-slate-800">
-                    <td className="p-3 border border-slate-400">
-                      {item.data.split('-').reverse().join('/')} <br/>
-                      <span className="text-[9px] text-slate-400">{item.mesReferencia}/{item.anoBase}</span>
-                    </td>
+                    <td className="p-3 border border-slate-400">{item.data.split('-').reverse().join('/')} <br/><span className="text-[9px] text-slate-400">{item.mesReferencia}/{item.anoBase}</span></td>
                     <td className="p-3 border border-slate-400 text-left text-slate-500 font-medium">{item.montagem || '-'}</td>
                     <td className="p-3 border border-slate-400 text-blue-700">R$ {item.montagemValor.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 text-left text-slate-500 font-medium">{item.transposicao || '-'}</td>
@@ -78,9 +71,7 @@ export default async function JoaozinhoPage() {
                     <td className="p-3 border border-slate-400 text-left text-slate-500 font-medium">{item.coloracao || '-'}</td>
                     <td className="p-3 border border-slate-400 text-purple-700">R$ {item.coloracaoValor.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400 bg-[#92d050]/20 text-green-800 font-black text-sm">R$ {item.total.toFixed(2)}</td>
-                    <td className="p-3 border border-slate-400 bg-white">
-                      <BotoesAcao id={item.id} tabela="joaozinho" caminho="/faturamento/joaozinho" linkEditar={`/faturamento/joaozinho/${item.id}/editar`} />
-                    </td>
+                    <td className="p-3 border border-slate-400 bg-white"><BotoesAcao id={item.id} tabela="joaozinho" caminho="/faturamento/joaozinho" linkEditar={`/faturamento/joaozinho/${item.id}/editar`} /></td>
                   </tr>
                 ))}
               </tbody>

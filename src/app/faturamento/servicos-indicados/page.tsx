@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosIndicados } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, Handshake, Wrench, Landmark, Activity, BookOpen, UserMinus, Users, CalendarDays } from 'lucide-react';
+import { Plus, Handshake, Wrench, Landmark, Activity, BookOpen, UserMinus, Users, CalendarDays, Scale } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function ServicosIndicadosPage() {
@@ -24,15 +24,15 @@ export default async function ServicosIndicadosPage() {
       </div>
 
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
-         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Activity className="h-4 w-4" /> Conta UTI</Link>
-         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><BookOpen className="h-4 w-4" /> Carnês</Link>
-         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
-         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
-         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Funcionários</Link>
-         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
-         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
+         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
+         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><BookOpen className="h-4 w-4" /> Carnês</Link>
+         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
+         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-white border-t-2 border-x-2 border-indigo-600 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Handshake className="h-4 w-4 text-indigo-600" /> Serviços Indicados</Link>
+         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
+         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
+         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -45,11 +45,7 @@ export default async function ServicosIndicadosPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse min-w-[1000px] border border-slate-400">
               <thead>
-                <tr>
-                  <th colSpan={8} className="bg-indigo-600 text-white py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">
-                    SERVIÇOS INDICADOS POR ÓTICAS
-                  </th>
-                </tr>
+                <tr><th colSpan={8} className="bg-indigo-600 text-white py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">SERVIÇOS INDICADOS POR ÓTICAS</th></tr>
                 <tr className="text-xs uppercase tracking-wider font-black text-black bg-slate-50">
                   <th className="p-3 border border-slate-400 text-left">QUEM INDICOU</th>
                   <th className="p-3 border border-slate-400">CONTATOS</th>
@@ -66,18 +62,12 @@ export default async function ServicosIndicadosPage() {
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors font-bold text-xs text-slate-800">
                     <td className="p-3 border border-slate-400 text-left uppercase text-indigo-900">{item.quemIndicou}</td>
                     <td className="p-3 border border-slate-400 text-slate-600">{item.contatos || '-'}</td>
-                    <td className="p-3 border border-slate-400">
-                      <span className={`px-2 py-1 rounded text-[10px] font-black ${item.servicoPago === 'SIM' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'}`}>
-                        {item.servicoPago}
-                      </span>
-                    </td>
+                    <td className="p-3 border border-slate-400"><span className={`px-2 py-1 rounded text-[10px] font-black ${item.servicoPago === 'SIM' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'}`}>{item.servicoPago}</span></td>
                     <td className="p-3 border border-slate-400 text-left text-slate-700">{item.servico}</td>
                     <td className="p-3 border border-slate-400 text-blue-700 text-sm">R$ {item.valor.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400">{item.data.split('-').reverse().join('/')}</td>
                     <td className="p-3 border border-slate-400 text-red-600 text-sm bg-red-50/50">R$ {item.valorDevido.toFixed(2)}</td>
-                    <td className="p-3 border border-slate-400 bg-white">
-                      <BotoesAcao id={item.id} tabela="indicados" caminho="/faturamento/servicos-indicados" linkEditar={`/faturamento/servicos-indicados/${item.id}/editar`} />
-                    </td>
+                    <td className="p-3 border border-slate-400 bg-white"><BotoesAcao id={item.id} tabela="indicados" caminho="/faturamento/servicos-indicados" linkEditar={`/faturamento/servicos-indicados/${item.id}/editar`} /></td>
                   </tr>
                 ))}
               </tbody>

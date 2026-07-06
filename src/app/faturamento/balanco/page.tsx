@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { balancoAnual } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, Scale, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays } from 'lucide-react';
+import { Plus, Scale, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays, Wallet } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function BalancoPage() {
@@ -21,7 +21,6 @@ export default async function BalancoPage() {
         </Link>
       </div>
 
-      {/* SISTEMA DE ABAS */}
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
          <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
          <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
@@ -32,34 +31,25 @@ export default async function BalancoPage() {
          <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
          <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
          <Link href="/faturamento/balanco" className="px-4 py-2 bg-white border-t-2 border-x-2 border-slate-900 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {registros.length === 0 ? (
-          <div className="xl:col-span-2 bg-white rounded-xl border border-slate-300 p-12 flex flex-col items-center justify-center text-center shadow-sm">
-            <Scale className="h-16 w-16 text-slate-300 mb-4" />
-            <h3 className="text-lg font-bold text-slate-900">Nenhum Balanço Anual Registrado</h3>
-          </div>
+          <div className="xl:col-span-2 bg-white rounded-xl border border-slate-300 p-12 flex flex-col items-center justify-center text-center shadow-sm"><Scale className="h-16 w-16 text-slate-300 mb-4" /><h3 className="text-lg font-bold text-slate-900">Nenhum Balanço Anual Registrado</h3></div>
         ) : (
           registros.map((item) => {
             const meses = JSON.parse(item.mesesJson);
-            
             return (
               <div key={item.id} className="bg-white rounded-xl border border-slate-400 shadow-sm overflow-hidden">
-                <div className="bg-white text-black text-center border-b border-slate-400 p-3 font-black uppercase tracking-widest relative">
-                  BALANÇO {item.ano}
-                  <div className="absolute right-3 top-2.5">
-                     <BotoesAcao id={item.id} tabela="balanco" caminho="/faturamento/balanco" linkEditar={`/faturamento/balanco/${item.id}/editar`} />
-                  </div>
+                <div className="bg-white text-black text-center border-b border-slate-400 p-3 font-black uppercase tracking-widest relative">BALANÇO {item.ano}
+                  <div className="absolute right-3 top-2.5"><BotoesAcao id={item.id} tabela="balanco" caminho="/faturamento/balanco" linkEditar={`/faturamento/balanco/${item.id}/editar`} /></div>
                 </div>
-
                 <table className="w-full text-center border-collapse">
                   <thead>
                     <tr className="bg-white text-black font-black text-xs uppercase">
-                      <th className="p-2 border border-slate-400 w-16">MÊS</th>
-                      <th className="p-2 border border-slate-400 w-1/3">COMPRAS</th>
-                      <th className="p-2 border border-slate-400 w-1/3">ENTRADA R$</th>
-                      <th className="p-2 border border-slate-400 w-1/3">SAÍDA - CARTÃO/PIX</th>
+                      <th className="p-2 border border-slate-400 w-16">MÊS</th><th className="p-2 border border-slate-400 w-1/3">COMPRAS</th>
+                      <th className="p-2 border border-slate-400 w-1/3">ENTRADA R$</th><th className="p-2 border border-slate-400 w-1/3">SAÍDA - CARTÃO/PIX</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm font-bold text-slate-700 bg-white">
@@ -74,10 +64,8 @@ export default async function BalancoPage() {
                   </tbody>
                   <tfoot>
                     <tr className="text-sm font-black text-slate-900 bg-slate-100">
-                      <td className="p-3 border border-slate-400 uppercase">TOTAL</td>
-                      <td className="p-3 border border-slate-400 text-orange-800">{item.totalCompras.toFixed(2).replace('.', ',')}</td>
-                      <td className="p-3 border border-slate-400 text-green-800">{item.totalEntrada.toFixed(2).replace('.', ',')}</td>
-                      <td className="p-3 border border-slate-400 text-red-800">{item.totalSaida.toFixed(2).replace('.', ',')}</td>
+                      <td className="p-3 border border-slate-400 uppercase">TOTAL</td><td className="p-3 border border-slate-400 text-orange-800">{item.totalCompras.toFixed(2).replace('.', ',')}</td>
+                      <td className="p-3 border border-slate-400 text-green-800">{item.totalEntrada.toFixed(2).replace('.', ',')}</td><td className="p-3 border border-slate-400 text-red-800">{item.totalSaida.toFixed(2).replace('.', ',')}</td>
                     </tr>
                   </tfoot>
                 </table>

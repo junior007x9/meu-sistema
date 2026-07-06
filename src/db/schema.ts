@@ -399,3 +399,23 @@ export const balancoAnual = sqliteTable('balanco_anual', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 10. BALANÇO DIÁRIO (MENSAL)
+// ==========================================
+export const balancoDiario = sqliteTable('balanco_diario', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  data: text('data').notNull(),
+  mesReferencia: text('mes_referencia').notNull(),
+  anoBase: text('ano_base').default('2026').notNull(),
+  
+  compras: real('compras').default(0).notNull(),
+  
+  entradaDinheiro: real('entrada_dinheiro').default(0).notNull(), // R$
+  entradaCredito: real('entrada_credito').default(0).notNull(),
+  entradaDebito: real('entrada_debito').default(0).notNull(),
+  entradaPix: real('entrada_pix').default(0).notNull(),
+  
+  saidaPagamentos: real('saida_pagamentos').default(0).notNull(),
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

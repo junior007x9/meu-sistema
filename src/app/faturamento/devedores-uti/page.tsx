@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { clientesDevedoresUti } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, UserMinus, Wrench, Landmark, Activity, BookOpen, Handshake, Users, CalendarDays, Scale } from 'lucide-react';
+import { Plus, UserMinus, Wrench, Landmark, Activity, BookOpen, Handshake, Users, CalendarDays, Scale, Wallet } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function DevedoresUtiPage() {
@@ -32,36 +32,29 @@ export default async function DevedoresUtiPage() {
          <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
          <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
          <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
         {registros.length === 0 ? (
-          <div className="p-12 flex flex-col items-center justify-center text-center">
-            <UserMinus className="h-16 w-16 text-slate-300 mb-4" />
-            <h3 className="text-lg font-bold text-slate-900">Nenhum devedor registrado</h3>
-          </div>
+          <div className="p-12 flex flex-col items-center justify-center text-center"><UserMinus className="h-16 w-16 text-slate-300 mb-4" /><h3 className="text-lg font-bold text-slate-900">Nenhum devedor registrado</h3></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse min-w-[900px] border border-slate-400">
               <thead>
                 <tr><th colSpan={7} className="bg-red-600 text-white py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">CLIENTES DEVEDORES UTI DOS ÓCULOS</th></tr>
                 <tr className="text-xs uppercase tracking-wider font-black text-black bg-slate-50">
-                  <th className="p-3 border border-slate-400 w-48 text-left">CLIENTES DEVEDORES</th>
-                  <th className="p-3 border border-slate-400 w-32">CONTATO</th>
-                  <th className="p-3 border border-slate-400 text-left">SERVIÇOS</th>
-                  <th className="p-3 border border-slate-400 w-24">VALOR</th>
-                  <th className="p-3 border border-slate-400 w-28">DATA</th>
-                  <th className="p-3 border border-slate-400 w-24">PAGO</th>
+                  <th className="p-3 border border-slate-400 w-48 text-left">CLIENTES DEVEDORES</th><th className="p-3 border border-slate-400 w-32">CONTATO</th>
+                  <th className="p-3 border border-slate-400 text-left">SERVIÇOS</th><th className="p-3 border border-slate-400 w-24">VALOR</th>
+                  <th className="p-3 border border-slate-400 w-28">DATA</th><th className="p-3 border border-slate-400 w-24">PAGO</th>
                   <th className="p-3 border border-slate-400 bg-slate-200 w-24">AÇÕES</th>
                 </tr>
               </thead>
               <tbody>
                 {registros.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors font-bold text-xs text-slate-800">
-                    <td className="p-3 border border-slate-400 text-left uppercase">{item.cliente}</td>
-                    <td className="p-3 border border-slate-400 text-slate-600">{item.contato || '-'}</td>
-                    <td className="p-3 border border-slate-400 text-left text-slate-600">{item.servicos}</td>
-                    <td className="p-3 border border-slate-400 text-red-600 text-sm">R$ {item.valor.toFixed(2)}</td>
+                    <td className="p-3 border border-slate-400 text-left uppercase">{item.cliente}</td><td className="p-3 border border-slate-400 text-slate-600">{item.contato || '-'}</td>
+                    <td className="p-3 border border-slate-400 text-left text-slate-600">{item.servicos}</td><td className="p-3 border border-slate-400 text-red-600 text-sm">R$ {item.valor.toFixed(2)}</td>
                     <td className="p-3 border border-slate-400">{item.data.split('-').reverse().join('/')}</td>
                     <td className="p-3 border border-slate-400"><span className={`px-3 py-1 rounded-md text-xs font-black ${item.pago === 'SIM' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'}`}>{item.pago}</span></td>
                     <td className="p-3 border border-slate-400 bg-white"><BotoesAcao id={item.id} tabela="devedores-uti" caminho="/faturamento/devedores-uti" linkEditar={`/faturamento/devedores-uti/${item.id}/editar`} /></td>
@@ -71,8 +64,7 @@ export default async function DevedoresUtiPage() {
               <tfoot>
                  <tr>
                     <td colSpan={3} className="p-3 border border-slate-400 text-right font-black uppercase text-red-700 bg-red-50">Total Pendente a Receber:</td>
-                    <td className="p-3 border border-slate-400 bg-red-100 text-red-700 font-black text-lg">R$ {valorPendente.toFixed(2)}</td>
-                    <td colSpan={3} className="p-3 border border-slate-400 bg-red-50"></td>
+                    <td className="p-3 border border-slate-400 bg-red-100 text-red-700 font-black text-lg">R$ {valorPendente.toFixed(2)}</td><td colSpan={3} className="p-3 border border-slate-400 bg-red-50"></td>
                  </tr>
               </tfoot>
             </table>

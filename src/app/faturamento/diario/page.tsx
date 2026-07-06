@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { faturamentoDiario } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, CalendarDays, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, Scale } from 'lucide-react';
+import { Plus, CalendarDays, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, Scale, Wallet } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function FaturamentoDiarioPage() {
@@ -45,6 +45,7 @@ export default async function FaturamentoDiarioPage() {
          <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
          <Link href="/faturamento/diario" className="px-4 py-2 bg-white border-t-2 border-x-2 border-slate-900 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
          <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -71,14 +72,10 @@ export default async function FaturamentoDiarioPage() {
               <thead>
                 <tr><th colSpan={13} className="bg-slate-900 text-white py-3 font-black tracking-widest uppercase border border-slate-400 text-sm">FATURAMENTO DIÁRIO</th></tr>
                 <tr className="text-[10px] uppercase font-black text-black bg-slate-100">
-                  <th className="p-2 border border-slate-400 w-24" rowSpan={2}>DATA</th>
-                  <th className="p-2 border border-slate-400 w-48 text-left" rowSpan={2}>VENDAS / SERVIÇOS</th>
-                  <th className="p-2 border border-slate-400 w-24" rowSpan={2}>R$ COMPRA</th>
-                  <th className="p-2 border border-slate-400" colSpan={4}>FORMA DE PAGAMENTO</th>
-                  <th className="p-2 border border-slate-400 w-28 bg-[#c2d69b]" rowSpan={2}>TOTAL</th>
-                  <th className="p-2 border border-slate-400" colSpan={2}>SAÍDA PAGAMENTO</th>
-                  <th className="p-2 border border-slate-400 w-24 bg-green-100 text-green-800" rowSpan={2}>DÍZIMO</th>
-                  <th className="p-2 border border-slate-400 w-24" rowSpan={2}>FAT. DIÁRIO<br/>EM ESPÉCIE</th>
+                  <th className="p-2 border border-slate-400 w-24" rowSpan={2}>DATA</th><th className="p-2 border border-slate-400 w-48 text-left" rowSpan={2}>VENDAS / SERVIÇOS</th>
+                  <th className="p-2 border border-slate-400 w-24" rowSpan={2}>R$ COMPRA</th><th className="p-2 border border-slate-400" colSpan={4}>FORMA DE PAGAMENTO</th>
+                  <th className="p-2 border border-slate-400 w-28 bg-[#c2d69b]" rowSpan={2}>TOTAL</th><th className="p-2 border border-slate-400" colSpan={2}>SAÍDA PAGAMENTO</th>
+                  <th className="p-2 border border-slate-400 w-24 bg-green-100 text-green-800" rowSpan={2}>DÍZIMO</th><th className="p-2 border border-slate-400 w-24" rowSpan={2}>FAT. DIÁRIO<br/>EM ESPÉCIE</th>
                   <th className="p-2 border border-slate-400 bg-slate-200" rowSpan={2}>AÇÕES</th>
                 </tr>
                 <tr className="text-[9px] uppercase font-black text-black bg-slate-50">
@@ -91,14 +88,12 @@ export default async function FaturamentoDiarioPage() {
                 {registros.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50 transition-colors font-bold text-xs text-slate-800">
                     <td className="p-2 border border-slate-400">{item.data.split('-').reverse().join('/')} <br/><span className="text-[8px] text-slate-400">{item.mesReferencia}</span></td>
-                    <td className="p-2 border border-slate-400 text-left uppercase text-slate-600">{item.descricao}</td>
-                    <td className="p-2 border border-slate-400 text-orange-600">{item.compra.toFixed(2)}</td>
+                    <td className="p-2 border border-slate-400 text-left uppercase text-slate-600">{item.descricao}</td><td className="p-2 border border-slate-400 text-orange-600">{item.compra.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400">{item.especie.toFixed(2)}</td><td className="p-2 border border-slate-400">{item.credito.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400">{item.debito.toFixed(2)}</td><td className="p-2 border border-slate-400">{item.pix.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400 bg-[#eaf1dd] text-green-900 font-black text-sm">{item.total.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400 text-red-600">{item.saidaDinheiro.toFixed(2)}</td><td className="p-2 border border-slate-400 text-red-600">{item.saidaPix.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 text-green-700 bg-green-50">{item.dizimo.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 text-blue-800 bg-blue-50">{item.fatEspecie.toFixed(2)}</td>
+                    <td className="p-2 border border-slate-400 text-green-700 bg-green-50">{item.dizimo.toFixed(2)}</td><td className="p-2 border border-slate-400 text-blue-800 bg-blue-50">{item.fatEspecie.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400 bg-white"><BotoesAcao id={item.id} tabela="diario" caminho="/faturamento/diario" linkEditar={`/faturamento/diario/${item.id}/editar`} /></td>
                   </tr>
                 ))}
@@ -106,13 +101,11 @@ export default async function FaturamentoDiarioPage() {
               <tfoot>
                  <tr className="bg-slate-200 text-slate-900 font-black text-xs uppercase">
                     <td colSpan={2} className="p-3 border border-slate-400 text-right">SUBTOTAIS:</td>
-                    <td className="p-2 border border-slate-400 text-orange-700">{sCompra.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400">{sEspecie.toFixed(2)}</td><td className="p-2 border border-slate-400">{sCredito.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400">{sDebito.toFixed(2)}</td><td className="p-2 border border-slate-400">{sPix.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 bg-[#c2d69b] text-green-900">{sTotal.toFixed(2)}</td>
+                    <td className="p-2 border border-slate-400 text-orange-700">{sCompra.toFixed(2)}</td><td className="p-2 border border-slate-400">{sEspecie.toFixed(2)}</td>
+                    <td className="p-2 border border-slate-400">{sCredito.toFixed(2)}</td><td className="p-2 border border-slate-400">{sDebito.toFixed(2)}</td>
+                    <td className="p-2 border border-slate-400">{sPix.toFixed(2)}</td><td className="p-2 border border-slate-400 bg-[#c2d69b] text-green-900">{sTotal.toFixed(2)}</td>
                     <td className="p-2 border border-slate-400 text-red-700">{sSaidaDinheiro.toFixed(2)}</td><td className="p-2 border border-slate-400 text-red-700">{sSaidaPix.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 bg-green-200 text-green-900">{sDizimo.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 bg-blue-200 text-blue-900">{sFatEspecie.toFixed(2)}</td><td className="p-2 border border-slate-400"></td>
+                    <td className="p-2 border border-slate-400 bg-green-200 text-green-900">{sDizimo.toFixed(2)}</td><td className="p-2 border border-slate-400 bg-blue-200 text-blue-900">{sFatEspecie.toFixed(2)}</td><td className="p-2 border border-slate-400"></td>
                  </tr>
               </tfoot>
             </table>

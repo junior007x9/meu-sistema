@@ -1,7 +1,6 @@
 "use server";
 
 import { db } from '@/db';
-import { faturamentoDiario } from '@/db/schema';
 import { servicosJoaozinho } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';

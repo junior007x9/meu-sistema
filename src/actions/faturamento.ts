@@ -456,3 +456,89 @@ export async function atualizarDiario(id: number, formData: FormData) {
   revalidatePath('/faturamento/diario');
   redirect('/faturamento/diario');
 }
+export async function atualizarFuncionario(id: number, formData: FormData) {
+  const nome = formData.get('nome') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const dataInicio = formData.get('dataInicio') as string;
+
+  const dias = [];
+  let totalVt = 0, totalVa = 0, totalSalario = 0, totalFerias = 0, total13 = 0;
+
+  for (let i = 1; i <= 31; i++) {
+    const status = formData.get(`d${i}_status`) as string || 'P';
+    const vt = parseFloat(formData.get(`d${i}_vt`) as string) || 0;
+    const va = parseFloat(formData.get(`d${i}_va`) as string) || 0;
+    const sal = parseFloat(formData.get(`d${i}_sal`) as string) || 0;
+    const fer = parseFloat(formData.get(`d${i}_fer`) as string) || 0;
+    const d13 = parseFloat(formData.get(`d${i}_d13`) as string) || 0;
+
+    dias.push({ dia: i, status, vt, va, sal, fer, d13 });
+    if (status !== 'F') { totalVt += vt; totalVa += va; totalSalario += sal; totalFerias += fer; total13 += d13; }
+  }
+
+  const diasJson = JSON.stringify(dias);
+  const totalGeral = totalVt + totalVa + totalSalario + totalFerias + total13;
+
+  await db.update(controleFuncionarios).set({
+    nome, mesReferencia, dataInicio, diasJson, totalVt, totalVa, totalSalario, totalFerias, total13, totalGeral
+  }).where(eq(controleFuncionarios.id, id));
+
+  revalidatePath('/faturamento/funcionarios');
+  redirect('/faturamento/funcionarios');
+}
+
+export async function atualizarBalanco(id: number, formData: FormData) {
+  const ano = formData.get('ano') as string;
+  const MESES = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+  const mesesData = [];
+  let totalCompras = 0, totalEntrada = 0, totalSaida = 0;
+
+  for (const mes of MESES) {
+    const compras = parseFloat(formData.get(`compras_${mes}`) as string) || 0;
+    const entrada = parseFloat(formData.get(`entrada_${mes}`) as string) || 0;
+    const saida = parseFloat(formData.get(`saida_${mes}`) as string) || 0;
+    mesesData.push({ mes, compras, entrada, saida });
+    totalCompras += compras; totalEntrada += entrada; totalSaida += saida;
+  }
+
+  await db.update(balancoAnual).set({
+    ano, mesesJson: JSON.stringify(mesesData), totalCompras, totalEntrada, totalSaida
+  }).where(eq(balancoAnual.id, id));
+
+  revalidatePath('/faturamento/balanco');
+  redirect('/faturamento/balanco');
+}
+
+export async function atualizarBalancoDiario(id: number, formData: FormData) {
+  const compras = parseFloat(formData.get('compras') as string) || 0;
+  const entradaDinheiro = parseFloat(formData.get('entradaDinheiro') as string) || 0;
+  const entradaCredito = parseFloat(formData.get('entradaCredito') as string) || 0;
+  const entradaDebito = parseFloat(formData.get('entradaDebito') as string) || 0;
+  const entradaPix = parseFloat(formData.get('entradaPix') as string) || 0;
+  const saidaPagamentos = parseFloat(formData.get('saidaPagamentos') as string) || 0;
+
+  await db.update(balancoDiario).set({
+    data: formData.get('data') as string, mesReferencia: formData.get('mesReferencia') as string, anoBase: formData.get('anoBase') as string,
+    compras, entradaDinheiro, entradaCredito, entradaDebito, entradaPix, saidaPagamentos
+  }).where(eq(balancoDiario.id, id));
+
+  revalidatePath('/faturamento/balanco-diario');
+  redirect('/faturamento/balanco-diario');
+}
+
+export async function atualizarBalancoUti(id: number, formData: FormData) {
+  const compras = parseFloat(formData.get('compras') as string) || 0;
+  const entradaDinheiro = parseFloat(formData.get('entradaDinheiro') as string) || 0;
+  const entradaCredito = parseFloat(formData.get('entradaCredito') as string) || 0;
+  const entradaDebito = parseFloat(formData.get('entradaDebito') as string) || 0;
+  const entradaPix = parseFloat(formData.get('entradaPix') as string) || 0;
+  const saidaPagamentos = parseFloat(formData.get('saidaPagamentos') as string) || 0;
+
+  await db.update(balancoDiarioUti).set({
+    data: formData.get('data') as string, mesReferencia: formData.get('mesReferencia') as string, anoBase: formData.get('anoBase') as string,
+    compras, entradaDinheiro, entradaCredito, entradaDebito, entradaPix, saidaPagamentos
+  }).where(eq(balancoDiarioUti.id, id));
+
+  revalidatePath('/faturamento/balanco-uti');
+  redirect('/faturamento/balanco-uti');
+}

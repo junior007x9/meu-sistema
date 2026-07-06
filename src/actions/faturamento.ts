@@ -1,19 +1,25 @@
 "use server";
 
 import { db } from '@/db';
-import { servicosJoaozinho } from '@/db/schema';
+import { 
+  servicosJoaozinho, 
+  contaStyllo, 
+  contaUti, 
+  controleCarne, 
+  clientesDevedoresUti, 
+  servicosIndicados, 
+  controleFuncionarios, 
+  faturamentoDiario, 
+  balancoAnual, 
+  balancoDiario, 
+  balancoDiarioUti 
+} from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { contaStyllo } from '@/db/schema';
-import { contaUti } from '@/db/schema';
-import { controleCarne } from '@/db/schema';
-import { clientesDevedoresUti} from '@/db/schema';
-import { servicosIndicados } from '@/db/schema';
-import { controleFuncionarios } from '@/db/schema';
-import { faturamentoDiario } from '@/db/schema';
-import { balancoAnual } from '@/db/schema';
-import { balancoDiario } from '@/db/schema';
-import { balancoDiarioUti } from '@/db/schema';
+
+// ==========================================
+// 1. SERVIÇOS JOÃOZINHO
+// ==========================================
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -31,16 +37,20 @@ export async function salvarServicoJoaozinho(formData: FormData) {
   const total = montagemValor + transposicaoValor + coloracaoValor;
 
   await db.insert(servicosJoaozinho).values({
-    data, mesReferencia, anoBase,
-    montagem, montagemValor,
-    transposicao, transposicaoValor,
-    coloracao, coloracaoValor,
+    data, mesReferencia, anoBase, 
+    montagem, montagemValor, 
+    transposicao, transposicaoValor, 
+    coloracao, coloracaoValor, 
     total
   });
 
   revalidatePath('/faturamento/joaozinho');
   redirect('/faturamento/joaozinho');
 }
+
+// ==========================================
+// 2. CONTA STYLLO ÓTICA
+// ==========================================
 export async function salvarContaStyllo(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -51,17 +61,19 @@ export async function salvarContaStyllo(formData: FormData) {
   const debito = parseFloat(formData.get('debito') as string) || 0;
   const saida = parseFloat(formData.get('saida') as string) || 0;
 
-  // A Matemática: Tudo que entra menos o que sai
   const total = (pix + credito + debito) - saida;
 
   await db.insert(contaStyllo).values({
-    data, mesReferencia, anoBase,
-    pix, credito, debito, saida, total
+    data, mesReferencia, anoBase, pix, credito, debito, saida, total
   });
 
   revalidatePath('/faturamento/conta-styllo');
   redirect('/faturamento/conta-styllo');
 }
+
+// ==========================================
+// 3. CONTA UTI
+// ==========================================
 export async function salvarContaUti(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -75,38 +87,61 @@ export async function salvarContaUti(formData: FormData) {
   const total = (pix + credito + debito) - saida;
 
   await db.insert(contaUti).values({
-    data, mesReferencia, anoBase,
-    pix, credito, debito, saida, total
+    data, mesReferencia, anoBase, pix, credito, debito, saida, total
   });
 
   revalidatePath('/faturamento/conta-uti');
   redirect('/faturamento/conta-uti');
 }
+
+// ==========================================
+// 4. CARNÊS
+// ==========================================
 export async function salvarCarne(formData: FormData) {
-  const parcelas: any = {};
-  
-  // Loop inteligente para capturar as 10 parcelas do formulário
-  for (let i = 1; i <= 10; i++) {
-    parcelas[`p${i}Valor`] = parseFloat(formData.get(`p${i}Valor`) as string) || 0;
-    parcelas[`p${i}Data`] = formData.get(`p${i}Data`) as string || null;
-  }
+  const cliente = formData.get('cliente') as string;
+  const contato = formData.get('contato') as string;
+  const dataCompra = formData.get('dataCompra') as string;
+  const anoBase = formData.get('anoBase') as string;
+  const valorVenda = parseFloat(formData.get('valorVenda') as string) || 0;
+  const valorEntrada = parseFloat(formData.get('valorEntrada') as string) || 0;
+
+  const p1Valor = parseFloat(formData.get('p1Valor') as string) || 0;
+  const p1Data = formData.get('p1Data') as string;
+  const p2Valor = parseFloat(formData.get('p2Valor') as string) || 0;
+  const p2Data = formData.get('p2Data') as string;
+  const p3Valor = parseFloat(formData.get('p3Valor') as string) || 0;
+  const p3Data = formData.get('p3Data') as string;
+  const p4Valor = parseFloat(formData.get('p4Valor') as string) || 0;
+  const p4Data = formData.get('p4Data') as string;
+  const p5Valor = parseFloat(formData.get('p5Valor') as string) || 0;
+  const p5Data = formData.get('p5Data') as string;
+  const p6Valor = parseFloat(formData.get('p6Valor') as string) || 0;
+  const p6Data = formData.get('p6Data') as string;
+  const p7Valor = parseFloat(formData.get('p7Valor') as string) || 0;
+  const p7Data = formData.get('p7Data') as string;
+  const p8Valor = parseFloat(formData.get('p8Valor') as string) || 0;
+  const p8Data = formData.get('p8Data') as string;
+  const p9Valor = parseFloat(formData.get('p9Valor') as string) || 0;
+  const p9Data = formData.get('p9Data') as string;
+  const p10Valor = parseFloat(formData.get('p10Valor') as string) || 0;
+  const p10Data = formData.get('p10Data') as string;
 
   await db.insert(controleCarne).values({
-    anoBase: formData.get('anoBase') as string,
-    cliente: formData.get('cliente') as string,
-    contato: formData.get('contato') as string,
-    dataCompra: formData.get('dataCompra') as string,
-    valorVenda: parseFloat(formData.get('valorVenda') as string) || 0,
-    valorEntrada: parseFloat(formData.get('valorEntrada') as string) || 0,
-    ...parcelas // Injeta as 10 parcelas automaticamente
+    cliente, contato, dataCompra, anoBase, valorVenda, valorEntrada,
+    p1Valor, p1Data, p2Valor, p2Data, p3Valor, p3Data, p4Valor, p4Data, p5Valor, p5Data,
+    p6Valor, p6Data, p7Valor, p7Data, p8Valor, p8Data, p9Valor, p9Data, p10Valor, p10Data
   });
 
   revalidatePath('/faturamento/carne');
   redirect('/faturamento/carne');
 }
+
+// ==========================================
+// 5. DEVEDORES UTI
+// ==========================================
 export async function salvarDevedorUti(formData: FormData) {
   const cliente = formData.get('cliente') as string;
-  const contato = formData.get('contato') as string || '';
+  const contato = formData.get('contato') as string;
   const servicos = formData.get('servicos') as string;
   const valor = parseFloat(formData.get('valor') as string) || 0;
   const data = formData.get('data') as string;
@@ -119,9 +154,13 @@ export async function salvarDevedorUti(formData: FormData) {
   revalidatePath('/faturamento/devedores-uti');
   redirect('/faturamento/devedores-uti');
 }
+
+// ==========================================
+// 6. SERVIÇOS INDICADOS
+// ==========================================
 export async function salvarServicoIndicado(formData: FormData) {
   const quemIndicou = formData.get('quemIndicou') as string;
-  const contatos = formData.get('contatos') as string || '';
+  const contatos = formData.get('contatos') as string;
   const servicoPago = formData.get('servicoPago') as string;
   const servico = formData.get('servico') as string;
   const valor = parseFloat(formData.get('valor') as string) || 0;
@@ -135,54 +174,53 @@ export async function salvarServicoIndicado(formData: FormData) {
   revalidatePath('/faturamento/servicos-indicados');
   redirect('/faturamento/servicos-indicados');
 }
+
+// ==========================================
+// 7. CONTROLE DE FUNCIONÁRIOS
+// ==========================================
 export async function salvarFuncionario(formData: FormData) {
   const nome = formData.get('nome') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
   const dataInicio = formData.get('dataInicio') as string;
-  
-  let totalVt = 0, totalVa = 0, totalSalario = 0, totalFerias = 0, total13 = 0;
+
   const dias = [];
+  let totalVt = 0, totalVa = 0, totalSalario = 0, totalFerias = 0, total13 = 0;
 
-  // O sistema varre as 25 linhas do formulário
-  for(let i = 0; i < 25; i++) {
-    const dia = formData.get(`dia_${i}`) as string;
-    if(!dia) continue; // Se o dia estiver vazio, ignora
-    
-    const status = formData.get(`status_${i}`) as string;
-    let vt = 0, va = 0, sal = 0, fer = 0, d13 = 0;
-    
-    // Se estiver presente (P), lê os valores da linha
-    if (status === 'P') {
-      vt = parseFloat(formData.get(`vt_${i}`) as string) || 0;
-      va = parseFloat(formData.get(`va_${i}`) as string) || 0;
-      sal = parseFloat(formData.get(`sal_${i}`) as string) || 0;
-      fer = parseFloat(formData.get(`fer_${i}`) as string) || 0;
-      d13 = parseFloat(formData.get(`d13_${i}`) as string) || 0;
+  for (let i = 1; i <= 31; i++) {
+    const status = formData.get(`d${i}_status`) as string || 'P';
+    const vt = parseFloat(formData.get(`d${i}_vt`) as string) || 0;
+    const va = parseFloat(formData.get(`d${i}_va`) as string) || 0;
+    const sal = parseFloat(formData.get(`d${i}_sal`) as string) || 0;
+    const fer = parseFloat(formData.get(`d${i}_fer`) as string) || 0;
+    const d13 = parseFloat(formData.get(`d${i}_d13`) as string) || 0;
+
+    dias.push({ dia: i, status, vt, va, sal, fer, d13 });
+
+    if (status !== 'F') {
+      totalVt += vt; totalVa += va; totalSalario += sal; totalFerias += fer; total13 += d13;
     }
-
-    totalVt += vt; totalVa += va; totalSalario += sal; totalFerias += fer; total13 += d13;
-    dias.push({ dia, status, vt, va, sal, fer, d13 });
   }
 
+  const diasJson = JSON.stringify(dias);
   const totalGeral = totalVt + totalVa + totalSalario + totalFerias + total13;
 
   await db.insert(controleFuncionarios).values({
-    nome, mesReferencia, dataInicio,
-    diasJson: JSON.stringify(dias), // Salva a planilha inteira aqui
-    totalVt, totalVa, totalSalario, totalFerias, total13, totalGeral
+    nome, mesReferencia, dataInicio, diasJson, totalVt, totalVa, totalSalario, totalFerias, total13, totalGeral
   });
 
   revalidatePath('/faturamento/funcionarios');
   redirect('/faturamento/funcionarios');
 }
-export async function salvarFaturamentoDiario(formData: FormData) {
-  const mesReferencia = formData.get('mesReferencia') as string;
-  const anoBase = formData.get('anoBase') as string;
+
+// ==========================================
+// 8. FATURAMENTO DIÁRIO
+// ==========================================
+export async function salvarDiario(formData: FormData) {
   const data = formData.get('data') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
   const descricao = formData.get('descricao') as string;
-  
+
   const compra = parseFloat(formData.get('compra') as string) || 0;
-  
   const especie = parseFloat(formData.get('especie') as string) || 0;
   const credito = parseFloat(formData.get('credito') as string) || 0;
   const debito = parseFloat(formData.get('debito') as string) || 0;
@@ -190,50 +228,53 @@ export async function salvarFaturamentoDiario(formData: FormData) {
   
   const saidaDinheiro = parseFloat(formData.get('saidaDinheiro') as string) || 0;
   const saidaPix = parseFloat(formData.get('saidaPix') as string) || 0;
-  
-  // A Matemática Base
+  const dizimo = parseFloat(formData.get('dizimo') as string) || 0;
+  const fatEspecie = parseFloat(formData.get('fatEspecie') as string) || 0;
+
   const total = especie + credito + debito + pix;
-  const dizimo = parseFloat(formData.get('dizimo') as string) || (total * 0.10); // Pega do form, ou calcula 10%
-  const fatEspecie = especie - saidaDinheiro;
 
   await db.insert(faturamentoDiario).values({
-    mesReferencia, anoBase, data, descricao,
-    compra, especie, credito, debito, pix, total,
-    saidaDinheiro, saidaPix, dizimo, fatEspecie
+    data, mesReferencia, descricao, compra, especie, credito, debito, pix, total, saidaDinheiro, saidaPix, dizimo, fatEspecie
   });
 
   revalidatePath('/faturamento/diario');
   redirect('/faturamento/diario');
 }
+
+// ==========================================
+// 9. BALANÇO ANUAL
+// ==========================================
 export async function salvarBalanco(formData: FormData) {
   const ano = formData.get('ano') as string;
+  const MESES = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
   
+  const mesesData = [];
   let totalCompras = 0, totalEntrada = 0, totalSaida = 0;
-  const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
-  const dadosMeses = [];
 
-  // Loop que passa pelos 12 meses e soma tudo automaticamente
-  for (const mes of meses) {
+  for (const mes of MESES) {
     const compras = parseFloat(formData.get(`compras_${mes}`) as string) || 0;
     const entrada = parseFloat(formData.get(`entrada_${mes}`) as string) || 0;
     const saida = parseFloat(formData.get(`saida_${mes}`) as string) || 0;
 
+    mesesData.push({ mes, compras, entrada, saida });
     totalCompras += compras;
     totalEntrada += entrada;
     totalSaida += saida;
-
-    dadosMeses.push({ mes, compras, entrada, saida });
   }
 
+  const mesesJson = JSON.stringify(mesesData);
+
   await db.insert(balancoAnual).values({
-    ano,
-    mesesJson: JSON.stringify(dadosMeses),
-    totalCompras, totalEntrada, totalSaida
+    ano, mesesJson, totalCompras, totalEntrada, totalSaida
   });
 
   revalidatePath('/faturamento/balanco');
   redirect('/faturamento/balanco');
 }
+
+// ==========================================
+// 10. BALANÇO DIÁRIO
+// ==========================================
 export async function salvarBalancoDiario(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -254,6 +295,10 @@ export async function salvarBalancoDiario(formData: FormData) {
   revalidatePath('/faturamento/balanco-diario');
   redirect('/faturamento/balanco-diario');
 }
+
+// ==========================================
+// 11. BALANÇO DIÁRIO (UTI)
+// ==========================================
 export async function salvarBalancoUti(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -273,41 +318,4 @@ export async function salvarBalancoUti(formData: FormData) {
 
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
-}
-export async function salvarDiario(formData: FormData) {
-  const data = formData.get('data') as string;
-  const mesReferencia = formData.get('mesReferencia') as string;
-  const descricao = formData.get('descricao') as string;
-
-  const compra = parseFloat(formData.get('compra') as string) || 0;
-  const especie = parseFloat(formData.get('especie') as string) || 0;
-  const credito = parseFloat(formData.get('credito') as string) || 0;
-  const debito = parseFloat(formData.get('debito') as string) || 0;
-  const pix = parseFloat(formData.get('pix') as string) || 0;
-  
-  const saidaDinheiro = parseFloat(formData.get('saidaDinheiro') as string) || 0;
-  const saidaPix = parseFloat(formData.get('saidaPix') as string) || 0;
-  const dizimo = parseFloat(formData.get('dizimo') as string) || 0;
-  const fatEspecie = parseFloat(formData.get('fatEspecie') as string) || 0;
-
-  const total = especie + credito + debito + pix;
-
-  await db.insert(faturamentoDiario).values({
-    data,
-    mesReferencia,
-    descricao,
-    compra,
-    especie,
-    credito,
-    debito,
-    pix,
-    total,
-    saidaDinheiro,
-    saidaPix,
-    dizimo,
-    fatEspecie
-  });
-
-  revalidatePath('/faturamento/diario');
-  redirect('/faturamento/diario');
 }

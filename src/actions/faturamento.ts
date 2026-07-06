@@ -319,3 +319,140 @@ export async function salvarBalancoUti(formData: FormData) {
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
 }
+import { eq } from 'drizzle-orm'; // Adicione isto lá no topo do ficheiro junto aos outros imports!
+
+// ==========================================
+// FUNÇÕES DE ATUALIZAÇÃO (EDITAR)
+// ==========================================
+
+export async function atualizarServicoJoaozinho(id: number, formData: FormData) {
+  const montagemValor = parseFloat(formData.get('montagemValor') as string) || 0;
+  const transposicaoValor = parseFloat(formData.get('transposicaoValor') as string) || 0;
+  const coloracaoValor = parseFloat(formData.get('coloracaoValor') as string) || 0;
+  const total = montagemValor + transposicaoValor + coloracaoValor;
+
+  await db.update(servicosJoaozinho).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    anoBase: formData.get('anoBase') as string,
+    montagem: formData.get('montagem') as string,
+    montagemValor,
+    transposicao: formData.get('transposicao') as string,
+    transposicaoValor,
+    coloracao: formData.get('coloracao') as string,
+    coloracaoValor,
+    total
+  }).where(eq(servicosJoaozinho.id, id));
+
+  revalidatePath('/faturamento/joaozinho');
+  redirect('/faturamento/joaozinho');
+}
+
+export async function atualizarContaStyllo(id: number, formData: FormData) {
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+  const total = (pix + credito + debito) - saida;
+
+  await db.update(contaStyllo).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    anoBase: formData.get('anoBase') as string,
+    pix, credito, debito, saida, total
+  }).where(eq(contaStyllo.id, id));
+
+  revalidatePath('/faturamento/conta-styllo');
+  redirect('/faturamento/conta-styllo');
+}
+
+export async function atualizarContaUti(id: number, formData: FormData) {
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+  const total = (pix + credito + debito) - saida;
+
+  await db.update(contaUti).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    anoBase: formData.get('anoBase') as string,
+    pix, credito, debito, saida, total
+  }).where(eq(contaUti.id, id));
+
+  revalidatePath('/faturamento/conta-uti');
+  redirect('/faturamento/conta-uti');
+}
+
+export async function atualizarCarne(id: number, formData: FormData) {
+  const parcelas: any = {};
+  for (let i = 1; i <= 10; i++) {
+    parcelas[`p${i}Valor`] = parseFloat(formData.get(`p${i}Valor`) as string) || 0;
+    parcelas[`p${i}Data`] = formData.get(`p${i}Data`) as string || null;
+  }
+
+  await db.update(controleCarne).set({
+    anoBase: formData.get('anoBase') as string,
+    cliente: formData.get('cliente') as string,
+    contato: formData.get('contato') as string,
+    dataCompra: formData.get('dataCompra') as string,
+    valorVenda: parseFloat(formData.get('valorVenda') as string) || 0,
+    valorEntrada: parseFloat(formData.get('valorEntrada') as string) || 0,
+    ...parcelas
+  }).where(eq(controleCarne.id, id));
+
+  revalidatePath('/faturamento/carne');
+  redirect('/faturamento/carne');
+}
+
+export async function atualizarDevedorUti(id: number, formData: FormData) {
+  await db.update(clientesDevedoresUti).set({
+    cliente: formData.get('cliente') as string,
+    contato: formData.get('contato') as string,
+    servicos: formData.get('servicos') as string,
+    valor: parseFloat(formData.get('valor') as string) || 0,
+    data: formData.get('data') as string,
+    pago: formData.get('pago') as string
+  }).where(eq(clientesDevedoresUti.id, id));
+
+  revalidatePath('/faturamento/devedores-uti');
+  redirect('/faturamento/devedores-uti');
+}
+
+export async function atualizarServicoIndicado(id: number, formData: FormData) {
+  await db.update(servicosIndicados).set({
+    quemIndicou: formData.get('quemIndicou') as string,
+    contatos: formData.get('contatos') as string,
+    servicoPago: formData.get('servicoPago') as string,
+    servico: formData.get('servico') as string,
+    valor: parseFloat(formData.get('valor') as string) || 0,
+    data: formData.get('data') as string,
+    valorDevido: parseFloat(formData.get('valorDevido') as string) || 0
+  }).where(eq(servicosIndicados.id, id));
+
+  revalidatePath('/faturamento/servicos-indicados');
+  redirect('/faturamento/servicos-indicados');
+}
+
+export async function atualizarDiario(id: number, formData: FormData) {
+  const compra = parseFloat(formData.get('compra') as string) || 0;
+  const especie = parseFloat(formData.get('especie') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const saidaDinheiro = parseFloat(formData.get('saidaDinheiro') as string) || 0;
+  const saidaPix = parseFloat(formData.get('saidaPix') as string) || 0;
+  const dizimo = parseFloat(formData.get('dizimo') as string) || 0;
+  const fatEspecie = parseFloat(formData.get('fatEspecie') as string) || 0;
+  const total = especie + credito + debito + pix;
+
+  await db.update(faturamentoDiario).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    descricao: formData.get('descricao') as string,
+    compra, especie, credito, debito, pix, total, saidaDinheiro, saidaPix, dizimo, fatEspecie
+  }).where(eq(faturamentoDiario.id, id));
+
+  revalidatePath('/faturamento/diario');
+  redirect('/faturamento/diario');
+}

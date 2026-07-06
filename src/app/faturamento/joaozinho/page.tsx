@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { servicosJoaozinho } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, BarChart3, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays, Scale, Wallet } from 'lucide-react';
+import { Plus, BarChart3, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays, Scale, Wallet, HeartPulse } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function JoaozinhoPage() {
@@ -13,26 +13,22 @@ export default async function JoaozinhoPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Faturamento por Mês</h1>
-          <p className="text-slate-500 mt-1">Controle de entradas, repasses e serviços.</p>
-        </div>
-        <Link href="/faturamento/joaozinho/novo" className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-5 py-2.5 rounded-xl font-bold shadow-sm transition-transform hover:-translate-y-0.5">
-          <Plus className="h-5 w-5" /> Novo Lançamento
-        </Link>
+        <div><h1 className="text-3xl font-bold tracking-tight text-slate-900">Faturamento por Mês</h1><p className="text-slate-500 mt-1">Controle de entradas, repasses e serviços.</p></div>
+        <Link href="/faturamento/joaozinho/novo" className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 px-5 py-2.5 rounded-xl font-bold shadow-sm transition-transform hover:-translate-y-0.5"><Plus className="h-5 w-5" /> Novo Lançamento</Link>
       </div>
 
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-900 text-white font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
-         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
-         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><BookOpen className="h-4 w-4" /> Carnês</Link>
-         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
-         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
-         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
-         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
-         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
-         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-white border-t-2 border-x-2 border-slate-900 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><Wrench className="h-4 w-4 text-slate-900" /> Serviços Joãozinho</Link>
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Landmark className="h-4 w-4" /> Conta Styllo</Link>
+         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Activity className="h-4 w-4" /> Conta UTI</Link>
+         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><BookOpen className="h-4 w-4" /> Carnês</Link>
+         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
+         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Handshake className="h-4 w-4" /> Serv. Indicados</Link>
+         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Funcionários</Link>
+         <Link href="/faturamento/diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
+         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
+         <Link href="/faturamento/balanco-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><HeartPulse className="h-4 w-4" /> Balanço UTI</Link>
       </div>
 
       <div className="bg-white rounded-b-xl rounded-tr-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -66,10 +62,7 @@ export default async function JoaozinhoPage() {
                 ))}
               </tbody>
               <tfoot>
-                 <tr>
-                    <td colSpan={7} className="p-3 border border-slate-400 text-right font-black uppercase text-slate-700 bg-slate-100">Total Faturado:</td>
-                    <td className="p-3 border border-slate-400 bg-[#92d050] text-black font-black text-lg">R$ {totalGeral.toFixed(2)}</td><td className="p-3 border border-slate-400 bg-slate-100"></td>
-                 </tr>
+                 <tr><td colSpan={7} className="p-3 border border-slate-400 text-right font-black uppercase text-slate-700 bg-slate-100">Total Faturado:</td><td className="p-3 border border-slate-400 bg-[#92d050] text-black font-black text-lg">R$ {totalGeral.toFixed(2)}</td><td className="p-3 border border-slate-400 bg-slate-100"></td></tr>
               </tfoot>
             </table>
           </div>

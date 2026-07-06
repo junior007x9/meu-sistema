@@ -19,6 +19,7 @@ import {
   faturamentoDiario,
   balancoAnual,
   balancoDiario,
+  balancoDiarioUti,
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -43,6 +44,7 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'diario') await db.delete(faturamentoDiario).where(eq(faturamentoDiario.id, id));
     if (tabela === 'balanco') await db.delete(balancoAnual).where(eq(balancoAnual.id, id));
     if (tabela === 'balanco-diario') await db.delete(balancoDiario).where(eq(balancoDiario.id, id));
+    if (tabela === 'balanco-uti') await db.delete(balancoDiarioUti).where(eq(balancoDiarioUti.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

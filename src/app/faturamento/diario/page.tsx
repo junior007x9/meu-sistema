@@ -3,64 +3,46 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { faturamentoDiario } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, CalendarDays, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, Scale, Wallet } from 'lucide-react';
+import { Plus, CalendarDays, Wrench, Landmark, Activity, BookOpen, UserMinus, Handshake, Users, Scale, Wallet, HeartPulse } from 'lucide-react';
 import BotoesAcao from '@/components/BotoesAcao';
 
 export default async function FaturamentoDiarioPage() {
   const registros = await db.select().from(faturamentoDiario).orderBy(desc(faturamentoDiario.data));
 
   const sCompra = registros.reduce((a, b) => a + b.compra, 0);
-  const sEspecie = registros.reduce((a, b) => a + b.especie, 0);
-  const sCredito = registros.reduce((a, b) => a + b.credito, 0);
-  const sDebito = registros.reduce((a, b) => a + b.debito, 0);
-  const sPix = registros.reduce((a, b) => a + b.pix, 0);
   const sTotal = registros.reduce((a, b) => a + b.total, 0);
   const sSaidaDinheiro = registros.reduce((a, b) => a + b.saidaDinheiro, 0);
   const sSaidaPix = registros.reduce((a, b) => a + b.saidaPix, 0);
   const sDizimo = registros.reduce((a, b) => a + b.dizimo, 0);
-  const sFatEspecie = registros.reduce((a, b) => a + b.fatEspecie, 0);
-
   const despesasCaixa = sSaidaDinheiro + sSaidaPix;
   const totalLiquido = sTotal - sCompra - sDizimo - despesasCaixa;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Faturamento Diário</h1>
-          <p className="text-slate-500 mt-1">Gestão de entradas, saídas, dízimos e lucros.</p>
-        </div>
-        <Link href="/faturamento/diario/novo" className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-transform hover:-translate-y-0.5">
-          <Plus className="h-5 w-5" /> Novo Faturamento
-        </Link>
+        <div><h1 className="text-3xl font-bold tracking-tight text-slate-900">Faturamento Diário</h1></div>
+        <Link href="/faturamento/diario/novo" className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-transform hover:-translate-y-0.5"><Plus className="h-5 w-5" /> Novo Faturamento</Link>
       </div>
 
       <div className="flex gap-2 border-b border-slate-200 pb-2 overflow-x-auto scrollbar-none">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Landmark className="h-4 w-4" /> Conta Styllo Ótica</Link>
-         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Activity className="h-4 w-4" /> Conta UTI</Link>
-         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><BookOpen className="h-4 w-4" /> Carnês</Link>
-         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
-         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Handshake className="h-4 w-4" /> Serviços Indicados</Link>
-         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Users className="h-4 w-4" /> Funcionários</Link>
+         <Link href="/faturamento/joaozinho" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
+         <Link href="/faturamento/conta-styllo" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Landmark className="h-4 w-4" /> Conta Styllo</Link>
+         <Link href="/faturamento/conta-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Activity className="h-4 w-4" /> Conta UTI</Link>
+         <Link href="/faturamento/carne" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><BookOpen className="h-4 w-4" /> Carnês</Link>
+         <Link href="/faturamento/devedores-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
+         <Link href="/faturamento/servicos-indicados" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Handshake className="h-4 w-4" /> Serv. Indicados</Link>
+         <Link href="/faturamento/funcionarios" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Funcionários</Link>
          <Link href="/faturamento/diario" className="px-4 py-2 bg-white border-t-2 border-x-2 border-slate-900 text-slate-900 font-black rounded-t-lg flex items-center gap-2 whitespace-nowrap shadow-sm"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
-         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Scale className="h-4 w-4" /> Balanço</Link>
-         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap transition-colors"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
+         <Link href="/faturamento/balanco" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Scale className="h-4 w-4" /> Balanço</Link>
+         <Link href="/faturamento/balanco-diario" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
+         <Link href="/faturamento/balanco-uti" className="px-4 py-2 bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold rounded-t-lg flex items-center gap-2 whitespace-nowrap"><HeartPulse className="h-4 w-4" /> Balanço UTI</Link>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-emerald-100 border border-emerald-300 p-4 rounded-xl shadow-sm text-center">
-           <p className="text-xs font-black uppercase text-emerald-800">TOTAL BRUTO</p><h3 className="text-2xl font-black text-emerald-900">R$ {sTotal.toFixed(2)}</h3>
-        </div>
-        <div className="bg-green-100 border border-green-300 p-4 rounded-xl shadow-sm text-center">
-           <p className="text-xs font-black uppercase text-green-800">DÍZIMO (10%)</p><h3 className="text-2xl font-black text-green-900">R$ {sDizimo.toFixed(2)}</h3>
-        </div>
-        <div className="bg-red-100 border border-red-300 p-4 rounded-xl shadow-sm text-center">
-           <p className="text-xs font-black uppercase text-red-800">DESPESAS DE CAIXA</p><h3 className="text-2xl font-black text-red-900">R$ {despesasCaixa.toFixed(2)}</h3>
-        </div>
-        <div className="bg-slate-200 border border-slate-400 p-4 rounded-xl shadow-sm text-center">
-           <p className="text-xs font-black uppercase text-slate-800">TOTAL LÍQUIDO</p><h3 className="text-2xl font-black text-slate-900">R$ {totalLiquido.toFixed(2)}</h3>
-        </div>
+        <div className="bg-emerald-100 border border-emerald-300 p-4 rounded-xl shadow-sm text-center"><p className="text-xs font-black uppercase text-emerald-800">TOTAL BRUTO</p><h3 className="text-2xl font-black text-emerald-900">R$ {sTotal.toFixed(2)}</h3></div>
+        <div className="bg-green-100 border border-green-300 p-4 rounded-xl shadow-sm text-center"><p className="text-xs font-black uppercase text-green-800">DÍZIMO (10%)</p><h3 className="text-2xl font-black text-green-900">R$ {sDizimo.toFixed(2)}</h3></div>
+        <div className="bg-red-100 border border-red-300 p-4 rounded-xl shadow-sm text-center"><p className="text-xs font-black uppercase text-red-800">DESPESAS DE CAIXA</p><h3 className="text-2xl font-black text-red-900">R$ {despesasCaixa.toFixed(2)}</h3></div>
+        <div className="bg-slate-200 border border-slate-400 p-4 rounded-xl shadow-sm text-center"><p className="text-xs font-black uppercase text-slate-800">TOTAL LÍQUIDO</p><h3 className="text-2xl font-black text-slate-900">R$ {totalLiquido.toFixed(2)}</h3></div>
       </div>
 
       <div className="bg-white rounded-xl border border-slate-300 shadow-sm overflow-hidden">
@@ -98,16 +80,6 @@ export default async function FaturamentoDiarioPage() {
                   </tr>
                 ))}
               </tbody>
-              <tfoot>
-                 <tr className="bg-slate-200 text-slate-900 font-black text-xs uppercase">
-                    <td colSpan={2} className="p-3 border border-slate-400 text-right">SUBTOTAIS:</td>
-                    <td className="p-2 border border-slate-400 text-orange-700">{sCompra.toFixed(2)}</td><td className="p-2 border border-slate-400">{sEspecie.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400">{sCredito.toFixed(2)}</td><td className="p-2 border border-slate-400">{sDebito.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400">{sPix.toFixed(2)}</td><td className="p-2 border border-slate-400 bg-[#c2d69b] text-green-900">{sTotal.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 text-red-700">{sSaidaDinheiro.toFixed(2)}</td><td className="p-2 border border-slate-400 text-red-700">{sSaidaPix.toFixed(2)}</td>
-                    <td className="p-2 border border-slate-400 bg-green-200 text-green-900">{sDizimo.toFixed(2)}</td><td className="p-2 border border-slate-400 bg-blue-200 text-blue-900">{sFatEspecie.toFixed(2)}</td><td className="p-2 border border-slate-400"></td>
-                 </tr>
-              </tfoot>
             </table>
           </div>
         )}

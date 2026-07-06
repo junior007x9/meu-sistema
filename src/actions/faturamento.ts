@@ -13,7 +13,7 @@ import { controleFuncionarios } from '@/db/schema';
 import { faturamentoDiario } from '@/db/schema';
 import { balancoAnual } from '@/db/schema';
 import { balancoDiario } from '@/db/schema';
-
+import { balancoDiarioUti } from '@/db/schema';
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -253,4 +253,24 @@ export async function salvarBalancoDiario(formData: FormData) {
 
   revalidatePath('/faturamento/balanco-diario');
   redirect('/faturamento/balanco-diario');
+}
+export async function salvarBalancoUti(formData: FormData) {
+  const data = formData.get('data') as string;
+  const mesReferencia = formData.get('mesReferencia') as string;
+  const anoBase = formData.get('anoBase') as string;
+  
+  const compras = parseFloat(formData.get('compras') as string) || 0;
+  const entradaDinheiro = parseFloat(formData.get('entradaDinheiro') as string) || 0;
+  const entradaCredito = parseFloat(formData.get('entradaCredito') as string) || 0;
+  const entradaDebito = parseFloat(formData.get('entradaDebito') as string) || 0;
+  const entradaPix = parseFloat(formData.get('entradaPix') as string) || 0;
+  const saidaPagamentos = parseFloat(formData.get('saidaPagamentos') as string) || 0;
+
+  await db.insert(balancoDiarioUti).values({
+    data, mesReferencia, anoBase,
+    compras, entradaDinheiro, entradaCredito, entradaDebito, entradaPix, saidaPagamentos
+  });
+
+  revalidatePath('/faturamento/balanco-uti');
+  redirect('/faturamento/balanco-uti');
 }

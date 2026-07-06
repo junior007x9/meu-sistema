@@ -66,7 +66,7 @@ export default function NovoServicoIndicadoPage() {
 
         <div className="flex justify-end pt-6 border-t border-slate-100 mt-6">
           <button type="submit" className="hidden"/> {/* Fallback sem bugs */}
-          <BotaoSubmit text="Gravar Registro de Indicação" icone={<Save className="h-5 w-5" />} cor="indigo" />
+          <BotaoSubmit texto="Gravar Registro de Indicação" icone={<Save className="h-5 w-5" />} cor="indigo" />
         </div>
       </form>
     </div>

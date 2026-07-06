@@ -59,7 +59,7 @@ export default function NovoDevedorUtiPage() {
         </div>
 
         <div className="flex justify-end pt-6 border-t border-slate-100 mt-6">
-          <BotaoSubmit text="Gravar Registro de Dívida" icone={<Save className="h-5 w-5" />} cor="rose" />
+          <BotaoSubmit texto="Gravar Registro de Dívida" icone={<Save className="h-5 w-5" />} cor="rose" />
         </div>
       </form>
     </div>

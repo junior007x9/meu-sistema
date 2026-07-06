@@ -17,6 +17,7 @@ import {
   servicosIndicados,
   controleFuncionarios,
   faturamentoDiario,
+  balancoAnual,
 } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -39,6 +40,7 @@ export async function deletarRegistro(id: number, tabela: string, caminho: strin
     if (tabela === 'indicados') await db.delete(servicosIndicados).where(eq(servicosIndicados.id, id));
     if (tabela === 'funcionarios') await db.delete(controleFuncionarios).where(eq(controleFuncionarios.id, id));
     if (tabela === 'diario') await db.delete(faturamentoDiario).where(eq(faturamentoDiario.id, id));
+    if (tabela === 'balanco') await db.delete(balancoAnual).where(eq(balancoAnual.id, id));
     revalidatePath(caminho);
     return { success: true };
   } catch (error) {

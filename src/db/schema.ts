@@ -384,3 +384,18 @@ export const faturamentoDiario = sqliteTable('faturamento_diario', {
   
   criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+// ==========================================
+// 9. BALANÇO ANUAL
+// ==========================================
+export const balancoAnual = sqliteTable('balanco_anual', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  ano: text('ano').default('2026').notNull(),
+  
+  mesesJson: text('meses_json').notNull(), // Guarda os 12 meses num único campo
+  
+  totalCompras: real('total_compras').default(0).notNull(),
+  totalEntrada: real('total_entrada').default(0).notNull(),
+  totalSaida: real('total_saida').default(0).notNull(),
+  
+  criadoEm: integer('criado_em', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});

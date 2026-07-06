@@ -7,7 +7,7 @@ import { deletarRegistro } from '@/actions/deletar';
 
 interface BotoesAcaoProps {
   id: number;
-  tabela: 'cliente' | 'produto' | 'compras' | 'os' | 'simulacao' | 'preco' | 'conta' | 'joaozinho' | 'conta-styllo' | 'conta-uti'| 'carne' | 'devedores-uti'| 'indicados' | 'funcionarios' | 'diario';
+  tabela: 'cliente' | 'produto' | 'compras' | 'os' | 'simulacao' | 'preco' | 'conta' | 'joaozinho' | 'conta-styllo' | 'conta-uti'| 'carne' | 'devedores-uti'| 'indicados' | 'funcionarios' | 'diario'| 'balanco';
   caminho: string;
   linkEditar: string;
 }

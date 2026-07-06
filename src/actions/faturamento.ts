@@ -11,6 +11,8 @@ import { clientesDevedoresUti} from '@/db/schema';
 import { servicosIndicados } from '@/db/schema';
 import { controleFuncionarios } from '@/db/schema';
 import { faturamentoDiario } from '@/db/schema';
+import { balancoAnual } from '@/db/schema';
+
 export async function salvarServicoJoaozinho(formData: FormData) {
   const data = formData.get('data') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -201,4 +203,33 @@ export async function salvarFaturamentoDiario(formData: FormData) {
 
   revalidatePath('/faturamento/diario');
   redirect('/faturamento/diario');
+}
+export async function salvarBalanco(formData: FormData) {
+  const ano = formData.get('ano') as string;
+  
+  let totalCompras = 0, totalEntrada = 0, totalSaida = 0;
+  const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+  const dadosMeses = [];
+
+  // Loop que passa pelos 12 meses e soma tudo automaticamente
+  for (const mes of meses) {
+    const compras = parseFloat(formData.get(`compras_${mes}`) as string) || 0;
+    const entrada = parseFloat(formData.get(`entrada_${mes}`) as string) || 0;
+    const saida = parseFloat(formData.get(`saida_${mes}`) as string) || 0;
+
+    totalCompras += compras;
+    totalEntrada += entrada;
+    totalSaida += saida;
+
+    dadosMeses.push({ mes, compras, entrada, saida });
+  }
+
+  await db.insert(balancoAnual).values({
+    ano,
+    mesesJson: JSON.stringify(dadosMeses),
+    totalCompras, totalEntrada, totalSaida
+  });
+
+  revalidatePath('/faturamento/balanco');
+  redirect('/faturamento/balanco');
 }

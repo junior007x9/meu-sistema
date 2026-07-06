@@ -14,3 +14,4 @@ export default async function EditarContaStylloPage({ params }: { params: Promis
   }
 
   return <FormEditar registro={registro} />;
+}

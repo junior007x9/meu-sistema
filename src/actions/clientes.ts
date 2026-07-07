@@ -5,69 +5,75 @@ import { clientes } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function criarCliente(formData: FormData) {
-  const nome = formData.get('nome') as string;
-
-  if (!nome || nome.trim() === '') {
-    throw new Error('O nome do cliente é obrigatório.');
-  }
-
-  const idadeStr = formData.get('idade') as string;
-  const idade = idadeStr ? parseInt(idadeStr, 10) : null;
-
-  await db.insert(clientes).values({
-    nome,
-    dataNascimento: formData.get('dataNascimento') as string || null,
-    idade,
-    rg: formData.get('rg') as string || null,
-    cpf: formData.get('cpf') as string || null,
-    endereco: formData.get('endereco') as string || null,
-    numero: formData.get('numero') as string || null,
-    bairro: formData.get('bairro') as string || null,
-    cep: formData.get('cep') as string || null,
-    cidade: formData.get('cidade') as string || null,
-    uf: formData.get('uf') as string || null,
-    telefone: formData.get('telefone') as string || null,
-    email: formData.get('email') as string || null,
-    profissao: formData.get('profissao') as string || null,
-    localTrabalho: formData.get('localTrabalho') as string || null,
+export async function salvarCliente(formData: FormData) {
+  const data = {
+    // 1. Dados Pessoais
+    nome: formData.get('nome') as string,
+    dataNascimento: formData.get('dataNascimento') as string,
+    idade: parseInt(formData.get('idade') as string) || null,
+    cpf: formData.get('cpf') as string,
+    rg: formData.get('rg') as string,
     
-    // Anamnese
-    ultimaConsulta: formData.get('ultimaConsulta') as string || null,
-    motivoConsulta: formData.get('motivoConsulta') as string || null,
-    hipertensao: formData.get('hipertensao') === 'on',
-    diabetes: formData.get('diabetes') === 'on',
-    glaucoma: formData.get('glaucoma') === 'on',
-    catarata: formData.get('catarata') === 'on',
-    outrasDoencas: formData.get('outrasDoencas') as string || null,
-    observacoes: formData.get('observacoes') as string || null,
+    // 2. Endereço e Contato
+    endereco: formData.get('endereco') as string,
+    numero: formData.get('numero') as string,
+    bairro: formData.get('bairro') as string,
+    cep: formData.get('cep') as string,
+    cidade: formData.get('cidade') as string,
+    uf: formData.get('uf') as string,
+    telefone: formData.get('telefone') as string,
+    email: formData.get('email') as string,
 
-    // Receita Longe
-    longeOdEsf: formData.get('longeOdEsf') as string || null,
-    longeOdCil: formData.get('longeOdCil') as string || null,
-    longeOdEixo: formData.get('longeOdEixo') as string || null,
-    longeOdDnp: formData.get('longeOdDnp') as string || null,
-    longeOdAltura: formData.get('longeOdAltura') as string || null,
-    longeOeEsf: formData.get('longeOeEsf') as string || null,
-    longeOeCil: formData.get('longeOeCil') as string || null,
-    longeOeEixo: formData.get('longeOeEixo') as string || null,
-    longeOeDnp: formData.get('longeOeDnp') as string || null,
-    longeOeAltura: formData.get('longeOeAltura') as string || null,
+    // 3. Histórico / Ficha Antiga
+    trabalha: formData.get('trabalha') as string,
+    ondeTrabalha: formData.get('ondeTrabalha') as string,
+    telefoneTrabalho: formData.get('telefoneTrabalho') as string,
+    pensionista: formData.get('pensionista') as string,
+    pretendeConsultar: formData.get('pretendeConsultar') as string,
+    turnoConsulta: formData.get('turnoConsulta') as string,
+    profissao: formData.get('profissao') as string,
+    localTrabalho: formData.get('localTrabalho') as string,
 
-    // Receita Perto
-    pertoOdEsf: formData.get('pertoOdEsf') as string || null,
-    pertoOdCil: formData.get('pertoOdCil') as string || null,
-    pertoOdEixo: formData.get('pertoOdEixo') as string || null,
-    pertoOdDnp: formData.get('pertoOdDnp') as string || null,
-    pertoOdAltura: formData.get('pertoOdAltura') as string || null,
-    pertoOeEsf: formData.get('pertoOeEsf') as string || null,
-    pertoOeCil: formData.get('pertoOeCil') as string || null,
-    pertoOeEixo: formData.get('pertoOeEixo') as string || null,
-    pertoOeDnp: formData.get('pertoOeDnp') as string || null,
-    pertoOeAltura: formData.get('pertoOeAltura') as string || null,
+    // 4. Anamnese / Dados Clínicos
+    ultimaConsulta: formData.get('ultimaConsulta') as string,
+    motivoConsulta: formData.get('motivoConsulta') as string,
+    hipertensao: formData.get('hipertensao') === 'true',
+    diabetes: formData.get('diabetes') === 'true',
+    glaucoma: formData.get('glaucoma') === 'true',
+    catarata: formData.get('catarata') === 'true',
+    outrasDoencas: formData.get('outrasDoencas') as string,
+    observacoes: formData.get('observacoes') as string,
 
-    adicao: formData.get('adicao') as string || null,
-  });
+    // 5. Receita Longe
+    longeOdEsf: formData.get('longeOdEsf') as string,
+    longeOdCil: formData.get('longeOdCil') as string,
+    longeOdEixo: formData.get('longeOdEixo') as string,
+    longeOdDnp: formData.get('longeOdDnp') as string,
+    longeOdAltura: formData.get('longeOdAltura') as string,
+    
+    longeOeEsf: formData.get('longeOeEsf') as string,
+    longeOeCil: formData.get('longeOeCil') as string,
+    longeOeEixo: formData.get('longeOeEixo') as string,
+    longeOeDnp: formData.get('longeOeDnp') as string,
+    longeOeAltura: formData.get('longeOeAltura') as string,
+
+    // 6. Receita Perto
+    pertoOdEsf: formData.get('pertoOdEsf') as string,
+    pertoOdCil: formData.get('pertoOdCil') as string,
+    pertoOdEixo: formData.get('pertoOdEixo') as string,
+    pertoOdDnp: formData.get('pertoOdDnp') as string,
+    pertoOdAltura: formData.get('pertoOdAltura') as string,
+
+    pertoOeEsf: formData.get('pertoOeEsf') as string,
+    pertoOeCil: formData.get('pertoOeCil') as string,
+    pertoOeEixo: formData.get('pertoOeEixo') as string,
+    pertoOeDnp: formData.get('pertoOeDnp') as string,
+    pertoOeAltura: formData.get('pertoOeAltura') as string,
+
+    adicao: formData.get('adicao') as string,
+  };
+
+  await db.insert(clientes).values(data);
 
   revalidatePath('/clientes');
   redirect('/clientes');

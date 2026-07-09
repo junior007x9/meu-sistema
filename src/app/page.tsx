@@ -21,7 +21,7 @@ export default function DashboardPrincipal() {
             SISTEMA DE GESTÃO INTEGRADO V2.0
           </span>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-none text-white pt-2">
-            Controlo Total da Sua Ótica
+            Controle Total da Sua Ótica
           </h1>
           <p className="text-slate-400 font-medium text-sm sm:text-base max-w-lg">
             Aceda rápida e eficientemente a todos os módulos operacionais, de laboratório e consolidações financeiras diárias.

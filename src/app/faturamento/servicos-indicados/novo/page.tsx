@@ -1,72 +1,51 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Save, Handshake } from 'lucide-react';
 import { salvarServicoIndicado } from '@/actions/faturamento';
 import BotaoSubmit from '@/components/BotaoSubmit';
+import InputMoeda from '@/components/InputMoeda';
+import InfoAjuda from '@/components/InfoAjuda';
 
 export default function NovoServicoIndicadoPage() {
+  const dataHoje = new Date().toISOString().split('T')[0];
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0">
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0 mb-10">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/faturamento/servicos-indicados" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/faturamento/servicos-indicados" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors outline-none"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Nova Indicação de Óticas</h1>
-          <p className="text-sm text-slate-500 font-medium mt-1">Lançamento focado no controle de parcerias e comissões externas.</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Registar Indicação</h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">Gira os valores e comissões de parceiros que enviaram clientes.</p>
         </div>
       </div>
 
-      <form action={salvarServicoIndicado} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-6">
-        
-        <div className="flex items-center gap-2 mb-2 border-b border-slate-100 pb-3">
-          <Handshake className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">Detalhes da Parceria Comercial</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <form action={salvarServicoIndicado} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Data *</label><input type="date" name="data" defaultValue={dataHoje} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-bold text-slate-800" /></div>
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Quem Indicou? *</label><input type="text" name="quemIndicou" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-bold text-slate-800 uppercase" /></div>
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Contatos do Cliente</label><input type="text" name="contatos" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-bold text-slate-700 uppercase" /></div>
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Serviço Executado *</label><input type="text" name="servico" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-bold text-slate-800 uppercase" /></div>
+          
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Quem Indicou o Serviço? *</label>
-            <input type="text" name="quemIndicou" required placeholder="Ex: Ótica Paris - Filial Centro" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-black text-indigo-950 uppercase" />
+            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Valor Total (Venda)</label>
+            <InputMoeda name="valor" className="py-3 border border-slate-200 focus:border-indigo-500 font-bold text-slate-800" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Contactos da Ótica / Gerente</label>
-            <input type="text" name="contatos" placeholder="Ex: Tel / WhatsApp corporativo" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-medium text-slate-700" />
+            <label className="text-xs font-bold text-indigo-600 uppercase ml-1 flex items-center">Comissão Devida <InfoAjuda texto="Quanto você vai repassar ao parceiro."/></label>
+            <InputMoeda name="valorDevido" className="py-3 border border-indigo-200 focus:border-indigo-500 font-black text-indigo-800 text-lg" />
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="md:col-span-2 space-y-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Descrição do Serviço Executado *</label>
-            <input type="text" name="servico" placeholder="Ex: Conserto de charneira + polimento de acetato" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-medium text-slate-700" />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase ml-1">O Cliente Já Pagou? *</label>
-            <select name="servicoPago" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-black text-slate-700 cursor-pointer appearance-none">
-               <option value="NÃO">NÃO</option>
-               <option value="SIM">SIM</option>
+          <div className="space-y-1.5 md:col-span-2">
+            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Comissão Já Foi Paga? *</label>
+            <select name="servicoPago" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-black text-slate-700 cursor-pointer">
+              <option value="NÃO">NÃO (Aguardando Pagamento ao Parceiro)</option>
+              <option value="SIM">SIM (Comissão já paga)</option>
             </select>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50 p-5 rounded-2xl border border-slate-100">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-blue-600 uppercase ml-1">Valor do Serviço (R$) *</label>
-            <input type="number" step="0.01" name="valor" required className="w-full px-4 py-3 border border-blue-200 bg-white rounded-xl font-black text-blue-800 text-lg outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="0.00" />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-red-600 uppercase ml-1">Valor Devido / Comissão (R$) *</label>
-            <input type="number" step="0.01" name="valorDevido" required className="w-full px-4 py-3 border border-red-200 bg-white rounded-xl font-black text-red-700 text-lg outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all" placeholder="0.00" />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Data da Indicação *</label>
-            <input type="date" name="data" required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all font-bold text-slate-800" />
-          </div>
-        </div>
-
-        <div className="flex justify-end pt-6 border-t border-slate-100 mt-6">
-          <button type="submit" className="hidden"/> {/* Fallback sem bugs */}
-          <BotaoSubmit texto="Gravar Registro de Indicação" icone={<Save className="h-5 w-5" />} cor="indigo" />
+        <div className="flex justify-end pt-8 border-t border-slate-100 mt-6">
+          <BotaoSubmit texto="Salvar Indicação" icone={<Save className="h-5 w-5" />} cor="indigo" />
         </div>
       </form>
     </div>

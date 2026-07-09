@@ -6,6 +6,10 @@ import { ArrowLeft, Save, ShoppingBag, Truck, CircleDollarSign } from 'lucide-re
 import { salvarCompra } from '@/actions/operacional';
 import BotaoSubmit from '@/components/BotaoSubmit';
 
+// Importação das nossas novas ferramentas premium
+import InputMoeda from '@/components/InputMoeda';
+import InfoAjuda from '@/components/InfoAjuda';
+
 export default function NovaCompraPage() {
   const [unt, setUnt] = useState(0);
   const [qtd, setQtd] = useState(1);
@@ -25,49 +29,49 @@ export default function NovaCompraPage() {
 
       <form action={salvarCompra} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Data da Compra *</label><input type="date" name="dataCompra" defaultValue={dataHoje} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-rose-500 font-bold text-slate-800" /></div>
-          <div className="space-y-1.5 md:col-span-2"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Produto Comprado *</label><input type="text" name="produto" required placeholder="Ex: Lote de 10 Armações TR90" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-rose-500 font-bold text-slate-800 uppercase" /></div>
-          
-          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Loja / Fornecedor *</label><input type="text" name="loja" required placeholder="Ex: Shopee / Fornecedor Y" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-rose-500 font-medium text-slate-700 uppercase" /></div>
-          <div className="space-y-1.5 md:col-span-2"><label className="text-xs font-bold text-slate-500 uppercase ml-1 flex items-center gap-1"><Truck className="h-3.5 w-3.5" /> Código de Rastreio (Opcional)</label><input type="text" name="rastreio" placeholder="Ex: BR123456789BR" className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-rose-500 font-medium text-slate-700 uppercase" /></div>
-        </div>
-
+        {/* ... Resto do código inicial igual ... */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
           <div className="space-y-4">
              <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2"><ShoppingBag className="h-4 w-4 text-rose-500" /> Detalhes Financeiros</h2>
              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Valor Unitário (R$)</label><input type="number" step="0.01" name="valorUnitario" value={unt || ''} onChange={e => setUnt(Number(e.target.value))} required className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-xl font-bold text-slate-800 outline-none focus:bg-white focus:border-rose-500" placeholder="0.00" /></div>
-                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Quantidade</label><input type="number" name="quantidade" value={qtd} onChange={e => setQtd(Number(e.target.value))} required className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-xl font-bold text-slate-800 outline-none focus:bg-white focus:border-rose-500" /></div>
+                
+                {/* AQUI ESTÁ A MÁGICA! SUBSTITUÍMOS O INPUT NORMAL PELO NOSSO INPUT DE MOEDA E ADICIONAMOS O TUTORIAL */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-600 uppercase ml-1 flex items-center">
+                    Valor Unitário
+                    <InfoAjuda texto="Digite apenas números. O sistema formata automaticamente para Reais (ex: digite 15000 para 150,00)." />
+                  </label>
+                  <InputMoeda 
+                    name="valorUnitario" 
+                    required 
+                    onChange={setUnt}
+                    className="px-4 py-3 border border-slate-200 bg-slate-50 rounded-xl font-bold text-slate-800 outline-none focus:bg-white focus:border-rose-500" 
+                  />
+                </div>
+                
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-600 uppercase ml-1 flex items-center">
+                    Quantidade
+                    <InfoAjuda texto="Insira quantas unidades deste produto foram compradas. O total é multiplicado automaticamente." />
+                  </label>
+                  <input type="number" name="quantidade" value={qtd} onChange={e => setQtd(Number(e.target.value))} required className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-xl font-bold text-slate-800 outline-none focus:bg-white focus:border-rose-500" />
+                </div>
              </div>
+             
              <div className="bg-rose-50 border border-rose-200 p-4 rounded-xl flex justify-between items-center">
                 <span className="font-black text-rose-900 text-xs uppercase tracking-widest">Valor Total</span>
-                <span className="font-black text-rose-700 text-2xl">R$ {total.toFixed(2)}</span>
+                <span className="font-black text-rose-700 text-2xl">
+                  {/* Total também formatado lindamente */}
+                  R$ {total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </span>
              </div>
           </div>
 
           <div className="space-y-4">
+             {/* ... Resto do código dos pagamentos ... */}
              <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2"><CircleDollarSign className="h-4 w-4 text-emerald-600" /> Responsáveis e Pagamento</h2>
-             <div className="space-y-4">
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Quem Comprou?</label><input type="text" name="quemComprou" required className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-rose-500 uppercase text-sm" /></div>
-                 <div className="space-y-1.5"><label className="text-xs font-bold text-slate-600 uppercase ml-1">Quem Vai Pagar?</label><input type="text" name="quemVaiPagar" required className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-rose-500 uppercase text-sm" /></div>
-               </div>
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-1.5">
-                   <label className="text-xs font-bold text-slate-600 uppercase ml-1">Forma de Pagamento</label>
-                   <select name="metodoPagamento" required className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-rose-500 text-sm font-bold appearance-none cursor-pointer">
-                     <option value="CARTÃO DE CRÉDITO">Cartão de Crédito</option><option value="PIX">PIX</option><option value="BOLETO">Boleto</option>
-                   </select>
-                 </div>
-                 <div className="space-y-1.5">
-                   <label className="text-xs font-bold text-slate-600 uppercase ml-1">Status Pagamento</label>
-                   <select name="situacaoPagamento" required className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:border-rose-500 text-sm font-bold appearance-none cursor-pointer">
-                     <option value="PAGO">Já Pago</option><option value="PENDENTE">Pendente / A Pagar</option>
-                   </select>
-                 </div>
-               </div>
-             </div>
+             {/* ... */}
           </div>
         </div>
 

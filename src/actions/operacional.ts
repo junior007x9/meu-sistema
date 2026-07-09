@@ -121,3 +121,65 @@ export async function salvarContaMensal(formData: FormData) {
   revalidatePath('/contas-mensais');
   redirect('/contas-mensais');
 }
+// ==========================================
+// AÇÕES DE ATUALIZAÇÃO (EDIÇÃO)
+// ==========================================
+export async function atualizarSimulacao(id: number, formData: FormData) {
+  const custoLente = parseFloat(formData.get('custoLente') as string) || 0;
+  const valorTabela = parseFloat(formData.get('valorTabela') as string) || 0;
+  const taxaCartao = parseFloat(formData.get('taxaCartao') as string) || 0;
+
+  const valorParcela = valorTabela / 6;
+  const descontoCartao = valorTabela * (taxaCartao / 100);
+  const diferenca = valorTabela - descontoCartao;
+  const ganho = diferenca - custoLente;
+
+  await db.update(simulacoesLentes).set({
+    marcaLente: formData.get('marcaLente') as string,
+    cliente: formData.get('cliente') as string || null,
+    custoLente, valorTabela, taxaCartao, valorParcela, descontoCartao, diferenca, ganho,
+  }).where(eq(simulacoesLentes.id, id));
+
+  revalidatePath('/simulacoes');
+  redirect('/simulacoes');
+}
+
+export async function atualizarCompra(id: number, formData: FormData) {
+  const valorUnitario = parseFloat(formData.get('valorUnitario') as string) || 0;
+  const quantidade = parseInt(formData.get('quantidade') as string) || 1;
+  
+  await db.update(comprasOnline).set({
+    dataCompra: formData.get('dataCompra') as string,
+    produto: formData.get('produto') as string,
+    loja: formData.get('loja') as string,
+    quemComprou: formData.get('quemComprou') as string,
+    quemVaiPagar: formData.get('quemVaiPagar') as string,
+    rastreio: formData.get('rastreio') as string,
+    valorUnitario,
+    quantidade,
+    valorTotal: valorUnitario * quantidade,
+    metodoPagamento: formData.get('metodoPagamento') as string,
+    situacaoPagamento: formData.get('situacaoPagamento') as string,
+  }).where(eq(comprasOnline.id, id));
+
+  revalidatePath('/compras');
+  redirect('/compras');
+}
+
+export async function atualizarContaMensal(id: number, formData: FormData) {
+  await db.update(contasMensais).set({
+    mesReferencia: formData.get('mesReferencia') as string,
+    totalKwh: parseFloat(formData.get('totalKwh') as string) || 0,
+    totalRs: parseFloat(formData.get('totalRs') as string) || 0,
+    mediaBarbosaKwh: parseFloat(formData.get('mediaBarbosaKwh') as string) || 0,
+    descontoAlinePerc: parseFloat(formData.get('descontoAlinePerc') as string) || 20,
+    aguaAline: parseFloat(formData.get('aguaAline') as string) || 0,
+    aguaBarbosa: parseFloat(formData.get('aguaBarbosa') as string) || 0,
+    equatorialBarbosa: parseFloat(formData.get('equatorialBarbosa') as string) || 0,
+    equatorialAline: parseFloat(formData.get('equatorialAline') as string) || 0,
+    totalAlineGeral: parseFloat(formData.get('totalAlineGeral') as string) || 0,
+  }).where(eq(contasMensais.id, id));
+
+  revalidatePath('/contas-mensais');
+  redirect('/contas-mensais');
+}

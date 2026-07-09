@@ -6,7 +6,7 @@ import { desc } from 'drizzle-orm';
 import { 
   LayoutDashboard, Users, Wrench, Package, 
   TrendingUp, ArrowRight, PlusCircle, Clock, 
-  CheckCircle2, AlertCircle, ShoppingBag, Landmark
+  ShoppingBag, Landmark
 } from 'lucide-react';
 
 export default async function PainelGeralPage() {
@@ -62,7 +62,7 @@ export default async function PainelGeralPage() {
         </div>
       </div>
 
-      {/* CARTÕES DE INDICADORES (KPIs) - Adaptável 1 col (telemóvel), 2 cols (tablet), 4 cols (PC) */}
+      {/* CARTÕES DE INDICADORES (KPIs) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         
         {/* Card 1: UTI DOS ÓCULOS */}
@@ -119,7 +119,7 @@ export default async function PainelGeralPage() {
 
       </div>
 
-      {/* ÁREA DE TABELAS RECENTES (Duas Colunas em telas grandes) */}
+      {/* ÁREA DE TABELAS RECENTES */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         
         {/* TABELA: Últimas Ordens de Serviço */}
@@ -147,7 +147,10 @@ export default async function PainelGeralPage() {
                     <tr key={os.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4">
                         <p className="font-bold text-slate-900 uppercase truncate max-w-[200px] sm:max-w-[300px]">{os.descricaoDefeito}</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">{new Date(os.dataEntrada).toLocaleDateString('pt-BR')}</p>
+                        {/* AQUI ESTÁ A PROTEÇÃO CONTRA DATAS NULAS */}
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                          {os.dataEntrada ? new Date(os.dataEntrada).toLocaleDateString('pt-BR') : 'SEM DATA'}
+                        </p>
                       </td>
                       <td className="p-4 text-center">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[9px] font-black tracking-widest uppercase
@@ -193,7 +196,10 @@ export default async function PainelGeralPage() {
                     <tr key={fat.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4">
                         <p className="font-bold text-slate-900 uppercase truncate max-w-[150px] sm:max-w-[250px]">{fat.descricao}</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">{new Date(fat.data).toLocaleDateString('pt-BR')}</p>
+                        {/* AQUI TAMBÉM PROTEGEMOS A DATA */}
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                          {fat.data ? new Date(fat.data).toLocaleDateString('pt-BR') : 'SEM DATA'}
+                        </p>
                       </td>
                       <td className="p-4 text-center">
                         <span className="font-bold text-rose-600 text-xs flex items-center justify-center gap-1">

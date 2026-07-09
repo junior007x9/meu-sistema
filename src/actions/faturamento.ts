@@ -16,7 +16,8 @@ import {
 } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { desc, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
+
 // ==========================================
 // 1. SERVIÇOS JOÃOZINHO
 // ==========================================
@@ -105,31 +106,14 @@ export async function salvarCarne(formData: FormData) {
   const valorVenda = parseFloat(formData.get('valorVenda') as string) || 0;
   const valorEntrada = parseFloat(formData.get('valorEntrada') as string) || 0;
 
-  const p1Valor = parseFloat(formData.get('p1Valor') as string) || 0;
-  const p1Data = formData.get('p1Data') as string;
-  const p2Valor = parseFloat(formData.get('p2Valor') as string) || 0;
-  const p2Data = formData.get('p2Data') as string;
-  const p3Valor = parseFloat(formData.get('p3Valor') as string) || 0;
-  const p3Data = formData.get('p3Data') as string;
-  const p4Valor = parseFloat(formData.get('p4Valor') as string) || 0;
-  const p4Data = formData.get('p4Data') as string;
-  const p5Valor = parseFloat(formData.get('p5Valor') as string) || 0;
-  const p5Data = formData.get('p5Data') as string;
-  const p6Valor = parseFloat(formData.get('p6Valor') as string) || 0;
-  const p6Data = formData.get('p6Data') as string;
-  const p7Valor = parseFloat(formData.get('p7Valor') as string) || 0;
-  const p7Data = formData.get('p7Data') as string;
-  const p8Valor = parseFloat(formData.get('p8Valor') as string) || 0;
-  const p8Data = formData.get('p8Data') as string;
-  const p9Valor = parseFloat(formData.get('p9Valor') as string) || 0;
-  const p9Data = formData.get('p9Data') as string;
-  const p10Valor = parseFloat(formData.get('p10Valor') as string) || 0;
-  const p10Data = formData.get('p10Data') as string;
+  const parcelas: any = {};
+  for (let i = 1; i <= 10; i++) {
+    parcelas[`p${i}Valor`] = parseFloat(formData.get(`p${i}Valor`) as string) || 0;
+    parcelas[`p${i}Data`] = formData.get(`p${i}Data`) as string || null;
+  }
 
   await db.insert(controleCarne).values({
-    cliente, contato, dataCompra, anoBase, valorVenda, valorEntrada,
-    p1Valor, p1Data, p2Valor, p2Data, p3Valor, p3Data, p4Valor, p4Data, p5Valor, p5Data,
-    p6Valor, p6Data, p7Valor, p7Data, p8Valor, p8Data, p9Valor, p9Data, p10Valor, p10Data
+    cliente, contato, dataCompra, anoBase, valorVenda, valorEntrada, ...parcelas
   });
 
   revalidatePath('/faturamento/carne');
@@ -319,11 +303,11 @@ export async function salvarBalancoUti(formData: FormData) {
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
 }
-import { eq } from 'drizzle-orm'; // Adicione isto lá no topo do ficheiro junto aos outros imports!
 
-// ==========================================
-// FUNÇÕES DE ATUALIZAÇÃO (EDITAR)
-// ==========================================
+
+// =========================================================================
+// FUNÇÕES DE ATUALIZAÇÃO (EDITAR - SEM DUPLICAÇÕES)
+// =========================================================================
 
 export async function atualizarServicoJoaozinho(id: number, formData: FormData) {
   const montagemValor = parseFloat(formData.get('montagemValor') as string) || 0;
@@ -456,6 +440,7 @@ export async function atualizarDiario(id: number, formData: FormData) {
   revalidatePath('/faturamento/diario');
   redirect('/faturamento/diario');
 }
+
 export async function atualizarFuncionario(id: number, formData: FormData) {
   const nome = formData.get('nome') as string;
   const mesReferencia = formData.get('mesReferencia') as string;
@@ -541,42 +526,4 @@ export async function atualizarBalancoUti(id: number, formData: FormData) {
 
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
-}
-// ==========================================
-// AÇÕES DE EDIÇÃO (ATUALIZAR CAIXAS)
-// ==========================================
-export async function atualizarContaStyllo(id: number, formData: FormData) {
-  const pix = parseFloat(formData.get('pix') as string) || 0;
-  const credito = parseFloat(formData.get('credito') as string) || 0;
-  const debito = parseFloat(formData.get('debito') as string) || 0;
-  const saida = parseFloat(formData.get('saida') as string) || 0;
-
-  await db.update(contaStyllo).set({
-    data: formData.get('data') as string,
-    mesReferencia: formData.get('mesReferencia') as string,
-    anoBase: formData.get('anoBase') as string,
-    pix, credito, debito, saida,
-    total: (pix + credito + debito) - saida,
-  }).where(eq(contaStyllo.id, id));
-
-  revalidatePath('/faturamento/conta-styllo');
-  redirect('/faturamento/conta-styllo');
-}
-
-export async function atualizarContaUti(id: number, formData: FormData) {
-  const pix = parseFloat(formData.get('pix') as string) || 0;
-  const credito = parseFloat(formData.get('credito') as string) || 0;
-  const debito = parseFloat(formData.get('debito') as string) || 0;
-  const saida = parseFloat(formData.get('saida') as string) || 0;
-
-  await db.update(contaUti).set({
-    data: formData.get('data') as string,
-    mesReferencia: formData.get('mesReferencia') as string,
-    anoBase: formData.get('anoBase') as string,
-    pix, credito, debito, saida,
-    total: (pix + credito + debito) - saida,
-  }).where(eq(contaUti.id, id));
-
-  revalidatePath('/faturamento/conta-uti');
-  redirect('/faturamento/conta-uti');
 }

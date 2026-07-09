@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Save, BookOpen, Calculator } from 'lucide-react';
+import { ArrowLeft, Save, BookOpen } from 'lucide-react';
 import { salvarCarne } from '@/actions/faturamento';
 import BotaoSubmit from '@/components/BotaoSubmit';
 import InputMoeda from '@/components/InputMoeda';
@@ -55,7 +55,7 @@ export default function NovoCarnePage() {
         </div>
 
         <div className="flex justify-end pt-8 border-t border-slate-100 mt-6">
-          <BotaoSubmit texto="Gerar Carnê" icone={<Save className="h-5 w-5" />} cor="amber" />
+          <BotaoSubmit texto="Gerar Carnê" icone={<Save className="h-5 w-5" />} cor="yellow" />
         </div>
       </form>
     </div>

@@ -22,8 +22,8 @@ export default function RootLayout({
           {/* Menu de Navegação Lateral */}
           <Sidebar />
           
-          {/* Conteúdo Principal da Página */}
-          <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+          {/* Conteúdo Principal da Página (Ajustado para permitir painéis alargados) */}
+          <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
             {children}
           </main>
         </div>

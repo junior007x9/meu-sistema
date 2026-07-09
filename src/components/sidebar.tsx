@@ -23,17 +23,17 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // Lista definitiva com TODOS os botões e módulos do sistema
+  // Lista definitiva com TODOS os botões apontando para as rotas corretas construídas
   const menuItems = [
     { name: 'Painel Geral', icon: LayoutDashboard, href: '/' },
     { name: 'Faturamento Mensal', icon: BarChart3, href: '/faturamento/joaozinho' },
     { name: 'Fichas de Clientes', icon: Users, href: '/clientes' },
     { name: 'Estoque & Produtos', icon: Glasses, href: '/produtos' },
-    { name: 'UTI dos Óculos (OS)', icon: Wrench, href: '/uti-oculos' },
-    { name: 'Produção Técnicos', icon: UserCog, href: '/uti-oculos/tecnicos' },
+    { name: 'UTI dos Óculos (OS)', icon: Wrench, href: '/os' }, // Corrigido de /uti-oculos para /os
+    { name: 'Produção Técnicos', icon: UserCog, href: '/os/tecnicos' }, // Adaptado para a rota base de OS
     { name: 'Tabela de Preços', icon: ListChecks, href: '/tabela-precos' },
     { name: 'Simulador de Lentes', icon: Calculator, href: '/simulacoes' },
-    { name: 'Repasses Mensais', icon: Receipt, href: '/contas' },
+    { name: 'Repasses Mensais', icon: Receipt, href: '/contas-mensais' }, // Corrigido de /contas para /contas-mensais
     { name: 'Compras Online', icon: ShoppingCart, href: '/compras' },
     { name: 'Financeiro', icon: Wallet, href: '/financeiro' },
   ];
@@ -81,10 +81,9 @@ export default function Sidebar() {
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sistema de Gestão</p>
           </div>
 
-          {/* Navegação completa com rolagem suave se o ecrã for pequeno */}
+          {/* Navegação completa com rolagem suave */}
           <nav className="space-y-1.5 overflow-y-auto flex-1 pr-2 pb-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
             {menuItems.map((item) => {
-              // Mantém o botão ativo mesmo se estiver dentro de uma sub-página (ex: /faturamento/joaozinho/novo)
               const isActive = (pathname === '/' && item.href === '/') || 
                                (item.href !== '/' && pathname.startsWith(item.href));
               const Icon = item.icon;

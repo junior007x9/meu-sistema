@@ -44,7 +44,7 @@ export default async function PainelGeralPage() {
             <LayoutDashboard className="h-8 w-8 sm:h-10 sm:w-10" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight uppercase">Painel de Controlo</h1>
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight uppercase">Painel de Controle</h1>
             <p className="text-sm sm:text-base text-slate-500 font-medium mt-1">Bem-vindo(a) ao sistema de gestão da <strong className="text-slate-800">Styllo Ótica & UTI dos Óculos</strong>.</p>
           </div>
         </div>

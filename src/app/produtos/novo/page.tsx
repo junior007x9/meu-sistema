@@ -105,7 +105,7 @@ export default function NovoProdutoPage() {
         </div>
 
         <div className="flex justify-end pt-8 border-t border-slate-100 mt-6">
-          <BotaoSubmit texto="Salvar Produto" icone={<Save className="h-5 w-5" />} cor="teal" />
+          <BotaoSubmit texto="Salvar Produto" icone={<Save className="h-5 w-5" />} cor="emerald" />
         </div>
       </form>
     </div>

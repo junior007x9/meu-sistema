@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/sidebar";
+import BotaoVoltarGlobal from "@/components/BotaoVoltarGlobal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,9 @@ export default function RootLayout({
           {/* Menu de Navegação Lateral */}
           <Sidebar />
           
-          {/* Conteúdo Principal da Página (Ajustado para permitir painéis alargados) */}
+          {/* Conteúdo Principal da Página com Botão Voltar Global */}
           <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+            <BotaoVoltarGlobal />
             {children}
           </main>
         </div>

@@ -11,32 +11,28 @@ import {
 
 export default async function PainelGeralPage() {
   // =========================================================
-  // 1. BUSCA DE DADOS NO BANCO PARA O RESUMO (RÁPIDO E SEGURO)
+  // 1. BUSCA DE DADOS NO BANCO PARA O RESUMO
   // =========================================================
   
-  // Clientes
   const listaClientes = await db.select().from(clientes);
   const totalClientes = listaClientes.length;
 
-  // Ordens de Serviço (Laboratório / UTI)
   const listaOS = await db.select().from(ordensServico).orderBy(desc(ordensServico.id));
   const osPendentes = listaOS.filter(os => os.status === 'RECEBIDO' || os.status === 'EM ANDAMENTO');
   const totalOsPendentes = osPendentes.length;
   const ultimasOS = listaOS.slice(0, 5);
 
-  // Estoque (Produtos)
   const listaProdutos = await db.select().from(produtos);
   const totalEstoque = listaProdutos.reduce((acc, prod) => acc + (prod.estoque || 0), 0);
   const produtosBaixoEstoque = listaProdutos.filter(prod => prod.estoque <= 2).length;
 
-  // Faturamento Diário (Últimos registos)
   const ultimosFaturamentos = await db.select().from(faturamentoDiario).orderBy(desc(faturamentoDiario.data)).limit(5);
 
   // =========================================================
-  // 2. CONSTRUÇÃO DA INTERFACE (UI) RESPONSIVA
+  // 2. INTERFACE (UI) 100% RESPONSIVA
   // =========================================================
   return (
-    <div className="space-y-6 sm:space-y-8 max-w-[1600px] mx-auto px-1 sm:px-4 animate-fade-in mb-10">
+    <div className="space-y-6 sm:space-y-8 max-w-[1600px] mx-auto px-1 sm:px-4 animate-fade-in mb-10 mt-2">
       
       {/* CABEÇALHO DO DASHBOARD */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
@@ -48,11 +44,11 @@ export default async function PainelGeralPage() {
             <LayoutDashboard className="h-8 w-8 sm:h-10 sm:w-10" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight uppercase">Painel de Controle</h1>
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight uppercase">Painel de Controlo</h1>
             <p className="text-sm sm:text-base text-slate-500 font-medium mt-1">Bem-vindo(a) ao sistema de gestão da <strong className="text-slate-800">Styllo Ótica & UTI dos Óculos</strong>.</p>
           </div>
         </div>
-        <div className="relative z-10 w-full md:w-auto mt-4 md:mt-0 flex gap-3">
+        <div className="relative z-10 w-full md:w-auto mt-4 md:mt-0 flex flex-col sm:flex-row gap-3">
           <Link href="/os/novo" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3.5 rounded-xl font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
             <PlusCircle className="h-5 w-5" /> Nova O.S.
           </Link>
@@ -62,10 +58,9 @@ export default async function PainelGeralPage() {
         </div>
       </div>
 
-      {/* CARTÕES DE INDICADORES (KPIs) */}
+      {/* CARTÕES DE INDICADORES */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         
-        {/* Card 1: UTI DOS ÓCULOS */}
         <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-3xl border border-purple-100 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-purple-100 text-purple-600 rounded-xl group-hover:scale-110 transition-transform"><Wrench className="h-6 w-6" /></div>
@@ -73,12 +68,11 @@ export default async function PainelGeralPage() {
           </div>
           <div>
             <h3 className="text-4xl font-black text-slate-800">{totalOsPendentes}</h3>
-            <p className="text-sm font-bold text-slate-500 uppercase mt-1">O.S. na Fila / Pendentes</p>
+            <p className="text-sm font-bold text-slate-500 uppercase mt-1">O.S. Pendentes</p>
           </div>
           <Link href="/os" className="mt-4 text-xs font-bold text-purple-600 flex items-center gap-1 hover:gap-2 transition-all w-fit">Ver fila de trabalho <ArrowRight className="h-3 w-3" /></Link>
         </div>
 
-        {/* Card 2: ESTOQUE E PRODUTOS */}
         <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-3xl border border-blue-100 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-blue-100 text-blue-600 rounded-xl group-hover:scale-110 transition-transform"><Package className="h-6 w-6" /></div>
@@ -91,7 +85,6 @@ export default async function PainelGeralPage() {
           <Link href="/produtos" className="mt-4 text-xs font-bold text-blue-600 flex items-center gap-1 hover:gap-2 transition-all w-fit">Gerir inventário <ArrowRight className="h-3 w-3" /></Link>
         </div>
 
-        {/* Card 3: FATURAMENTO */}
         <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-3xl border border-emerald-100 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl group-hover:scale-110 transition-transform"><Landmark className="h-6 w-6" /></div>
@@ -104,7 +97,6 @@ export default async function PainelGeralPage() {
           <Link href="/faturamento/diario" className="mt-4 text-xs font-bold text-emerald-600 flex items-center gap-1 hover:gap-2 transition-all w-fit">Ver faturamento diário <ArrowRight className="h-3 w-3" /></Link>
         </div>
 
-        {/* Card 4: CLIENTES */}
         <div className="bg-gradient-to-br from-amber-50 to-white p-6 rounded-3xl border border-amber-100 shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-amber-100 text-amber-600 rounded-xl group-hover:scale-110 transition-transform"><Users className="h-6 w-6" /></div>
@@ -147,9 +139,9 @@ export default async function PainelGeralPage() {
                     <tr key={os.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4">
                         <p className="font-bold text-slate-900 uppercase truncate max-w-[200px] sm:max-w-[300px]">{os.descricaoDefeito}</p>
-                        {/* AQUI ESTÁ A PROTEÇÃO CONTRA DATAS NULAS */}
+                        {/* PROTEÇÃO TYPESCRIPT PARA DATA NULA */}
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                          {os.dataEntrada ? new Date(os.dataEntrada).toLocaleDateString('pt-BR') : 'SEM DATA'}
+                          {os.dataEntrada ? new Date(os.dataEntrada as Date).toLocaleDateString('pt-BR') : 'SEM DATA'}
                         </p>
                       </td>
                       <td className="p-4 text-center">
@@ -196,7 +188,6 @@ export default async function PainelGeralPage() {
                     <tr key={fat.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4">
                         <p className="font-bold text-slate-900 uppercase truncate max-w-[150px] sm:max-w-[250px]">{fat.descricao}</p>
-                        {/* AQUI TAMBÉM PROTEGEMOS A DATA */}
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                           {fat.data ? new Date(fat.data).toLocaleDateString('pt-BR') : 'SEM DATA'}
                         </p>

@@ -65,7 +65,7 @@ export default function FormEditar({ registro }: { registro: any }) {
         </div>
 
         <div className="flex justify-end pt-8 border-t border-slate-100 mt-6">
-          <BotaoSubmit texto="Salvar Alterações" icone={<Save className="h-5 w-5" />} cor="purple" />
+          <BotaoSubmit texto="Salvar Alterações" icone={<Save className="h-5 w-5" />} cor="indigo" />
         </div>
       </form>
     </div>

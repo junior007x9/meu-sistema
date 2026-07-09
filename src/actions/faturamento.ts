@@ -16,7 +16,7 @@ import {
 } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-
+import { desc, eq } from 'drizzle-orm';
 // ==========================================
 // 1. SERVIÇOS JOÃOZINHO
 // ==========================================
@@ -541,4 +541,42 @@ export async function atualizarBalancoUti(id: number, formData: FormData) {
 
   revalidatePath('/faturamento/balanco-uti');
   redirect('/faturamento/balanco-uti');
+}
+// ==========================================
+// AÇÕES DE EDIÇÃO (ATUALIZAR CAIXAS)
+// ==========================================
+export async function atualizarContaStyllo(id: number, formData: FormData) {
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+
+  await db.update(contaStyllo).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    anoBase: formData.get('anoBase') as string,
+    pix, credito, debito, saida,
+    total: (pix + credito + debito) - saida,
+  }).where(eq(contaStyllo.id, id));
+
+  revalidatePath('/faturamento/conta-styllo');
+  redirect('/faturamento/conta-styllo');
+}
+
+export async function atualizarContaUti(id: number, formData: FormData) {
+  const pix = parseFloat(formData.get('pix') as string) || 0;
+  const credito = parseFloat(formData.get('credito') as string) || 0;
+  const debito = parseFloat(formData.get('debito') as string) || 0;
+  const saida = parseFloat(formData.get('saida') as string) || 0;
+
+  await db.update(contaUti).set({
+    data: formData.get('data') as string,
+    mesReferencia: formData.get('mesReferencia') as string,
+    anoBase: formData.get('anoBase') as string,
+    pix, credito, debito, saida,
+    total: (pix + credito + debito) - saida,
+  }).where(eq(contaUti.id, id));
+
+  revalidatePath('/faturamento/conta-uti');
+  redirect('/faturamento/conta-uti');
 }

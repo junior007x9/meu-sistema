@@ -3,78 +3,73 @@ import Link from 'next/link';
 import { db } from '@/db';
 import { contaStyllo } from '@/db/schema';
 import { desc } from 'drizzle-orm';
-import { Plus, Landmark, Wrench, Activity, BookOpen, UserMinus, Handshake, Users, CalendarDays, Scale, Wallet, HeartPulse } from 'lucide-react';
-import BotoesAcao from '@/components/BotoesAcao';
-import TutorialSistema from '@/components/TutorialSistema';
+import { Plus, Landmark, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 
 export default async function ContaStylloPage() {
-  const registros = await db.select().from(contaStyllo).orderBy(desc(contaStyllo.data));
-  const somaTotal = registros.reduce((acc, curr) => acc + curr.total, 0);
-
-  const passosAjuda = [
-    { elemento: 'h1', titulo: 'Conta Styllo Ótica', texto: 'Este ecrã controla de forma resumida o valor diário que efetivamente caiu na conta bancária da Styllo Ótica.' },
-    { elemento: 'table', titulo: 'Entradas e Saídas', texto: 'Controle de PIX, cartões de crédito e débito, e subtração de saídas. O rodapé mostra o total acumulado do mês/ano listado.' }
-  ];
+  const movimentacoes = await db.select().from(contaStyllo).orderBy(desc(contaStyllo.data)).limit(100);
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto px-1 sm:px-4 animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 bg-gradient-to-r from-[#00bdf2] to-blue-600 bg-clip-text text-transparent">Conta Styllo Ótica</h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">Conferência diária do dinheiro que entra na conta.</p>
+    <div className="space-y-8 max-w-[1200px] mx-auto px-1 sm:px-4 animate-fade-in mb-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl"><Landmark className="h-8 w-8" /></div>
+          <div>
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Caixa: Styllo Ótica</h1>
+            <p className="text-sm text-slate-500 font-medium">Controlo diário de entradas (Pix/Cartões) e saídas.</p>
+          </div>
         </div>
-        <Link href="/faturamento/conta-styllo/novo" className="w-full sm:w-auto text-center bg-[#00bdf2] hover:bg-[#009bc2] active:scale-95 text-white px-5 py-3 rounded-xl font-black text-sm shadow-md transition-all duration-300 flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#00bdf2] outline-none">
-          <Plus className="h-4 w-4" /> Novo Valor Diário
+        <Link href="/faturamento/conta-styllo/novo" className="flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-md">
+          <Plus className="h-5 w-5" /> Novo Registo
         </Link>
       </div>
 
-      <div className="flex gap-2 border-b border-slate-200/60 pb-2 overflow-x-auto scrollbar-none snap-x mask-linear-edge">
-         <Link href="/faturamento/joaozinho" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Wrench className="h-4 w-4" /> Serviços Joãozinho</Link>
-         <Link href="/faturamento/conta-styllo" className="px-4 py-2.5 bg-white border-t border-x border-slate-300 text-[#00bdf2] font-black rounded-t-xl flex items-center gap-2 whitespace-nowrap shadow-sm border-b-2 border-b-white z-10 -mb-[2px]"><Landmark className="h-4 w-4" /> Conta Styllo</Link>
-         <Link href="/faturamento/conta-uti" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Activity className="h-4 w-4" /> Conta UTI</Link>
-         <Link href="/faturamento/carne" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><BookOpen className="h-4 w-4" /> Carnês</Link>
-         <Link href="/faturamento/devedores-uti" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><UserMinus className="h-4 w-4" /> Devedores UTI</Link>
-         <Link href="/faturamento/servicos-indicados" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Handshake className="h-4 w-4" /> Serv. Indicados</Link>
-         <Link href="/faturamento/funcionarios" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Users className="h-4 w-4" /> Funcionários</Link>
-         <Link href="/faturamento/diario" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><CalendarDays className="h-4 w-4" /> Fat. Diário</Link>
-         <Link href="/faturamento/balanco" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Scale className="h-4 w-4" /> Balanço</Link>
-         <Link href="/faturamento/balanco-diario" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><Wallet className="h-4 w-4" /> Balanço Diário</Link>
-         <Link href="/faturamento/balanco-uti" className="px-4 py-2.5 bg-slate-50 text-slate-500 hover:text-slate-900 font-bold rounded-t-xl flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent hover:border-slate-300 transition-all"><HeartPulse className="h-4 w-4" /> Balanço UTI</Link>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        {registros.length === 0 ? (
-          <div className="p-16 flex flex-col items-center justify-center text-center"><Landmark className="h-12 w-16 text-slate-300 mb-4 animate-bounce" /><h3 className="text-base font-bold text-slate-900">Nenhum valor registado</h3></div>
-        ) : (
-          <div className="overflow-x-auto scrollbar-thin select-none">
-            <table className="w-full text-center border-collapse min-w-[900px]">
-              <thead>
-                <tr className="text-[10px] uppercase font-black text-slate-700 bg-slate-50 border-b border-slate-200">
-                  <th className="p-3 border-r border-slate-200">DATA</th><th className="p-3 border-r border-slate-200">PIX</th>
-                  <th className="p-3 border-r border-slate-200">CRÉDITO</th><th className="p-3 border-r border-slate-200">DÉBITO</th>
-                  <th className="p-3 border-r border-slate-200 text-red-600">SAÍDA</th><th className="p-3 border-r border-slate-200 text-blue-900 bg-blue-50">TOTAL DIÁRIO</th>
-                  <th className="p-3 bg-slate-50">AÇÕES</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs font-bold text-slate-800">
-                {registros.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="p-3 border-r border-slate-100 text-slate-900">{item.data.split('-').reverse().join('/')} <br/><span className="text-[9px] text-slate-400">{item.mesReferencia}/{item.anoBase}</span></td>
-                    <td className="p-3 border-r border-slate-100 text-slate-600">R$ {item.pix.toFixed(2)}</td><td className="p-3 border-r border-slate-100 text-slate-600">R$ {item.credito.toFixed(2)}</td>
-                    <td className="p-3 border-r border-slate-100 text-slate-600">R$ {item.debito.toFixed(2)}</td><td className="p-3 border-r border-slate-100 text-red-600">R$ {item.saida.toFixed(2)}</td>
-                    <td className="p-3 border-r border-slate-100 bg-blue-50/30 text-blue-900 font-black">R$ {item.total.toFixed(2)}</td>
-                    <td className="p-2 bg-white"><BotoesAcao id={item.id} tabela="conta-styllo" caminho="/faturamento/conta-styllo" linkEditar={`/faturamento/conta-styllo/${item.id}/editar`} /></td>
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[900px]">
+            <thead>
+              <tr className="bg-slate-50 text-slate-500 font-black text-[10px] uppercase tracking-widest border-b border-slate-200">
+                <th className="p-5">Data / Ref</th>
+                <th className="p-5 text-center bg-blue-50/30">PIX</th>
+                <th className="p-5 text-center bg-blue-50/10">Cartões (Créd / Déb)</th>
+                <th className="p-5 text-center bg-rose-50/30">Saídas</th>
+                <th className="p-5 text-right bg-slate-100">Total Líquido</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-medium text-sm text-slate-700">
+              {movimentacoes.length === 0 ? (
+                <tr><td colSpan={5} className="p-10 text-center text-slate-500">Nenhum registo encontrado.</td></tr>
+              ) : (
+                movimentacoes.map((c) => (
+                  <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="p-5">
+                      <p className="font-bold text-slate-900">{new Date(c.data).toLocaleDateString('pt-BR')}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5 tracking-widest font-black">{c.mesReferencia}/{c.anoBase}</p>
+                    </td>
+                    <td className="p-5 text-center bg-blue-50/10">
+                      <span className="font-bold text-blue-700">{(c.pix || 0).toFixed(2)}</span>
+                    </td>
+                    <td className="p-5 text-center">
+                      <div className="text-xs space-y-1">
+                        <div><span className="text-slate-400">Crédito:</span> {(c.credito || 0).toFixed(2)}</div>
+                        <div><span className="text-slate-400">Débito:</span> {(c.debito || 0).toFixed(2)}</div>
+                      </div>
+                    </td>
+                    <td className="p-5 text-center bg-rose-50/10">
+                      <span className="font-bold text-rose-600 flex items-center justify-center gap-1"><ArrowDownRight className="h-3 w-3"/> {(c.saida || 0).toFixed(2)}</span>
+                    </td>
+                    <td className="p-5 text-right bg-slate-50/50">
+                      <p className={`font-black text-lg flex items-center justify-end gap-1 ${(c.total || 0) >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                        {(c.total || 0) >= 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                        R$ {(c.total || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                      </p>
+                    </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                 <tr className="bg-slate-50 border-t border-slate-200"><td colSpan={5} className="p-4 text-right font-black uppercase text-slate-700">Total Acumulado:</td><td className="p-4 bg-[#e6f9fd] text-blue-950 font-black text-lg">R$ {somaTotal.toFixed(2)}</td><td className="p-4"></td></tr>
-              </tfoot>
-            </table>
-          </div>
-        )}
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <TutorialSistema passos={passosAjuda} idContexto="conta-styllo" />
     </div>
   );
 }

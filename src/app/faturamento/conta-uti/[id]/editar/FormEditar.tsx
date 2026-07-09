@@ -2,62 +2,71 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Save, Activity } from 'lucide-react';
+import { ArrowLeft, Save, HeartPulse, Calculator } from 'lucide-react';
 import { atualizarContaUti } from '@/actions/faturamento';
 import BotaoSubmit from '@/components/BotaoSubmit';
+import InputMoeda from '@/components/InputMoeda';
 
 export default function FormEditar({ registro }: { registro: any }) {
-  const [pix, setPix] = useState(registro.pix);
-  const [credito, setCredito] = useState(registro.credito);
-  const [debito, setDebito] = useState(registro.debito);
-  const [saida, setSaida] = useState(registro.saida);
+  const [pix, setPix] = useState(registro.pix || 0);
+  const [credito, setCredito] = useState(registro.credito || 0);
+  const [debito, setDebito] = useState(registro.debito || 0);
+  const [saida, setSaida] = useState(registro.saida || 0);
 
   const total = (pix + credito + debito) - saida;
+  const dataFormatada = registro.data ? new Date(registro.data).toISOString().split('T')[0] : '';
+
   const actionAtualizar = atualizarContaUti.bind(null, registro.id);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in px-2 sm:px-0 mb-10">
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/faturamento/conta-uti" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"><ArrowLeft className="h-6 w-6" /></Link>
+        <Link href="/faturamento/conta-uti" className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors outline-none"><ArrowLeft className="h-6 w-6" /></Link>
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Editar Conta UTI</h1>
-          <p className="text-sm text-slate-500 font-medium mt-1">Corrija as movimentações do dia na UTI.</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Editar Caixa (UTI)</h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">Corrija os valores recebidos e as saídas deste dia.</p>
         </div>
       </div>
 
       <form action={actionAtualizar} className="bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1 tracking-wider">Data *</label><input type="date" name="data" defaultValue={registro.data} required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-semibold text-slate-800" /></div>
-          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1 tracking-wider">Mês Base *</label>
-             <select name="mesReferencia" defaultValue={registro.mesReferencia} required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-semibold text-slate-800">
-               <option value="JANEIRO">JANEIRO</option><option value="FEVEREIRO">FEVEREIRO</option>
-               <option value="MARÇO">MARÇO</option><option value="ABRIL">ABRIL</option>
-               <option value="MAIO">MAIO</option><option value="JUNHO">JUNHO</option>
-               <option value="JULHO">JULHO</option><option value="AGOSTO">AGOSTO</option>
-               <option value="SETEMBRO">SETEMBRO</option><option value="OUTUBRO">OUTUBRO</option>
-               <option value="NOVEMBRO">NOVEMBRO</option><option value="DEZEMBRO">DEZEMBRO</option>
-             </select>
-          </div>
-          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1 tracking-wider">Ano Base *</label><input type="text" name="anoBase" defaultValue={registro.anoBase} required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-semibold text-slate-800" /></div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Data *</label><input type="date" name="data" defaultValue={dataFormatada} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-purple-500 font-bold text-slate-800" /></div>
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Mês Ref. *</label><input type="text" name="mesReferencia" defaultValue={registro.mesReferencia} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-purple-500 font-bold text-slate-800 uppercase" /></div>
+          <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Ano Base</label><input type="text" name="anoBase" defaultValue={registro.anoBase} required className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-purple-500 font-bold text-slate-800" /></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2"><Activity className="h-4 w-4 text-[#00bdf2]" /> Entradas (R$)</h2>
-             <div className="space-y-4">
-                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">PIX</label><input type="number" step="0.01" name="pix" value={pix} onChange={e => setPix(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-bold text-slate-800" /></div>
-                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Cartão Crédito</label><input type="number" step="0.01" name="credito" value={credito} onChange={e => setCredito(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-bold text-slate-800" /></div>
-                <div className="space-y-1.5"><label className="text-xs font-bold text-slate-500 uppercase ml-1">Cartão Débito</label><input type="number" step="0.01" name="debito" value={debito} onChange={e => setDebito(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#00bdf2] font-bold text-slate-800" /></div>
+        <div className="space-y-4">
+           <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2"><HeartPulse className="h-5 w-5 text-purple-500" /> Valores do Fecho</h2>
+           
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+             <div className="space-y-1.5 bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+               <label className="text-[10px] font-bold text-purple-900 uppercase ml-1">PIX</label>
+               <InputMoeda name="pix" defaultValue={registro.pix} onChange={setPix} className="py-2 bg-white border border-purple-200 focus:border-purple-500 font-bold" />
              </div>
-          </div>
-          <div className="space-y-6">
-             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest border-b border-slate-100 pb-2">Saídas</h2>
-             <div className="space-y-1.5"><label className="text-xs font-bold text-red-600 uppercase ml-1">Saída Diária (R$)</label><input type="number" step="0.01" name="saida" value={saida} onChange={e => setSaida(Number(e.target.value))} className="w-full px-4 py-4 bg-red-50/30 border border-red-200 rounded-xl outline-none focus:border-red-500 font-black text-red-700 text-lg" /></div>
-             <div className="bg-[#e6f9fd] border border-[#00bdf2]/30 p-6 rounded-2xl flex flex-col justify-center mt-4"><span className="text-[10px] uppercase font-black tracking-widest text-[#007090] mb-1">Total Diário Atualizado</span><span className="text-4xl font-black text-[#003848]">R$ {total.toFixed(2)}</span></div>
-          </div>
+             <div className="space-y-1.5 bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+               <label className="text-[10px] font-bold text-purple-900 uppercase ml-1">Crédito</label>
+               <InputMoeda name="credito" defaultValue={registro.credito} onChange={setCredito} className="py-2 bg-white border border-purple-200 focus:border-purple-500 font-bold" />
+             </div>
+             <div className="space-y-1.5 bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+               <label className="text-[10px] font-bold text-purple-900 uppercase ml-1">Débito</label>
+               <InputMoeda name="debito" defaultValue={registro.debito} onChange={setDebito} className="py-2 bg-white border border-purple-200 focus:border-purple-500 font-bold" />
+             </div>
+             <div className="space-y-1.5 bg-rose-50/50 p-4 rounded-xl border border-rose-100">
+               <label className="text-[10px] font-bold text-rose-900 uppercase ml-1">Saídas</label>
+               <InputMoeda name="saida" defaultValue={registro.saida} onChange={setSaida} className="py-2 bg-white border border-rose-200 focus:border-rose-500 font-bold text-rose-700" />
+             </div>
+           </div>
+
+           <div className="bg-slate-900 p-4 rounded-xl flex justify-between items-center shadow-md mt-4">
+             <span className="font-black text-slate-300 text-xs uppercase tracking-widest flex items-center gap-2"><Calculator className="h-4 w-4"/> Total Apurado</span>
+             <span className={`font-black text-3xl ${total >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>R$ {total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+           </div>
         </div>
 
-        <div className="flex justify-end pt-8 border-t border-slate-100"><BotaoSubmit texto="Salvar Alterações" icone={<Save className="h-5 w-5" />} cor="blue" /></div>
+        <div className="flex justify-end pt-8 border-t border-slate-100 mt-6">
+          <BotaoSubmit texto="Salvar Alterações" icone={<Save className="h-5 w-5" />} cor="purple" />
+        </div>
       </form>
     </div>
   );

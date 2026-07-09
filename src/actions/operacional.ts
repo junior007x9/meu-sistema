@@ -67,3 +67,57 @@ export async function salvarSimulacao(formData: FormData) {
   revalidatePath('/simulacoes');
   redirect('/simulacoes');
 }
+import { comprasOnline, contasMensais } from '@/db/schema';
+
+// ==========================================
+// AÇÕES: COMPRAS ONLINE / ENCOMENDAS
+// ==========================================
+export async function salvarCompra(formData: FormData) {
+  const valorUnitario = parseFloat(formData.get('valorUnitario') as string) || 0;
+  const quantidade = parseInt(formData.get('quantidade') as string) || 1;
+  const valorTotal = valorUnitario * quantidade;
+
+  await db.insert(comprasOnline).values({
+    dataCompra: formData.get('dataCompra') as string,
+    produto: formData.get('produto') as string,
+    loja: formData.get('loja') as string,
+    quemComprou: formData.get('quemComprou') as string,
+    quemVaiPagar: formData.get('quemVaiPagar') as string,
+    rastreio: formData.get('rastreio') as string,
+    valorUnitario,
+    quantidade,
+    valorTotal,
+    metodoPagamento: formData.get('metodoPagamento') as string,
+    situacaoPagamento: formData.get('situacaoPagamento') as string,
+  });
+
+  revalidatePath('/compras');
+  redirect('/compras');
+}
+
+// ==========================================
+// AÇÕES: CONTAS E REPASSES MENSAIS
+// ==========================================
+export async function salvarContaMensal(formData: FormData) {
+  await db.insert(contasMensais).values({
+    mesReferencia: formData.get('mesReferencia') as string,
+    
+    totalKwh: parseFloat(formData.get('totalKwh') as string) || 0,
+    totalRs: parseFloat(formData.get('totalRs') as string) || 0,
+    mediaBarbosaKwh: parseFloat(formData.get('mediaBarbosaKwh') as string) || 0,
+    icms: parseFloat(formData.get('icms') as string) || 0,
+    pis: parseFloat(formData.get('pis') as string) || 0,
+    cofins: parseFloat(formData.get('cofins') as string) || 0,
+    descontoAlinePerc: parseFloat(formData.get('descontoAlinePerc') as string) || 20,
+    
+    aguaAline: parseFloat(formData.get('aguaAline') as string) || 0,
+    aguaBarbosa: parseFloat(formData.get('aguaBarbosa') as string) || 0,
+    
+    equatorialBarbosa: parseFloat(formData.get('equatorialBarbosa') as string) || 0,
+    equatorialAline: parseFloat(formData.get('equatorialAline') as string) || 0,
+    totalAlineGeral: parseFloat(formData.get('totalAlineGeral') as string) || 0,
+  });
+
+  revalidatePath('/contas-mensais');
+  redirect('/contas-mensais');
+}

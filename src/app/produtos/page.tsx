@@ -9,10 +9,10 @@ export default async function ProdutosDashboardPage() {
   // Busca todos os produtos, ordenando pelos adicionados mais recentemente
   const listaProdutos = await db.select().from(produtos).orderBy(desc(produtos.id));
 
-  // Cálculos rápidos para o topo do Dashboard
-  const totalItens = listaProdutos.reduce((acc, p) => acc + p.estoque, 0);
-  const valorTotalEstoque = listaProdutos.reduce((acc, p) => acc + (p.precoCusto || 0) * p.estoque, 0);
-  const produtosZerados = listaProdutos.filter(p => p.estoque <= 0).length;
+  // Cálculos rápidos para o topo do Dashboard com proteção contra "null" (|| 0)
+  const totalItens = listaProdutos.reduce((acc, p) => acc + (p.estoque || 0), 0);
+  const valorTotalEstoque = listaProdutos.reduce((acc, p) => acc + (p.precoCusto || 0) * (p.estoque || 0), 0);
+  const produtosZerados = listaProdutos.filter(p => (p.estoque || 0) <= 0).length;
 
   return (
     <div className="space-y-8 max-w-[1600px] mx-auto px-1 sm:px-4 animate-fade-in mb-10">
@@ -84,14 +84,14 @@ export default async function ProdutosDashboardPage() {
                     </td>
                     <td className="p-5 text-sm font-medium text-slate-600 uppercase">{produto.fornecedor || '--'}</td>
                     <td className="p-5 text-center">
-                      <span className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 w-fit mx-auto ${produto.estoque > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`}>
-                        {produto.estoque > 0 ? <Box className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
-                        {produto.estoque} UNID.
+                      <span className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 w-fit mx-auto ${(produto.estoque || 0) > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}`}>
+                        {(produto.estoque || 0) > 0 ? <Box className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
+                        {produto.estoque || 0} UNID.
                       </span>
                     </td>
                     <td className="p-5 text-right">
-                      <p className="font-black text-slate-900">R$ {produto.precoVenda.toFixed(2)}</p>
-                      {produto.porcentagemDesconto > 0 && (
+                      <p className="font-black text-slate-900">R$ {(produto.precoVenda || 0).toFixed(2)}</p>
+                      {(produto.porcentagemDesconto || 0) > 0 && (
                         <p className="text-[10px] text-orange-500 font-bold mt-0.5">Permite {produto.porcentagemDesconto}% desc.</p>
                       )}
                     </td>
